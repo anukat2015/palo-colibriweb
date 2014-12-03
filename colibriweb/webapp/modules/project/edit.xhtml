@@ -1,0 +1,417 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/layout/template.xhtml">
+
+	<ui:define name="topnav">
+		<ui:include src="/layout/menu.xhtml">
+			<ui:param name="page" value="project" />
+			<ui:param name="detailPage" value="true" />
+		</ui:include>
+	</ui:define>
+
+	<ui:define name="head">
+		<script
+			src="#{facesContext.externalContext.request.contextPath}/codemirror/lib/codemirror.js"
+			type="text/javascript"></script>
+		<script
+			src="#{facesContext.externalContext.request.contextPath}/codemirror/mode/xml/xml.js"></script>
+		<script
+			src="#{facesContext.externalContext.request.contextPath}/codemirror/addon/edit/closetag.js"></script>
+		<link rel="stylesheet"
+			href="#{facesContext.externalContext.request.contextPath}/codemirror/lib/codemirror.css" />
+		<style type="text/css">
+.connection-icon {
+	background:
+		url(#{facesContext.externalContext.request.contextPath}/img/modules/connection/icon_small.png)
+		!important;
+	height: 16px;
+	width: 16px;
+}
+
+.extract-icon {
+	background:
+		url(#{facesContext.externalContext.request.contextPath}/img/modules/extract/icon_small.png)
+		!important;
+	height: 16px;
+	width: 16px;
+}
+
+.transform-icon {
+	background:
+		url(#{facesContext.externalContext.request.contextPath}/img/modules/transform/icon_small.png)
+		!important;
+	height: 16px;
+	width: 16px;
+}
+
+.load-icon {
+	background:
+		url(#{facesContext.externalContext.request.contextPath}/img/modules/load/icon_small.png)
+		!important;
+	height: 16px;
+	width: 16px;
+}
+
+.job-icon {
+	background:
+		url(#{facesContext.externalContext.request.contextPath}/img/modules/load/icon_small.png)
+		!important;
+	height: 16px;
+	width: 16px;
+}
+</style>
+	</ui:define>
+
+	<ui:define name="maincontent">
+		<script type="text/javascript">
+			function getEditorContent() {
+				editor.save();
+	    	}
+			function resizeGraph() {
+		    	var height = ($(window).height()-80)+'px';
+		    	var width = ($(window).width()-30)+'px';
+		    	$("#mainform\\:flowGraphSelectionPanelContent").css('height',height);
+		    	$("#mainform\\:flowGraphSelectionPanelContent").css('width',width);
+			}
+			function resizeXML() {
+		    	var height = ($(window).height()-120)+'px';
+		    	var width = ($(window).width()-30)+'px';
+		    	$( ".CodeMirror" ).css('height',height);
+		    	$( ".CodeMirror" ).css('width',width);
+			}
+		</script>
+		<h:panelGroup id="header" layout="block" styleClass="headercontent"
+			style="padding-bottom:3px;">
+			<div class="headerdetails" style="width: 70%;">
+				<span class="headertext"> <s:fragment
+						rendered="#{projectModule.managed}">#{projectModule.config.label}: #{projectModule.instance.name}</s:fragment>
+					<s:fragment rendered="#{not projectModule.managed}">#{projectModule.config.label}: #{messages.get('global.new')}</s:fragment>
+				</span>
+			</div>
+			<div class="headerdetails detailtagwrapper">
+				<span class="headertextsmall" style="float: left;">#{messages.get('global.detailsView')}</span>
+			</div>
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="contenttab" id="content">
+			<h:form id="mainform">
+				<s:validateAll>
+					<div class="formwrapper">
+						<h:panelGrid id="baseGrid" styleClass="attributeTable" columns="2"
+							columnClasses="labelCol,attributCol" style="width:100%;">
+							<span class="inputlabel">#{messages.get('ui.name')}: *</span>
+							<s:decorate styleClass="inputwrapper"
+								template="/layout/fieldvalidation.xhtml" id="metafeedname">
+								<h:inputText value="#{projectModule.instance.name}"
+									validator="#{projectModule.validateName}"
+									styleClass="inputfield" required="true">
+									<p:ajax global="false" process="@this" event="change" />
+								</h:inputText>
+							</s:decorate>
+							<span class="inputlabel">#{messages.get('ui.type')}: </span>
+							<s:decorate styleClass="inputwrapper"
+								template="/layout/fieldvalidation.xhtml"
+								style="margin-bottom:5px;">
+								<p:selectOneMenu required="false"
+									value="#{projectModule.instance.type}" styleClass="inputfield">
+									<s:selectItems value="#{projectTypes}" var="selectionItem"
+										label="#{selectionItem.label}" />
+									<s:convertEntity />
+								</p:selectOneMenu>
+							</s:decorate>
+							<span class="inputlabel">#{messages.get('ui.responsible')}:
+							</span>
+							<s:decorate styleClass="inputwrapper"
+								template="/layout/fieldvalidation.xhtml">
+								<h:inputText value="#{projectModule.instance.contactPerson}"
+									styleClass="inputfield" required="false">
+									<p:ajax global="false" process="@this" event="change" />
+								</h:inputText>
+							</s:decorate>
+							<span class="inputlabel">#{messages.get('ui.mail')}: </span>
+							<s:decorate styleClass="inputwrapper"
+								template="/layout/fieldvalidation.xhtml">
+								<h:inputText value="#{projectModule.instance.contactOnError}"
+									styleClass="inputfield" required="false">
+									<p:ajax global="false" process="@this" event="change" />
+								</h:inputText>
+							</s:decorate>
+							<span class="inputlabel">#{messages.get('ui.description')}:</span>
+							<p:editor style="width:102%;margin-bottom:3px;" id="description"
+								value="#{projectModule.instance.description}" height="150"
+								controls="bold italic underline strikethrough | alignleft center alignright justify | bullets numbering  outdent indent | link unlink image | undo redo ">
+							</p:editor>
+							<span class="inputlabel">#{messages.get('ui.rights')}:</span>
+							<s:decorate styleClass="inputwrapper"
+								template="/layout/fieldvalidation.xhtml">
+								<p:selectOneMenu
+									value="#{projectModule.instance.publicationState}">
+									<f:selectItem itemValue="1"
+										itemLabel="#{messages.get('ui.rights.private')}"
+										itemDisabled="#{!projectModule.maySetInstancePrivate()}" />
+									<f:selectItem itemValue="2"
+										itemLabel="#{messages.get('ui.rights.user')}" />
+									<p:ajax global="false" process="@this" event="change" />
+								</p:selectOneMenu>
+							</s:decorate>
+							<span class="inputlabel">#{messages.get('ui.variables')}:</span>
+							<h:panelGroup id="parameterData">
+								<ui:include src="/elements/editComponent.xhtml">
+									<ui:param name="title" value="" />
+									<ui:param name="editComponent"
+										value="#{projectModule.parameterEditComponent}" />
+									<ui:param name="include"
+										value="/modules/project/elements/parameterEditPart.xhtml" />
+									<ui:param name="render" value=":mainform:parameterData" />
+									<ui:param name="enableCreation" value="true" />
+									<ui:param name="officalCreateText" value="New Variable" />
+									<ui:param name="rowStyle"
+										value="border-bottom: 1px solid lightgray; margin: 5px 0;" />
+								</ui:include>
+							</h:panelGroup>
+						</h:panelGrid>
+
+						<h:panelGroup layout="block" styleClass="content"
+							style="width:100%;overflow:auto;margin-bottom:10px;"
+							rendered="#{not empty projectModule.instance.id}">
+							<div class="headercontent" />
+							<div class="marginplus14pix" />
+							<h:panelGrid styleClass="searchwrapper" columns="1"
+								rowClasses="normalsearch" style="float: right;">
+								<s:fragment>
+									<span class="searchlabel">Filter:</span>
+
+									<h:inputText styleClass="inputfield searchinput"
+										value="#{projectModule.filter.filter}" autocomplete="off">
+										<p:ajax global="false" event="keyup" execute="@this"
+											listener="#{projectModule.filter.filter()}" update="tree" />
+									</h:inputText>
+
+								</s:fragment>
+							</h:panelGrid>
+							<br style="clear: both;" />
+
+							<h:panelGroup styleClass="tree" layout="block"
+								rendered="#{not empty projectModule.filter.content}">
+								<p:tree value="#{projectModule.filter.content}" var="node"
+									id="tree" orientation="horizontal" styleClass="tree"
+									selectionMode="single"
+									selection="#{projectModule.selectedNode}">
+									<p:ajax global="false" update="tree" event="select"
+										listener="#{projectModule.onNodeSelect}" />
+									<p:ajax global="false" event="expand"
+										listener="#{projectModule.onNodeExpand}" />
+									<p:ajax global="false" event="collapse"
+										listener="#{projectModule.onNodeCollapse}" />
+									<p:treeNode expandedIcon="ui-icon-folder-open"
+										collapsedIcon="ui-icon-folder-collapsed">
+										<h:outputText value="#{node}" />
+									</p:treeNode>
+									<p:treeNode type="connection" icon="ui-icon connection-icon">
+										<h:outputText value="#{node}"
+											style="text-decoration: underline;" />
+									</p:treeNode>
+									<p:treeNode type="extract" icon="ui-icon extract-icon">
+										<h:outputText value="#{node}"
+											style="text-decoration: underline;" />
+									</p:treeNode>
+									<p:treeNode type="transform" icon="ui-icon transform-icon">
+										<h:outputText value="#{node}"
+											style="text-decoration: underline;" />
+									</p:treeNode>
+									<p:treeNode type="load" icon="ui-icon load-icon">
+										<h:outputText value="#{node}"
+											style="text-decoration: underline;" />
+									</p:treeNode>
+									<p:treeNode type="job" icon="ui-icon job-icon">
+										<h:outputText value="#{node}"
+											style="text-decoration: underline;" />
+									</p:treeNode>
+								</p:tree>
+							</h:panelGroup>
+
+						</h:panelGroup>
+
+						<h:panelGroup id="actionpanel">
+							<div class="actions">
+								<p:commandButton type="submit" action="#{projectModule.persist}"
+									value="#{messages.get('global.save')}"
+									update=":header :content :messages" global="true" />
+							</div>
+							<div></div>
+							<div class="actions">
+								<p:commandButton type="submit" action="#{projectModule.close}"
+									value="#{messages.get('global.hide')}" immediate="true" />
+							</div>
+							<div class="actions">
+								<p:commandButton type="submit"
+									value="#{messages.get('global.flowgraph')}"
+									action="#{projectModule.generateFlowGraph()}"
+									update="flowGraphSelectionPanel" oncomplete="PF('flowGraphSelectionPanel').show();"
+									rendered="#{not empty projectModule.instance.id}">
+								</p:commandButton>
+							</div>
+							<div class="actions">
+								<p:commandButton type="button" value="XML" update="xmlEditPanel"
+									onclick="PF('xmlEditPanel').show();">
+								</p:commandButton>
+							</div>
+							<s:link rendered="#{not empty projectModule.instance.id}"
+								value="Download..." action="#{projectExport.download}">
+								<f:param name="projectName"
+									value="#{projectModule.instance.name}" />
+							</s:link>
+						</h:panelGroup>
+					</div>
+				</s:validateAll>
+
+				<s:fragment rendered="#{not empty projectModule.instance.id}">
+
+					<ui:include src="/elements/flowgraph.xhtml">
+						<ui:param name="module" value="#{projectModule}" />
+					</ui:include>
+
+				</s:fragment>
+
+				<p:dialog maximizable="false" onShow="resizeXML();editor.refresh()" closeOnEscape="true" position="left top"
+					dynamic="true" widgetVar="xmlEditPanel" id="xmlEditPanel"
+					header="#{projectModule.instance.name} XML" modal="true"
+					styleClass="modalpanel" minWidth="670" minHeight="400"
+					closable="true" resizable="false">
+					<p:hotkey bind="ctrl+s" handler="PF('saveXMLButton').jq.click();" />
+					<h:panelGroup layout="block" rendered="true" style="width:100%;overflow:auto;"
+						id="xmlEditPanelContent">
+						<s:decorate styleClass="inputwrapper"
+							template="/layout/fieldvalidation.xhtml" id="codearea">
+							<h:inputTextarea id="code" rows="20" cols="220"
+								style="width:99%;height:100%;" value="#{projectModule.xml}">
+							</h:inputTextarea>
+							<script type="text/javascript">
+					 					var editor = CodeMirror.fromTextArea(document.getElementById('mainform:codearea:code'), {
+					    				mode: "xml",
+					    				htmlMode: true,
+					    		        lineNumbers: true,
+					    		        textWrapping: false,
+					    		        autoCloseTags: true,
+					    		        viewportMargin: Infinity
+					  					});
+								</script>
+						</s:decorate>
+						<div class="spacer">&#160;</div>
+						<s:fragment>
+							<div class="actions">
+								<p:commandButton type="submit"
+									action="#{projectModule.updateXML()}"
+									value="#{messages.get('global.save')}"
+									process="xmlEditPanelContent" update=":messages"
+									onclick="getEditorContent()"
+									oncomplete="PF('xmlEditPanel').hide()"
+									widgetVar="saveXMLButton" />
+							</div>
+							<div></div>
+							<div class="actions">
+								<p:button type="button"
+									value="#{messages.get('global.hide')}"
+									onclick="PF('xmlEditPanel').hide()" />
+							</div>
+						</s:fragment>
+					</h:panelGroup>
+				</p:dialog>
+			</h:form>
+
+		</h:panelGroup>
+	</ui:define>
+
+	<ui:define name="rightcontent">
+		<h:form id="rightform">
+			<div class="subspacer marginplus14pix">&nbsp;</div>
+
+			<h:panelGroup id="connectionList">
+				<ui:include src="/modules/common/rightContentList.xhtml">
+					<ui:param name="id" value="connections" />
+					<ui:param name="title" value="Connections" />
+					<ui:param name="backingBean" value="#{connectionModule}" />
+					<ui:param name="emptyText" value="No Connections" />
+					<ui:param name="listImage" value="icon.png" />
+					<ui:param name="results"
+						value="#{projectModule.instance.connections}" />
+					<ui:param name="collapsed" value="true"></ui:param>
+				</ui:include>
+			</h:panelGroup>
+
+
+			<div class="subspacer">&nbsp;</div>
+			<h:panelGroup id="extractList">
+				<ui:include src="/modules/common/rightContentList.xhtml">
+					<ui:param name="id" value="extracts" />
+					<ui:param name="title" value="Extracts" />
+					<ui:param name="backingBean" value="#{extractModule}" />
+					<ui:param name="emptyText" value="No Extracts" />
+					<ui:param name="listImage" value="icon.png" />
+					<ui:param name="results" value="#{projectModule.instance.extracts}" />
+					<ui:param name="collapsed" value="true"></ui:param>
+				</ui:include>
+			</h:panelGroup>
+
+			<div class="subspacer">&nbsp;</div>
+			<h:panelGroup id="transformList">
+				<ui:include src="/modules/common/rightContentList.xhtml">
+					<ui:param name="id" value="transforms" />
+					<ui:param name="title" value="Transforms" />
+					<ui:param name="backingBean" value="#{transformModule}" />
+					<ui:param name="emptyText" value="No Transforms" />
+					<ui:param name="listImage" value="icon.png" />
+					<ui:param name="results"
+						value="#{projectModule.instance.transforms}" />
+					<ui:param name="collapsed" value="true"></ui:param>
+				</ui:include>
+			</h:panelGroup>
+
+			<div class="subspacer">&nbsp;</div>
+			<h:panelGroup id="loadList">
+				<ui:include src="/modules/common/rightContentList.xhtml">
+					<ui:param name="id" value="loads" />
+					<ui:param name="title" value="Loads" />
+					<ui:param name="backingBean" value="#{loadModule}" />
+					<ui:param name="emptyText" value="No Loads" />
+					<ui:param name="listImage" value="icon.png" />
+					<ui:param name="results" value="#{projectModule.instance.loads}" />
+					<ui:param name="collapsed" value="true"></ui:param>
+				</ui:include>
+			</h:panelGroup>
+
+			<div class="subspacer">&nbsp;</div>
+			<h:panelGroup id="jobList">
+				<ui:include src="/modules/common/rightContentList.xhtml">
+					<ui:param name="id" value="jobs" />
+					<ui:param name="title" value="Jobs" />
+					<ui:param name="backingBean" value="#{jobModule}" />
+					<ui:param name="emptyText" value="No Jobs" />
+					<ui:param name="listImage" value="icon.png" />
+					<ui:param name="results" value="#{projectModule.instance.jobs}" />
+					<ui:param name="collapsed" value="false"></ui:param>
+				</ui:include>
+			</h:panelGroup>
+
+			<!--  
+    		<div class="subspacer">&nbsp;</div>
+    		<h:panelGroup id="statistics">
+				<ui:include src="/modules/common/rightStatContent.xhtml">
+	    			<ui:param name="title" value="Performance" />
+	    			<ui:param name="id" value="statistics" />
+	    			<ui:param name="lastProcessText" value="Dauer letzter Filter (s)" />
+	    			<ui:param name="avgProcessText" value="Durchschnittliche Dauer (s)" />
+	    			<ui:param name="countProcessText" value="Anzahl Filterungen" />
+	    			<ui:param name="entity" value="#{projectModule.instance}" />
+	    			<ui:param name="initialState" value="opened"></ui:param>
+	    		</ui:include>
+    		</h:panelGroup>
+			-->
+		</h:form>
+	</ui:define>
+
+</ui:composition>

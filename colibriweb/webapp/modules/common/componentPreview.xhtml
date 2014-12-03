@@ -1,0 +1,122 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core" 
+   	>
+   <p:dialog maximizable="false" dynamic="true" closeOnEscape="true" onShow="resizeDataDialog();" position="left top" widgetVar="dataDisplayPanel"  header="#{module.instance.name} Preview" modal="true" styleClass="modalpanel" minWidth="670" minHeight="400" closable="true" resizable="false">
+	 <s:decorate template="/layout/fieldvalidation.xhtml" id="dataDisplay"> 
+	   	<h:panelGroup layout="block" styleClass="detailseditpanel" style="overflow:hidden;">	
+	   			<h:panelGroup id="options">
+	   				<div class="actions" style="float:left;">
+						<p:commandLink  global="false" title="reload" action="#{module.calculatePreview()}" process="options" update=":mainform:actions" oncomplete="PF('dataDisplayPanel').hide();">
+							<h:graphicImage value="/img/reload.png" style="margin-top:-5px;margin-bottom:5px;"/>
+						</p:commandLink>
+					</div>
+					<s:fragment rendered="#{module.isTreeSource(module.instance)}">
+						<span class="inputlabel" style="margin-left:5px;">Format:</span>
+						<p:selectOneMenu id="formatSelection" styleClass="inputfield" value="#{module.sampleFormat}" style="margin-left:5px;vertical-align:middle;">
+						   <s:selectItems value="#{module.getAvailableTreeViews()}" var="selectionItem" label="#{selectionItem}" itemValue="#{selectionItem}"/>
+						   <p:ajax event="change" proces="@this" update=":mainform:dataDisplay" listener="#{module.calculateDataFromTree()}"  oncomplete="resizeDataDialog();"></p:ajax>
+						</p:selectOneMenu>
+					</s:fragment>
+	   				<span class="inputlabel" style="margin-left:5px;">Samples:</span>
+					<p:spinner value="#{module.sampleSize}" readonly="false" min="10" max="50000" size="5" required="true" style="margin-left:5px;" disabled="#{module.isTreeSource(module.instance) and module.sampleFormat.equals('NONE')}">
+						<p:ajax event="change" proces="@this" update=":mainform:dataDisplay" oncomplete="resizeDataDialog();" disabled="#{not module.isTreeSource(module.instance)}"></p:ajax>
+					</p:spinner>
+					<div class="actions">
+						<p:commandLink  global="false" title="reload" action="#{module.calculatePreview()}" process="options" update=":mainform:actions" oncomplete="PF('dataDisplayPanel').hide();">
+							<h:graphicImage value="/img/reload.png" style="margin-top:-5px;margin-bottom:5px;"/>
+						</p:commandLink>
+					</div>
+					<div class="actions">
+						<p:commandButton global="true" type="submit" action="#{module.stopExecution()}" value="#{messages.get('global.stop')}" update="options :mainform:actions" rendered="#{module.executing}">
+							<p:effect type="scale" speed="1000">  
+				    		</p:effect>  
+						</p:commandButton>
+					</div>
+	   			</h:panelGroup>
+	   			
+	   			<div style="clear:both;"></div>   
+	   			
+				<p:dataTable id="metadataTable" value="#{module.getData()}" var="metadata" sortMode="multiple" filteredValue="#{module.filteredData}" filterDelay="600"
+				                resizableColumns="true" rowKey="#{metadata}"  selection="#{module.selectedData}" selectionMode="multiple"
+				                scrollable="true" draggableColumns="false" rendered="#{not module.isTreeSource(module.instance) or not module.sampleFormat.equals('NONE')}" liveScroll="true" scrollRows="100" rows="100">   
+				      
+				     <p:columns value="#{module.dataHeader}" var="dataHeader" resizable="true" sortBy="#{metadata.getData()[dataHeader.id]}" filterBy="#{metadata.getData()[dataHeader.id]}" width="100px;"  > 
+                		 <f:facet name="header">  
+                			<h:outputText value="#{dataHeader.name}"/>  
+			             </f:facet>   
+			             <h:outputText value="#{metadata.getData()[dataHeader.id]}" style="white-space: normal;"/>
+			         </p:columns>    
+				</p:dataTable>  
+				
+				<p:treeTable id="metadataTreeTable" value="#{module.getPreviewTree()}" var="node" 
+				                resizableColumns="true" rows="#{module.sampleSize}" 
+				                scrollable="true" draggableColumns="false" rendered="#{module.isTreeSource(module.instance) and module.sampleFormat.equals('NONE')}">   
+				      
+				     <p:column headerText="Name" style="width:100px;">
+			            <h:outputText value="#{node.name}"/>
+			        </p:column>
+			        
+			        <c:forEach items="#{module.getPreviewTreeAttributes()}" var="attribute">
+			            <p:column headerText="#{attribute}" style="width:100px;">
+			            	<h:outputText value="#{node.getAttributeValue(attribute)}" style="white-space: normal;"/>
+			            </p:column>
+        			 </c:forEach>
+				</p:treeTable>  
+				
+				<h:panelGroup style="width:100%;text-align:center;" rendered="#{module.executing}">
+					<div style="margin:auto;">
+					  <p:graphicImage value="/img/loading.gif" style="margin-top:20px;margin-bottom:20px;"/>  
+					</div>
+				</h:panelGroup>
+				<div class="subspacer"></div>   	
+		     	<h:panelGroup id="previewactions">
+		     		<s:fragment rendered="#{not module.isTreeSource(module.instance) or not module.sampleFormat.equals('NONE')}">
+			     		<div class="actions" style="float:left;">
+							 <h:commandLink>  
+						          <p:graphicImage value="/img/excel.png" />  
+						          <p:dataExporter  type="xls" target="metadataTable" fileName="#{module.instance.name}" selectionOnly="#{module.exportSelection}"/>  
+						      </h:commandLink> 
+						</div>
+						<div class="actions" style="float:left;">
+							 <h:commandLink>  
+						          <p:graphicImage value="/img/pdf.png" />  
+						          <p:dataExporter  type="pdf" target="metadataTable" fileName="#{module.instance.name}" selectionOnly="#{module.exportSelection}"/>  
+						      </h:commandLink> 
+						</div>
+						<div class="actions" style="float:left;">
+							 <h:commandLink>  
+						          <p:graphicImage value="/img/csv.png" />  
+						          <p:dataExporter  type="csv" target="metadataTable" fileName="#{module.instance.name}" selectionOnly="#{module.exportSelection}"/>  
+						      </h:commandLink> 
+						</div>
+						<div class="actions" style="float:left;">
+							 <h:commandLink>  
+						          <p:graphicImage value="/img/xml.png" />  
+						          <p:dataExporter  type="xml" target="metadataTable" fileName="#{module.instance.name}" selectionOnly="#{module.exportSelection}"/>  
+						      </h:commandLink> 
+						</div>
+					</s:fragment>
+					<!-- 
+					<div class="actions" style="float:left;margin-top:5px;">
+						<span class="inputlabel" style="margin-left:5px;">Selection Only:</span>
+						<h:selectBooleanCheckbox value="#{module.exportSelection}" style="margin-left:5px;">
+			        		<p:ajax global="false" process="@this" update="previewactions"  /> 
+			        	</h:selectBooleanCheckbox>
+					</div>
+					-->
+					<div class="actions">
+						<p:commandButton type="button" value="#{messages.get('global.hide')}" onclick="PF('dataDisplayPanel').hide()"/>
+					</div>
+				</h:panelGroup>
+	     </h:panelGroup>
+	   </s:decorate>
+	</p:dialog>
+   
+</ui:composition>

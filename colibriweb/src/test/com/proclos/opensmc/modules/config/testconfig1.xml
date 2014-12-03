@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules xmlns="http://schemas.opensmc.proclos.com/modules"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://schemas.opensmc.proclos.com/modules modules.xsd">
+
+	<module name="client" label="Klient" navigable="true">
+		<filterDefinition>
+			<selectmanycheckbox name="Vereine" mode="restrict">
+				<item name="proclos">
+					<condition type="hql">isTest = 'false'</condition>
+				</item>
+				<item name="adaptive">
+					<condition type="hql">isTest = 'false'</condition>
+				</item>
+				<item name="gesellikeitsverein">
+					<condition type="hql">isTest = 'false'</condition>
+				</item>
+				<item name="verein der grünen Männchen">
+					<condition type="hql">isTest = 'false'</condition>
+				</item>
+			</selectmanycheckbox>
+			<selectmanydate name="Datum">
+				<item name="von">
+					<default>-10</default>
+					<condition type="hql">creationDate &gt;= ? and modificationDate &gt;= ?</condition>
+				</item>
+				<item name="bis">
+					<default>10</default>
+					<condition type="hql">creationDate &lt;= ? and modificationDate &gt;= ?</condition>
+				</item>
+			</selectmanydate>
+			<!--  
+			<selectonemenu name="selectme">
+				<item name="1st">
+					<condition type="hql"></condition>
+				</item>
+			</selectonemenu>
+			<selectoneradio name="radiome">
+				<item name="1st">
+					<condition type="sql"></condition>
+				</item>
+			</selectoneradio>
+			-->
+		</filterDefinition>
+	</module>
+</modules>

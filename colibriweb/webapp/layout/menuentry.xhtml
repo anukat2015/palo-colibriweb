@@ -1,0 +1,13 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.org/schema/seam/taglib" xmlns:p="http://primefaces.org/ui" >
+	
+	<s:fragment rendered="#{rendered}">
+		<li class="#{page.toLowerCase() == name.toLowerCase() ? 'current' : ''}">
+			<s:link view="#{view}" value="#{label}" style="#{page.toLowerCase() == name.toLowerCase() ? '' : 'color:white;background:#505050;border-radius: 4px 4px 4px 4px;'}"/>
+		</li>
+	</s:fragment>
+	  
+</ui:composition>
+
+    

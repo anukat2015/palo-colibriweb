@@ -1,0 +1,676 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules xmlns="http://schemas.opensmc.proclos.com/modules" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.opensmc.proclos.com/modules modules.xsd">
+
+	<module name="project" label="Project" navigable="true" administrable="false">
+		<submodules>
+			<module name="projectType" label="Project Types" navigable="false" administrable="true"/>
+			<module name="projectSearch" label="Project Search" navigable="false" administrable="false">
+				<filterDefinition>
+					<nondisplay name="active">
+						<item name="active">
+							<condition type="hql">active = true</condition>
+						</item>
+					</nondisplay>
+				</filterDefinition>
+			</module>
+		</submodules>
+		<filterDefinition>
+			<selectoneradio name="Status">
+				<item name="All">
+				</item>
+				<item name="Active">
+					<default>true</default>
+				    <criteria>
+				    	<criterion op="eq" field="active" value="true"></criterion>
+				    </criteria>
+				</item>
+				<item name="Inactive">
+				    <criteria>
+				    	<criterion op="eq" field="active" value="false"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>		
+			<selectoneradio name="Owner">
+				<item name="All">
+					<default>true</default>
+				</item>
+				<item name="Mine">
+				    <criteria>
+				    	<criterion op="eq" field="creator" value="#{user}"></criterion>
+				    </criteria>
+				</item>
+				<item name="Others">
+				    <criteria>
+				    	<criterion op="ne" field="creator" value="#{user}"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>		
+			<selectoneradio name="Type">
+				<item name="All">
+					<default>true</default>
+				</item>
+				<item name="Dev">
+				    <criteria>
+				    	<criterion op="eq" field="type.name" value="Developement"></criterion>
+				    </criteria>
+				</item>
+				<item name="Stage">
+				    <criteria>
+				    	<criterion op="eq" field="type.name" value="Staging"></criterion>
+				    </criteria>
+				</item>
+				<item name="Prod">
+				    <criteria>
+				    	<criterion op="eq" field="type.name" value="Production"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>						
+			<selectmanydate name="Creation">
+				<item name="from">
+					<default>-10</default>
+					<condition type="hql">creationDate &gt;= ?</condition>
+				</item>
+				<item name="to">
+					<default>10</default>
+					<condition type="hql">creationDate &lt;= ?</condition>
+				</item>
+			</selectmanydate>
+		</filterDefinition>
+		<sorterDefinition>
+			<order name="name" label="Name" mode="asc"></order>
+			<order name="creationDate" label="Creation" mode="desc"></order>
+			<order name="modificationDate" label="Modification" mode="desc"></order>
+		</sorterDefinition>
+	</module>
+	
+	<module name="connection" label="Connection" navigable="true" administrable="false">
+		<filterDefinition>
+			<selectoneradio name="Status">
+				<item name="All">
+				</item>
+				<item name="Active">
+					<default>true</default>
+				    <criteria>
+				    	<criterion op="eq" field="active" value="true"></criterion>
+				    </criteria>
+				</item>
+				<item name="Inactive">
+				    <criteria>
+				    	<criterion op="eq" field="active" value="false"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>		
+			<selectoneradio name="Owner">
+				<item name="All">
+					<default>true</default>
+				</item>
+				<item name="Mine">
+				    <criteria>
+				    	<criterion op="eq" field="creator" value="#{user}"></criterion>
+				    </criteria>
+				</item>
+				<item name="Others">
+				    <criteria>
+				    	<criterion op="ne" field="creator" value="#{user}"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>
+			<selectoneradio name="Project">
+				<item name="All">
+				</item>
+				<item name="Active">
+					<default>true</default>
+					<condition type="hql">project.id = #{empty projectModule.instance.id ? 'project.id' : projectModule.instance.id}</condition>
+				</item>
+			</selectoneradio>			
+			<selectoneradio name="Type">
+				<item name="All">
+					<default>true</default>
+				</item>
+				<item name="Dev">
+				    <criteria>
+				    	<criterion op="eq" field="project.type.name" value="Developement"></criterion>
+				    </criteria>
+				</item>
+				<item name="Stage">
+				    <criteria>
+				    	<criterion op="eq" field="project.type.name" value="Staging"></criterion>
+				    </criteria>
+				</item>
+				<item name="Prod">
+				    <criteria>
+				    	<criterion op="eq" field="project.type.name" value="Production"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>						
+			<selectmanydate name="Creation">
+				<item name="from">
+					<default>-10</default>
+					<condition type="hql">creationDate &gt;= ?</condition>
+				</item>
+				<item name="to">
+					<default>10</default>
+					<condition type="hql">creationDate &lt;= ?</condition>
+				</item>
+			</selectmanydate>
+		</filterDefinition>
+		<sorterDefinition>
+			<order name="name" label="Name" mode="asc"></order>
+			<order name="creationDate" label="Creation" mode="desc"></order>
+			<order name="modificationDate" label="Modification" mode="desc"></order>
+		</sorterDefinition>
+	</module>
+	
+	<module name="extract" label="Extract" navigable="true" administrable="false">
+		<filterDefinition>
+			<selectoneradio name="Status">
+				<item name="All">
+				</item>
+				<item name="Active">
+					<default>true</default>
+				    <criteria>
+				    	<criterion op="eq" field="active" value="true"></criterion>
+				    </criteria>
+				</item>
+				<item name="Inactive">
+				    <criteria>
+				    	<criterion op="eq" field="active" value="false"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>		
+			<selectoneradio name="Owner">
+				<item name="All">
+					<default>true</default>
+				</item>
+				<item name="Mine">
+				    <criteria>
+				    	<criterion op="eq" field="creator" value="#{user}"></criterion>
+				    </criteria>
+				</item>
+				<item name="Others">
+				    <criteria>
+				    	<criterion op="ne" field="creator" value="#{user}"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>	
+			<selectoneradio name="Project">
+				<item name="All">
+				</item>
+				<item name="Active">
+					<default>true</default>
+					<condition type="hql">project.id = #{empty projectModule.instance.id ? 'project.id' : projectModule.instance.id}</condition>
+				</item>
+			</selectoneradio>		
+			<selectoneradio name="Type">
+				<item name="All">
+					<default>true</default>
+				</item>
+				<item name="Dev">
+				    <criteria>
+				    	<criterion op="eq" field="project.type.name" value="Developement"></criterion>
+				    </criteria>
+				</item>
+				<item name="Stage">
+				    <criteria>
+				    	<criterion op="eq" field="project.type.name" value="Staging"></criterion>
+				    </criteria>
+				</item>
+				<item name="Prod">
+				    <criteria>
+				    	<criterion op="eq" field="project.type.name" value="Production"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>							
+			<selectmanydate name="Creation">
+				<item name="from">
+					<default>-10</default>
+					<condition type="hql">creationDate &gt;= ?</condition>
+				</item>
+				<item name="to">
+					<default>10</default>
+					<condition type="hql">creationDate &lt;= ?</condition>
+				</item>
+			</selectmanydate>
+		</filterDefinition>
+		<sorterDefinition>
+			<order name="name" label="Name" mode="asc"></order>
+			<order name="creationDate" label="Creation" mode="desc"></order>
+			<order name="modificationDate" label="Modification" mode="desc"></order>
+		</sorterDefinition>
+	</module>
+	
+	<module name="transform" label="Transform" navigable="true" administrable="false">
+		<filterDefinition>
+			<selectoneradio name="Status">
+				<item name="All">
+				</item>
+				<item name="Active">
+					<default>true</default>
+				    <criteria>
+				    	<criterion op="eq" field="active" value="true"></criterion>
+				    </criteria>
+				</item>
+				<item name="Inactive">
+				    <criteria>
+				    	<criterion op="eq" field="active" value="false"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>		
+			<selectoneradio name="Owner">
+				<item name="All">
+					<default>true</default>
+				</item>
+				<item name="Mine">
+				    <criteria>
+				    	<criterion op="eq" field="creator" value="#{user}"></criterion>
+				    </criteria>
+				</item>
+				<item name="Others">
+				    <criteria>
+				    	<criterion op="ne" field="creator" value="#{user}"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>	
+			<selectoneradio name="Project">
+				<item name="All">
+				</item>
+				<item name="Active">
+					<default>true</default>
+					<condition type="hql">project.id = #{empty projectModule.instance.id ? 'project.id' : projectModule.instance.id}</condition>
+				</item>
+			</selectoneradio>		
+			<selectoneradio name="Type">
+				<item name="All">
+					<default>true</default>
+				</item>
+				<item name="Dev">
+				    <criteria>
+				    	<criterion op="eq" field="project.type.name" value="Developement"></criterion>
+				    </criteria>
+				</item>
+				<item name="Stage">
+				    <criteria>
+				    	<criterion op="eq" field="project.type.name" value="Staging"></criterion>
+				    </criteria>
+				</item>
+				<item name="Prod">
+				    <criteria>
+				    	<criterion op="eq" field="project.type.name" value="Production"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>							
+			<selectmanydate name="Creation">
+				<item name="from">
+					<default>-10</default>
+					<condition type="hql">creationDate &gt;= ?</condition>
+				</item>
+				<item name="to">
+					<default>10</default>
+					<condition type="hql">creationDate &lt;= ?</condition>
+				</item>
+			</selectmanydate>
+		</filterDefinition>
+		<sorterDefinition>
+			<order name="name" label="Name" mode="asc"></order>
+			<order name="creationDate" label="Creation" mode="desc"></order>
+			<order name="modificationDate" label="Modification" mode="desc"></order>
+		</sorterDefinition>
+	</module>
+	
+	<module name="load" label="Load" navigable="true" administrable="false">
+		<filterDefinition>
+			<selectoneradio name="Status">
+				<item name="All">
+				</item>
+				<item name="Active">
+					<default>true</default>
+				    <criteria>
+				    	<criterion op="eq" field="active" value="true"></criterion>
+				    </criteria>
+				</item>
+				<item name="Inactive">
+				    <criteria>
+				    	<criterion op="eq" field="active" value="false"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>		
+			<selectoneradio name="Owner">
+				<item name="All">
+					<default>true</default>
+				</item>
+				<item name="Mine">
+				    <criteria>
+				    	<criterion op="eq" field="creator" value="#{user}"></criterion>
+				    </criteria>
+				</item>
+				<item name="Others">
+				    <criteria>
+				    	<criterion op="ne" field="creator" value="#{user}"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>
+			<selectoneradio name="Project">
+				<item name="All">
+				</item>
+				<item name="Active">
+					<default>true</default>
+					<condition type="hql">project.id = #{empty projectModule.instance.id ? 'project.id' : projectModule.instance.id}</condition>
+				</item>
+			</selectoneradio>		
+			<selectoneradio name="Type">
+				<item name="All">
+					<default>true</default>
+				</item>
+				<item name="Dev">
+				    <criteria>
+				    	<criterion op="eq" field="project.type.name" value="Developement"></criterion>
+				    </criteria>
+				</item>
+				<item name="Stage">
+				    <criteria>
+				    	<criterion op="eq" field="project.type.name" value="Staging"></criterion>
+				    </criteria>
+				</item>
+				<item name="Prod">
+				    <criteria>
+				    	<criterion op="eq" field="project.type.name" value="Production"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>								
+			<selectmanydate name="Creation">
+				<item name="from">
+					<default>-10</default>
+					<condition type="hql">creationDate &gt;= ?</condition>
+				</item>
+				<item name="to">
+					<default>10</default>
+					<condition type="hql">creationDate &lt;= ?</condition>
+				</item>
+			</selectmanydate>
+		</filterDefinition>
+		<sorterDefinition>
+			<order name="name" label="Name" mode="asc"></order>
+			<order name="creationDate" label="Creation" mode="desc"></order>
+			<order name="modificationDate" label="Modification" mode="desc"></order>
+		</sorterDefinition>
+	</module>
+	
+	<module name="job" label="Job" navigable="true" administrable="false">
+		<filterDefinition>
+			<selectoneradio name="Status">
+				<item name="All">
+				</item>
+				<item name="Active">
+					<default>true</default>
+				    <criteria>
+				    	<criterion op="eq" field="active" value="true"></criterion>
+				    </criteria>
+				</item>
+				<item name="Inactive">
+				    <criteria>
+				    	<criterion op="eq" field="active" value="false"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>		
+			<selectoneradio name="Owner">
+				<item name="All">
+					<default>true</default>
+				</item>
+				<item name="Mine">
+				    <criteria>
+				    	<criterion op="eq" field="creator" value="#{user}"></criterion>
+				    </criteria>
+				</item>
+				<item name="Others">
+				    <criteria>
+				    	<criterion op="ne" field="creator" value="#{user}"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>
+			<selectoneradio name="Project">
+				<item name="All">
+				</item>
+				<item name="Active">
+					<default>true</default>
+					<condition type="hql">project.id = #{empty projectModule.instance.id ? 'project.id' : projectModule.instance.id}</condition>
+				</item>
+			</selectoneradio>		
+			<selectoneradio name="Type">
+				<item name="All">
+					<default>true</default>
+				</item>
+				<item name="Dev">
+				    <criteria>
+				    	<criterion op="eq" field="project.type.name" value="Developement"></criterion>
+				    </criteria>
+				</item>
+				<item name="Stage">
+				    <criteria>
+				    	<criterion op="eq" field="project.type.name" value="Staging"></criterion>
+				    </criteria>
+				</item>
+				<item name="Prod">
+				    <criteria>
+				    	<criterion op="eq" field="project.type.name" value="Production"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>								
+			<selectmanydate name="Creation">
+				<item name="from">
+					<default>-10</default>
+					<condition type="hql">creationDate &gt;= ?</condition>
+				</item>
+				<item name="to">
+					<default>10</default>
+					<condition type="hql">creationDate &lt;= ?</condition>
+				</item>
+			</selectmanydate>
+		</filterDefinition>
+		<sorterDefinition>
+			<order name="name" label="Name" mode="asc"></order>
+			<order name="creationDate" label="Creation" mode="desc"></order>
+			<order name="modificationDate" label="Modification" mode="desc"></order>
+		</sorterDefinition>
+	</module>
+	
+	<module name="execution" label="Execution" navigable="true" administrable="false">
+		<filterDefinition>
+			<selectoneradio name="Status">
+				<item name="All">
+					<default>true</default>
+				</item>
+				<item name="Active">
+				    <criteria>
+				    	<criterion op="isNull" field="stopDate"></criterion>
+				    </criteria>
+				</item>
+				<item name="Errors">
+				    <criteria>
+				    	<criterion op="ne" field="errors" value="0"></criterion>
+				    </criteria>
+				</item>
+				<item name="Warnings">
+				    <criteria op="or">
+				    	<criterion op="ne" field="warnings" value="0"></criterion>
+				    	<criterion op="ne" field="errors" value="0"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>
+			<selectoneradio name="Owner">
+				<item name="All">
+					<default>true</default>
+				</item>
+				<item name="Mine">
+				    <criteria>
+				    	<criterion op="eq" field="creator" value="#{user}"></criterion>
+				    </criteria>
+				</item>
+				<item name="Others">
+				    <criteria>
+				    	<criterion op="ne" field="creator" value="#{user}"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>	
+			<selectoneradio name="Project">
+				<item name="All">
+				</item>
+				<item name="Active">
+					<default>true</default>
+					<condition type="hql">component.project.id = #{empty projectModule.instance.id ? 'component.project.id' : projectModule.instance.id}</condition>
+				</item>
+			</selectoneradio>	
+			<selectoneradio name="Component">
+				<item name="All">
+				</item>
+				<item name="Job">
+					<default>true</default>
+					<condition type="hql">component.dType = 5</condition>
+				</item>
+				<item name="Load">
+					<condition type="hql">component.dType = 4</condition>
+				</item>
+				<item name="Source">
+					<condition type="hql">component.dType = 2 or component.dType = 3</condition>
+				</item>
+			</selectoneradio>	
+			<selectoneradio name="Type">
+				<item name="All">
+					<default>true</default>
+				</item>
+				<item name="Dev">
+				    <criteria>
+				    	<criterion op="eq" field="component.project.type.name" value="Developement"></criterion>
+				    </criteria>
+				</item>
+				<item name="Stage">
+				    <criteria>
+				    	<criterion op="eq" field="component.project.type.name" value="Staging"></criterion>
+				    </criteria>
+				</item>
+				<item name="Prod">
+				    <criteria>
+				    	<criterion op="eq" field="component.project.type.name" value="Production"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>									
+			<selectmanydate name="Creation">
+				<item name="from">
+					<default>-10</default>
+					<condition type="hql">creationDate &gt;= ?</condition>
+				</item>
+				<item name="to">
+					<default>10</default>
+					<condition type="hql">creationDate &lt;= ?</condition>
+				</item>
+			</selectmanydate>
+		</filterDefinition>
+	</module>
+	
+	<module name="fetchInterval" label="Job Interval" navigable="false" administrable="true"/>
+	<module name="library" label="Custom Library" navigable="false" administrable="true"/>
+	
+	<module name="componentSearch" label="Component Search" navigable="false" administrable="false">
+		<filterDefinition>
+			<nondisplay name="active">
+				<item name="active">
+					<condition type="hql">active = true</condition>
+				</item>
+			</nondisplay>
+			<nondisplay name="connections">
+				<item name="active">
+					<condition type="hql">dType = 1</condition>
+				</item>
+			</nondisplay>
+			<nondisplay name="extracts">
+				<item name="active">
+					<condition type="hql">dType = 2</condition>
+				</item>
+			</nondisplay>
+			<nondisplay name="transforms">
+				<item name="active">
+					<condition type="hql">dType = 3</condition>
+				</item>
+			</nondisplay>
+			<nondisplay name="loads">
+				<item name="active">
+					<condition type="hql">dType = 4</condition>
+				</item>
+			</nondisplay>
+			<nondisplay name="jobs">
+				<item name="active">
+					<condition type="hql">dType = 5</condition>
+				</item>
+			</nondisplay>
+		</filterDefinition>
+	</module>
+
+	
+	<module name="account" label="User" navigable="false" administrable="true">
+		<submodules>
+			<module name="userRole" label="User Roles" navigable="false" administrable="true"></module>
+			<module name="userSearch" label="User-Search" navigable="false" administrable="false">
+				<filterDefinition>
+					<nondisplay name="activeUser">
+						<item name="activeUser">
+							<condition type="hql">enabled = true</condition>
+						</item>
+					</nondisplay>
+				</filterDefinition>
+			</module>
+		</submodules>
+		<filterDefinition>
+			<selectoneradio name="Status">
+				<item name="All">
+				</item>
+				<item name="Active">
+					<default>true</default>
+				    <criteria>
+				    	<criterion op="eq" field="enabled" value="true"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>			
+		</filterDefinition>
+	</module>
+
+	<module name="dashboard" label="News" navigable="false" administrable="false">
+		<filterDefinition>
+			<selectoneradio name="Typen">
+				<item name="All">
+				</item>
+				<item name="Unread">
+					<default>true</default>
+					<criteria op="and">
+				    	<criterion op="eq" field="read" value="false"></criterion>
+				    	<criteria op="or">
+				    		<criterion op="isNull" field="visibleDate"/>
+				    		 <criterion op="lt" field="visibleDate" value="#{currentDate}"/>  
+				    	</criteria>
+				    </criteria>
+				</item>
+				<item name="Read">
+					<criteria>
+				    	<criterion op="eq" field="read" value="true"></criterion>
+				    </criteria>
+ 				</item>
+				<item name="Future">
+					<criteria op="and">
+				    	<criterion op="eq" field="read" value="false"></criterion>
+				    	<criterion op="gt" field="visibleDate" value="#{currentDate}"></criterion>
+				    </criteria>
+				</item>
+			</selectoneradio>
+			<selectmanydate name="Creation">
+				<item name="from">
+					<default>-10</default>
+					<condition type="hql">creationDate &gt;= ?</condition>
+				</item>
+				<item name="to">
+					<default>10</default>
+					<condition type="hql">creationDate &lt;= ?</condition>
+				</item>
+			</selectmanydate>
+		</filterDefinition>
+	</module>
+
+
+</modules>

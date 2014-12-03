@@ -1,0 +1,59 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+   	
+    template="/layout/template.xhtml">
+
+	<ui:define name="topnav">
+		<ui:include src="/layout/menu.xhtml">
+			<ui:param name="page" value="administration" />
+		</ui:include>
+	</ui:define>
+    <ui:define name="maincontent">
+		<div class="headercontent" style="padding-bottom:3px;">
+			<div class="headerdetails" style="width:70%;">
+				<span class="headertext" >
+					<s:fragment rendered="#{libraryModule.managed}">#{libraryModule.config.label}: #{libraryModule.instance.name}</s:fragment>
+					<s:fragment rendered="#{not libraryModule.managed}">#{libraryModule.config.label}:  #{messages.get('global.new')}</s:fragment>
+				</span>		
+			</div>
+			<div class="headerdetails detailtagwrapper">
+				<span class="headertextsmall" style="float:left;"> #{messages.get('global.detailsView')}</span>
+			</div>
+		</div>
+		<h:panelGroup layout="block" styleClass="contenttab" id="content">
+			<h:form enctype="multipart/form-data">
+				<s:validateAll>
+					<div class="formwrapper">
+						<h:panelGrid styleClass="attributeTable" columns="2" columnClasses="labelCol, attributCol" >
+							<ui:include src="/elements/defaultAdministrationEditForm.xhtml">
+								<ui:param name="module" value="#{libraryModule}"/>
+								<ui:param name="sortable" value="false"/>
+							</ui:include>
+							<span class="inputlabel">Filename: </span>
+							<h:outputText value="#{libraryModule.instance.fileName}" />
+						</h:panelGrid>
+						<p:fileUpload fileUploadListener="#{libraryModule.handleFileUpload}" mode="advanced" dragDropSupport="false"  auto="false"
+                  			process=":content"  update=":content :messages" sizeLimit="10000000" fileLimit="1" allowTypes="/(\.|\/)(jar)$/" style="margin-bottom:10px;"/>  
+						<div class="actions">
+							<p:commandButton type="submit" action="#{libraryModule.persist}" value="Speichern" update=":content :messages" global="true"/>
+						</div>
+					</div>
+				</s:validateAll>
+			</h:form>
+		</h:panelGroup>
+	</ui:define>
+    
+    <ui:define name="rightcontent">
+		<ui:include src="/elements/administrationMenu.xhtml" >
+			<ui:param name="selectedParent" value="library" />
+			<ui:param name="selected" value="library" />
+		</ui:include>
+    </ui:define>
+    
+</ui:composition>

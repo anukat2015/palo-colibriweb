@@ -1,0 +1,199 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+   	xmlns:c="http://java.sun.com/jsp/jstl/core"
+    template="/layout/template.xhtml">
+
+	<ui:define name="head">
+		<script src="#{facesContext.externalContext.request.contextPath}/js/component.js"></script>
+		<script src="#{facesContext.externalContext.request.contextPath}/codemirror/lib/codemirror.js" type="text/javascript"></script>
+		<script src="#{facesContext.externalContext.request.contextPath}/codemirror/mode/xml/xml.js"></script>
+		<script src="#{facesContext.externalContext.request.contextPath}/codemirror/addon/edit/closetag.js"></script>
+		<script src="#{facesContext.externalContext.request.contextPath}/codemirror/addon/hint/show-hint.js"></script>
+		<script src="#{facesContext.externalContext.request.contextPath}/codemirror/addon/hint/xml-hint.js"></script>
+		<link rel="stylesheet" href="#{facesContext.externalContext.request.contextPath}/codemirror/lib/codemirror.css"/>
+		<link rel="stylesheet" href="#{facesContext.externalContext.request.contextPath}/codemirror/addon/hint/show-hint.css"/>
+		<style type="text/css">
+			.ui-tree .ui-tree-selectable .ui-treenode-label, .ui-tree .ui-tree-selectable {
+				width:95%;
+			}
+		</style>
+	</ui:define>
+
+	<ui:define name="topnav">
+		<ui:include src="/layout/menu.xhtml">
+			<ui:param name="page" value="connection" />
+			<ui:param name="detailPage" value="true" />
+		</ui:include>
+	</ui:define>
+    
+    <ui:define name="maincontent">
+		<h:panelGroup layout="block" styleClass="contenttab" id="content">
+			<div class="headercontent" style="padding-bottom:3px;">
+				<div class="headerdetails" style="width:70%;">
+					<span class="headertext" >
+						<s:fragment rendered="#{connectionModule.managed}">#{connectionModule.config.label}: #{connectionModule.instance.name}</s:fragment>
+						<s:fragment rendered="#{not connectionModule.managed}">#{connectionModule.config.label}: #{messages.get('global.new')}</s:fragment>
+					</span>		
+				</div>
+				<div class="headerdetails detailtagwrapper">
+					<span class="headertextsmall" style="float:left;">#{messages.get('global.detailsView')}</span>
+				</div>
+			</div>
+			<h:form id="mainform">
+				<div class="formwrapper">
+					<s:fragment rendered="#{not connectionModule.isXmlMode()}">
+						<s:validateAll>
+							<h:panelGrid styleClass="attributeTable" columns="2" columnClasses="labelCol, attributCol" >
+			          			<ui:include src="/modules/common/componentHeader.xhtml">
+									<ui:param name="module" value="#{connectionModule}" />
+								</ui:include>	
+							</h:panelGrid>
+							
+							<p:dataList value="#{connectionModule.getComplexRootNodes()}" var="builder" styleClass="repeat" type="none" emptyMessage="" id="complexFields">
+								<ui:include src="/modules/common/componentEditor.xhtml">
+									<ui:param name="inputList" value="#{connectionModule.getComponentTypedInputList()}" />
+									<ui:param name="render" value=":mainform:complexFields" />
+									<ui:param name="nodeBase" value=":mainform:complexFields" />
+									<ui:param name="treeVar" value="tree#{builder.position}" />
+									<ui:param name="module" value="#{connectionModule}" />
+								</ui:include>
+							</p:dataList>	
+							<h:panelGrid styleClass="attributeTable" columns="2" columnClasses="labelCol, attributCol" >
+								<ui:include src="/modules/common/componentFooter.xhtml">
+									<ui:param name="module" value="#{connectionModule}" />
+								</ui:include>	
+							</h:panelGrid> 
+							<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml"  id="logPanel"> 
+						   		<s:fragment rendered="#{connectionModule.executing or not empty connectionModule.etlLogs}">
+							     	<p:tabView id="tabs">
+							     		<p:tab id="LogsTab" title="Logs">
+							     			<h:inputTextarea styleClass="inputfield" rows="5"	cols="120" style="width:99.4%;"	value="#{connectionModule.etlLogs}" id="logDisplay" readonly="true">
+									 		</h:inputTextarea>
+							     		</p:tab>
+							     	</p:tabView>
+						     	</s:fragment>
+						   </s:decorate>
+							<h:panelGroup id="actions">
+								<s:fragment rendered="#{not empty connectionModule.instance.id}">
+									<ui:include src="/modules/common/connectionMetadata.xhtml">
+										<ui:param name="module" value="#{connectionModule}" />
+									</ui:include>
+								</s:fragment>
+								<div class="subspacer"/>
+								<div class="actions">
+									<p:commandButton onclick="#{connectionModule.getEditorsToSave()}" type="submit" action="#{connectionModule.persist}" value="#{messages.get('global.save')}" update=":content :rightform :messages #{empty connectionModule.instance.id ? ':sockets' : ''}" global="true" widgetVar="saveButton"/>
+								</div>
+								<div class="actions">
+									<p:commandButton type="submit" action="#{connectionModule.close}" value="#{messages.get('global.hide')}" immediate="true"/>
+								</div>
+								<div class="actions">
+									<p:commandButton onclick="#{connectionModule.getEditorsToSave()}" type="submit" action="#{connectionModule.validateComponent()}" value="#{messages.get('global.validate')}" update=":content, :messages" global="true" rendered="#{not empty connectionModule.instance.id}"/>
+								</div>
+								<div class="actions">
+									<p:commandButton onclick="#{connectionModule.getEditorsToSave()}" global="true" type="submit" action="#{connectionModule.testComponent()}" value="#{messages.get('global.test')}" update=":content :mainform:actions :mainform:logPanel" rendered="#{not empty connectionModule.instance.id}"/>
+								</div>
+								<div class="actions">
+									<p:commandButton widgetVar="metadataButton" global="false" onclick="#{connectionModule.getEditorsToSave()}" type="submit" action="#{connectionModule.calculateMetadata()}" value="Metadata" update=":content :mainform:logPanel :mainform:actions :messages" rendered="#{not empty connectionModule.instance.id and not connectionModule.executing and not empty connectionModule.getMetadataCriterias()}"/>
+								</div>
+								<div class="actions">
+										<p:commandButton global="true" type="submit" action="#{connectionModule.stopExecution()}" value="#{messages.get('global.stop')}" update=":content :messages" rendered="#{connectionModule.executing}">
+											<p:effect type="scale" speed="1000">  
+								    		</p:effect>  
+										</p:commandButton>
+									</div>
+								<div class="actions" style="float:left;">
+									<p:commandButton type="submit" 
+										value="#{messages.get('global.flowgraph')}" action="#{connectionModule.generateFlowGraph()}"
+										update=":flowGraphSelectionPanel" oncomplete="PF('flowGraphSelectionPanel').show();" rendered="#{not empty connectionModule.instance.id}" widgetVar="showGraphButton">
+									</p:commandButton>
+								</div>
+								<div class="actions" style="float:left;">
+									<p:commandButton type="submit" value="XML" process=":content" update=":content" action="#{connectionModule.switchToXML()}" oncomplete="callXML()" onclick="#{connectionModule.getEditorsToSave()}" widgetVar="toXMLButton"></p:commandButton>
+								</div>
+							</h:panelGroup>
+						</s:validateAll>
+					</s:fragment>
+					<s:fragment rendered="#{connectionModule.isXmlMode()}">
+						<ui:include src="/modules/common/fragmentCodeEditor.xhtml">
+							<ui:param name="module" value="#{connectionModule}" />
+						</ui:include>
+					</s:fragment>
+				</div>
+			</h:form>
+		</h:panelGroup>
+		<ui:include src="/elements/flowgraph.xhtml">
+			<ui:param name="module" value="#{connectionModule}"/>
+		</ui:include>
+		<s:fragment rendered="#{not empty connectionModule.instance.id}">
+			<ui:include src="/modules/common/cloneComponent.xhtml">
+				<ui:param name="module" value="#{connectionModule}"/>
+			</ui:include>
+		</s:fragment>
+		<h:panelGroup id="sockets">
+			<p:socket channel="/log/#{connectionModule.pushId}" onMessage="handleMessage"> 
+			</p:socket>
+			<p:socket channel="/completed/#{connectionModule.pushId}"> 
+				<p:ajax global="false" process="@this" event="message" update=":mainform:actions :mainform:logPanel :messages" listener="#{connectionModule.checkMessages()}" oncomplete="scrollLogs();"/>
+			</p:socket>
+		</h:panelGroup>	
+		<p:hotkey bind="ctrl+g" handler="PF('showGraphButton').jq.click();" />
+		<p:hotkey bind="ctrl+s" handler="PF('saveButton').jq.click();" />
+		<p:hotkey bind="ctrl+d" handler="PF('metadataButton').jq.click();" />
+		<p:hotkey bind="ctrl+return" handler="PF('toXMLButton').jq.click();" />	
+    </ui:define>
+    
+    <ui:define name="rightcontent">
+  
+    	<h:form id="rightform"> 
+    		<div class="subspacer marginplus14pix">&nbsp;</div>
+    		
+ 			<h:panelGroup id="projectList">
+    		<ui:include src="/modules/common/rightContentList.xhtml">
+    			<ui:param name="id" value="projects" />
+    			<ui:param name="title" value="Project" />
+    			<ui:param name="backingBean" value="#{projectModule}" />
+    			<ui:param name="emptyText" value="No Project" />
+    			<ui:param name="listImage" value="icon.png" />
+    			<ui:param name="results" value="#{connectionModule.getProjectInList()}" />
+    			<ui:param name="collapsed" value="false"></ui:param>
+    		</ui:include>
+    		</h:panelGroup> 
+    		
+    		
+    		<div class="subspacer">&nbsp;</div>
+    		<h:panelGroup id="extractList">
+				<ui:include src="/modules/common/rightContentList.xhtml">
+	    			<ui:param name="id" value="extracts" />
+	    			<ui:param name="title" value="Extracts" />
+	    			<ui:param name="backingBean" value="#{extractModule}" />
+	    			<ui:param name="emptyText" value="No dependant Extracts" />
+	    			<ui:param name="listImage" value="icon.png" />
+	    			<ui:param name="results" value="#{connectionModule.getDirectDependants('extracts')}" />
+	    			<ui:param name="collapsed" value="#{results.size() == 0}"></ui:param>
+	    		</ui:include>
+    		</h:panelGroup>
+    		
+    		<div class="subspacer">&nbsp;</div>
+    		<h:panelGroup id="loadList">
+				<ui:include src="/modules/common/rightContentList.xhtml">
+	    			<ui:param name="id" value="loads" />
+	    			<ui:param name="title" value="Loads" />
+	    			<ui:param name="backingBean" value="#{loadModule}" />
+	    			<ui:param name="emptyText" value="No dependant Loads" />
+	    			<ui:param name="listImage" value="icon.png" />
+	    			<ui:param name="results" value="#{connectionModule.getDirectDependants('loads')}" />
+	    			<ui:param name="collapsed" value="#{results.size() == 0}"></ui:param>
+	    		</ui:include>
+    		</h:panelGroup>
+    
+    	</h:form>
+    	
+    </ui:define>
+    
+</ui:composition>

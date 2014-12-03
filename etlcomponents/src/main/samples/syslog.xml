@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="aransecni" version="3.0">
+  <comment>
+<![CDATA[ poject needs a name!]]>
+  </comment>
+  <connections>
+    <connection name="Diagnosis" type="File">
+      <database>diagnosis.csv</database>
+      <header>false</header>
+      <delimiter>;</delimiter>
+      <encoding>utf8</encoding>
+      <quote>"</quote>
+    </connection>
+      <connection name="Syslog" type="Syslog">
+    	<host>localhost</host>
+    	<port>5556</port>
+      <delimiter>;</delimiter>
+      <encoding>utf8</encoding>
+    </connection>
+  </connections>
+  <extracts>
+  	<extract name="syslog" type="Stream">
+  	  <comment> please specify all colums in alias map in ascending order!!! has to be fixed in future versions.</comment>
+      <connection nameref="Syslog" />
+      <columns>4</columns>
+       <alias_map>
+        <alias name="id">1</alias>
+        <alias name="parent">2</alias>
+        <alias name="name">3</alias>
+        <alias name="description">4</alias>
+      </alias_map>
+    </extract>
+    <extract name="Diagnosis" type="File">
+     <connection nameref="Diagnosis" />
+     <alias_map>
+        <alias name="id">1</alias>
+        <alias name="parent">2</alias>
+        <alias name="name">3</alias>
+        <alias name="description">4</alias>
+      </alias_map>
+    </extract>
+  </extracts>
+  <transforms>
+  </transforms>
+  <loads>
+    <load name="Syslog" type="Stream">
+  		<connection nameref="Syslog"/>
+  		<source nameref="Diagnosis"></source>
+  	</load>
+  </loads>
+  <jobs>
+    <job name="default">
+      <job nameref="syslog" />
+      <job nameref="extract" />
+    </job>
+    <job name="syslog">
+      <load nameref="Syslog" />
+    </job>
+    <job name="extract">
+    	<script>
+    		<![CDATA[
+    			state = API.executeSource("syslog");
+    			LOG.info(state.getData());
+    		]]>
+    	</script>
+    </job>
+  </jobs>
+</project>
+

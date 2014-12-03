@@ -1,0 +1,125 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	
+	template="/layout/template.xhtml">
+
+	<ui:define name="topnav">
+		<ui:include src="/layout/menu.xhtml">
+			<ui:param name="page" value="administration" />
+		</ui:include>
+	</ui:define>
+	<ui:define name="maincontent">
+		<h:panelGroup layout="block" styleClass="contenttab" id="content">
+
+			<h:form>
+				<h:panelGrid styleClass="attributeTable" columns="2" columnClasses="labelCol,attributCol" >	
+					<h:selectOneMenu id="globallevelInput" styleClass="inputfield" value="#{logManager.globalLogLevel}">
+						<f:selectItem itemValue="DEBUG" itemLabel="DEBUG" />
+						<f:selectItem itemValue="INFO" itemLabel="INFO" />
+						<f:selectItem itemValue="WARN" itemLabel="WARN" />
+						<f:selectItem itemValue="ERROR" itemLabel="ERROR" />
+					</h:selectOneMenu>
+					<p:commandButton value="Global Setzen" global="true" action="#{logManager.applyGlobalLogLevel}" />
+					
+					<h:selectOneMenu id="taskLevelInput" styleClass="inputfield" value="#{logManager.taskLogLevel}">
+						<f:selectItem itemValue="DEBUG" itemLabel="DEBUG" />
+						<f:selectItem itemValue="INFO" itemLabel="INFO" />
+						<f:selectItem itemValue="WARN" itemLabel="WARN" />
+						<f:selectItem itemValue="ERROR" itemLabel="ERROR" />
+					</h:selectOneMenu>
+					<p:commandButton value="Task Setzen" global="true" action="#{logManager.applyTaskLogLevel}" />
+					
+					<span class="inputlabel">Quartz-Cron:</span>
+					<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml">
+						<h:selectBooleanCheckbox  value="#{taskController.cronEnabled}" >
+							<p:ajax process="@this" event="change" update=":content"/>
+						</h:selectBooleanCheckbox>
+					</s:decorate>
+					
+					<span class="inputlabel">Mail:</span>
+					
+						<h:selectBooleanCheckbox  value="#{taskController.mailEnabled}" >
+							<p:ajax execute="@this" event="change" update=":content"/>
+						</h:selectBooleanCheckbox>
+					
+					<span class="inputlabel">Stack Log:</span>
+					<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml">
+						<h:selectBooleanCheckbox  value="#{taskController.logExceptionStack}" >
+							<p:ajax execute="@this" event="change" update=":content" />
+						</h:selectBooleanCheckbox>
+					</s:decorate>
+          			
+          			<p:commandButton type="submit" 
+						value="Aktualisieren">
+					</p:commandButton>
+					
+				</h:panelGrid>
+				
+				<h:panelGroup layout="block" styleClass="detailseditpanel" >		
+				    <div class="title">Jobs:</div>
+					<p:dataTable value="#{taskController.jobDescriptors}" rows="0" rowStyleClass="even,uneven" var="item" id="jobListTable" style="width:98%;">
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Typ"/>
+							</f:facet>
+							<h:outputText value="#{item.getType()}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+	                            <h:outputText value="Beschreibung" />
+	                        </f:facet>
+	                        <h:outputText value="#{item.getDescription()}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+	                            <h:outputText value="Job-Name" />
+	                        </f:facet>
+	                        <h:outputText value="#{item.getJobName()}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+	                            <h:outputText value="Trigger-Name" />
+	                        </f:facet>
+	                        <h:outputText value="#{item.getTrigger().getName()}">
+							</h:outputText>
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+	                            <h:outputText value="Start" />
+	                        </f:facet>
+	                        <h:outputText value="#{item.getTrigger().getStartTime()}">
+	                        	 <s:convertDateTime type="both" dateStyle="medium"/>
+	                        </h:outputText>
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+	                            <h:outputText value="Laufzeit" />
+	                        </f:facet>
+	                        <h:outputText value="#{item.getRuntime()}" />
+						</h:column>
+						<p:column style="text-align: center; width: 70px;">
+							<f:facet name="header">
+								<h:outputText value="Status"/>
+							</f:facet>
+							<p:commandButton type="submit" global="true" action="#{taskController.killJob(item)}" process="@this" title="Job löschen" image="/img/decline.png" update="jobListTable"/>
+						</p:column>
+					</p:dataTable>
+				</h:panelGroup>
+				<h:panelGroup>	
+					<p:commandButton type="submit" value="Alle Löschen" action="#{taskController.killAllJobs()}" update="jobListTable" >
+					</p:commandButton>
+				</h:panelGroup>
+				
+			</h:form>
+
+		</h:panelGroup>
+	</ui:define>
+
+
+</ui:composition>

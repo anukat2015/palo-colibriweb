@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="importRelDB" version="3.2">
+  <comment>
+<![CDATA[Palo ETL Demo.
+Import from Relational Database to Palo Server. Demonstrates creation of hierarchical dimensions, cubes and use of functions.
+Note: The Jobs "Cubedata" and "default" end for demonstration purpose with a Warning]]>
+  </comment>
+  <variables />
+  <connections>
+    <connection name="mq" type="MQ">
+    	<terminationCode>#Quit</terminationCode>
+    	<database>mq</database>
+    	<host>localhost</host>
+    	<port>61616</port>
+    	<protocol>tcp</protocol>
+    	<delimiter>;</delimiter>
+    	<quote>"</quote>
+    </connection>
+  </connections>
+  <extracts>
+    <extract name="MQ_Extract" type="Stream">
+      <connection nameref="mq" />
+      <columns>4</columns>
+      <alias_map>
+        <alias name="id">1</alias>
+        <alias name="parent">2</alias>
+        <alias name="name">3</alias>
+        <alias name="description">4</alias>
+      </alias_map>
+    </extract>
+  </extracts>
+  <transforms>
+  </transforms>
+  <loads>
+  </loads>
+  <jobs>
+  </jobs>
+</project>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.5.0_15" class="java.beans.XMLDecoder">
+	<object class="at.adaptive.components.documentmanagement.config.DocumentManagerConfig">
+		<void property="componentName">
+			<string>at.adaptive.components.documentmanagement.documentManager</string>
+		</void>
+		<void property="supportedDocumentTypes">
+			<object class="java.util.ArrayList">
+				<void method="add">
+					<string>xls</string>
+				</void>
+				<void method="add">
+					<string>txt</string>
+				</void>
+				<void method="add">
+					<string>doc</string>
+				</void>
+				<void method="add">
+					<string>docx</string>
+				</void>
+				<void method="add">
+					<string>csv</string>
+				</void>
+				<void method="add">
+					<string>xml</string>
+				</void>
+				<void method="add">
+					<string>pdf</string>
+				</void>
+				<void method="add">
+					<string>ods</string>
+				</void>
+				<void method="add">
+					<string>odt</string>
+				</void>
+				<void method="add">
+					<string>odp</string>
+				</void>
+				<void method="add">
+					<string>ppt</string>
+				</void>
+				<void method="add">
+					<string>pptx</string>
+				</void>
+			</object>
+		</void>
+	</object>
+</java> 

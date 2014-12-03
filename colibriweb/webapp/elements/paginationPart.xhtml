@@ -1,0 +1,26 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:s="http://jboss.org/schema/seam/taglib" xmlns:p="http://primefaces.org/ui" >
+  
+   <s:fragment rendered="#{backingBean.pageCount &gt; 1}">
+      <div class="paginationpanel" style="float:left;">
+         <p:commandLink global="true" style="float:left;" process="@this" rendered="#{backingBean.previousExists}" action="#{backingBean.getPreviousFirstResult}" update="#{render}" styleClass="pagnav">Backward</p:commandLink>
+         <p:commandLink global="true" style="float:left;" process="@this" rendered="#{!(backingBean.pageCount &gt; max and backingBean.currentPage &gt; (center+1))}" action="#{backingBean.getFirstPageResult}" styleClass="#{backingBean.currentPage==1?'active':''}" update="#{render}">1</p:commandLink>
+         <p:commandLink global="true" style="float:left;" process="@this" rendered="#{backingBean.pageCount &gt; max and backingBean.currentPage &gt; (center+1)}" action="#{backingBean.getFirstPageResult}" styleClass="#{backingBean.currentPage==1?'active':''}" update="#{render}">1...</p:commandLink>  
+         <h:panelGroup layout="block" style="float:left;" rendered="#{not empty backingBean.getCustomDisplayPages(max)}">
+	         <p:dataList value="#{backingBean.getCustomDisplayPages(max)}" var="page" styleClass="repeat" type="none" emptyMessage="">
+	            <p:commandLink global="true" process="@this" action="#{backingBean.getPageResults(page)}" styleClass="#{backingBean.currentPage==page?'active':''}" update="#{render}" style="float:left;">#{page}</p:commandLink>
+	         </p:dataList>
+	     </h:panelGroup>
+         <p:commandLink global="true" style="float:left;" process="@this" rendered="#{(backingBean.pageCount &gt; 1) and (backingBean.pageCount &gt; max and backingBean.currentPage lt (backingBean.pageCount-center))}" action="#{backingBean.getLastFirstResult}" styleClass="#{backingBean.currentPage==backingBean.pageCount?'active':''}" update="#{render}">...#{backingBean.pageCount}</p:commandLink>
+         <p:commandLink global="true" style="float:left;" process="@this" rendered="#{(backingBean.pageCount &gt; 1) and !(backingBean.pageCount &gt; max and backingBean.currentPage lt (backingBean.pageCount-center))}" action="#{backingBean.getLastFirstResult}" styleClass="#{backingBean.currentPage==backingBean.pageCount?'active':''}" update="#{render}">#{backingBean.pageCount}</p:commandLink>
+         <p:commandLink global="true" style="float:left;" process="@this" rendered="#{backingBean.nextExists}" action="#{backingBean.getNextFirstResult}" update="#{render}" styleClass="pagnav">Forward</p:commandLink>
+      </div>
+   </s:fragment>
+   <h:panelGroup layout="block" styleClass="paginationpanel" rendered="#{backingBean.resultCount &gt; 0}">
+		<h:panelGroup styleClass="infotextsmall">
+			<h:outputText value="Show #{backingBean.firstResult + 1}-#{backingBean.currentIndex} / #{backingBean.resultCount}" rendered="#{shortText}"/>
+			<h:outputText value="Show #{backingBean.firstResult + 1}-#{backingBean.currentIndex} of #{backingBean.resultCount} results" rendered="#{not shortText}"/>
+		</h:panelGroup>
+   </h:panelGroup>
+   
+</ui:composition>
+

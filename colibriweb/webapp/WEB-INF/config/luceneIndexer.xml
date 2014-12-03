@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<java version="1.5.0_15" class="java.beans.XMLDecoder"> 
+ <object class="at.adaptive.components.hibernate.LuceneIndexerConfig"> 
+  <void property="componentName"> 
+   <string>at.adaptive.components.hibernate.luceneIndexer</string> 
+  </void> 
+  <void property="urls"> 
+   <object class="java.util.ArrayList"> 
+    <void method="add"> 
+     <string>/WEB-INF/classes</string> 
+    </void> 
+   </object> 
+  </void> 
+ </object> 
+</java> 

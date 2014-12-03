@@ -1,0 +1,122 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	 template="/layout/template.xhtml">
+
+	<ui:define name="topnav">
+		<ui:include src="/layout/menu.xhtml">
+			<ui:param name="page" value="account" />
+		</ui:include>
+	</ui:define>
+	<ui:define name="maincontent">
+		<div class="headercontent" style="padding-bottom: 3px;">
+			<div class="headerdetails" style="width: 70%;">
+				<span class="headertext"> <s:fragment
+						rendered="#{accountModule.managed}">#{accountModule.config.label}: #{accountModule.instance.username}</s:fragment>
+					<s:fragment rendered="#{not accountModule.managed}">#{accountModule.config.label}: #{messages.get('global.new')}</s:fragment>
+				</span>
+			</div>
+			<div class="headerdetails detailtagwrapper">
+				<span class="headertextsmall" style="float: left;">#{messages.get('global.detailsView')}</span>
+			</div>
+		</div>
+		<h:panelGroup layout="block" styleClass="contenttab" id="content">
+			<h:form>
+				<s:validateAll>
+					<div class="formwrapper">
+						<h:panelGroup styleClass="attributeTable" layout="block"
+							id="basicData">
+							<h:panelGrid styleClass="attributeTable" columns="2"
+								columnClasses="labelCol, attributCol">
+
+								<span class="inputlabel">#{messages.get('login.user')}</span>
+								<s:decorate styleClass="inputwrapper"
+									template="/layout/fieldvalidation.xhtml">
+									<h:inputText required="true"
+										validator="#{accountModule.validateUsername}"
+										value="#{accountModule.instance.username}"
+										styleClass="inputfield" />
+								</s:decorate>
+
+								<ui:include src="/elements/gridinputfield.xhtml">
+									<ui:param name="inputType" value="inputSecret" />
+									<ui:param name="label" value="#{messages.get('login.password')}" />
+									<ui:param name="inputValue" value="#{accountModule.password}" />
+									<ui:param name="fieldrequired"
+										value="#{not accountModule.managed}" />
+								</ui:include>
+
+								<ui:include src="/elements/gridinputfield.xhtml">
+									<ui:param name="inputType" value="inputText" />
+									<ui:param name="label" value="Title" />
+									<ui:param name="inputValue"
+										value="#{accountModule.instance.title}" />
+								</ui:include>
+
+								<ui:include src="/elements/gridinputfield.xhtml">
+									<ui:param name="inputType" value="inputText" />
+									<ui:param name="label" value="#{messages.get('login.firstname')}" />
+									<ui:param name="inputValue"
+										value="#{accountModule.instance.firstname}" />
+								</ui:include>
+
+								<ui:include src="/elements/gridinputfield.xhtml">
+									<ui:param name="inputType" value="inputText" />
+									<ui:param name="label" value="#{messages.get('login.lastname')}" />
+									<ui:param name="inputValue"
+										value="#{accountModule.instance.lastname}" />
+								</ui:include>
+
+								<ui:include src="/elements/gridinputfield.xhtml">
+									<ui:param name="inputType" value="inputText" />
+									<ui:param name="label" value="#{messages.get('login.email')}" />
+									<ui:param name="inputValue"
+										value="#{accountModule.instance.email}" />
+								</ui:include>
+
+								<ui:include src="/elements/gridinputfield.xhtml">
+									<ui:param name="inputType" value="checkBox" />
+									<ui:param name="label" value="#{messages.get('login.active')}" />
+									<ui:param name="inputValue"
+										value="#{accountModule.instance.enabled}" />
+								</ui:include>
+							
+								<ui:include src="/elements/gridinputfield.xhtml">
+									<ui:param name="inputType" value="pickList" />
+									<ui:param name="label" value="#{messages.get('login.roles')}" />
+									<ui:param name="sourceValue" value="#{accountModule.listModel}" />
+									<ui:param name="sourceCaptionLabel" value="#{messages.get('login.roles.available')}" />
+									<ui:param name="targetCaptionLabel" value="#{messages.get('login.roles.selected')}" />
+									<ui:param name="sourceListWidth" value="200" />
+									<ui:param name="targetListWidth" value="200" />
+									<ui:param name="listsHeight" value="150" />
+									<ui:param name="fieldrequired" value="true" />
+								</ui:include>
+
+							</h:panelGrid>
+							<div class="actions">
+								<p:commandButton type="submit" action="#{accountModule.persist}"
+									value="#{messages.get('global.save')}"
+									update=":content :messages" global="true"/>
+							</div>
+						</h:panelGroup>
+					</div>
+				</s:validateAll>
+			</h:form>
+
+		</h:panelGroup>
+	</ui:define>
+
+	<ui:define name="rightcontent">
+		<ui:include src="/elements/administrationMenu.xhtml">
+			<ui:param name="selectedParent" value="account" />
+			<ui:param name="selected" value="account" />
+		</ui:include>
+	</ui:define>
+
+</ui:composition>

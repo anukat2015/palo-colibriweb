@@ -1,0 +1,63 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    template="/layout/templateNoColumns.xhtml">
+
+	<ui:define name="maincontent">
+		<h:panelGroup layout="block" styleClass="loginbox" style="width:450px;margin-left: auto ; margin-right: auto ;">
+			<div class="headerbox">
+				<div class="spanwrapper">
+					<span class="header">#{messages['login.title']}<br/>
+					</span>
+				</div>
+				<div class="spanwrapper" style="margin-bottom:10px;">
+					<span class="subheader">#{messages['login.info']}</span>
+				</div>
+			</div>
+
+			<div class="fields">
+				<h:form>
+					<h:panelGroup layout="block" id="baseGrid">
+						<h:panelGrid columns="2" columnClasses="labelCol,attributCol"  style="width:60%;float:left;margin-top:20px;" >
+							<span class="label">#{messages['login.username']}</span>
+							<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml" style="width:135px;">
+								<h:inputText id="username" required="true" styleClass="inputfield" value="#{credentials.username}"  >
+								</h:inputText>
+							</s:decorate>				
+							<span class="label">#{messages['login.password']}</span>
+							<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml" style="width:135px;">
+								<h:inputSecret required="true" styleClass="inputfield" value="#{credentials.password}"/>			
+							</s:decorate>
+						</h:panelGrid>
+						<h:panelGroup style="float:right;">
+							<h:commandButton value="#{messages['login.login']}" action="#{identity.login}" image="/img/colibri.png">
+							</h:commandButton>
+						</h:panelGroup>
+					</h:panelGroup>	
+					
+					<h:panelGroup layout="block">
+						<s:fragment rendered="#{!org.jboss.seam.navigation.pages.authenticate}">
+							<s:link propagation="none" value="#{messages['login.lostPassword']}" view="/lostpassword.xhtml" style="float:left;margin-top:20px;"/><br/>	
+						</s:fragment>
+						
+						<s:fragment>
+							<div class="actions">
+								<h:commandButton value="#{messages['login.login']}" action="#{identity.login}" style="float:right;margin-top:20px;margin-right:20px;" />
+							</div>
+						</s:fragment>
+						<p:focus context="baseGrid"/>  
+					</h:panelGroup>
+					
+				</h:form>
+				</div>
+			
+			<br style="clear: both;" />
+		</h:panelGroup>
+	</ui:define>
+
+</ui:composition>

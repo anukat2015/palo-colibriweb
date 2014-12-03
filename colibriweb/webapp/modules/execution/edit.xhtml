@@ -1,0 +1,184 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+   	
+    template="/layout/template.xhtml">
+
+	<ui:define name="head">
+		<script src="#{facesContext.externalContext.request.contextPath}/js/component.js"></script>
+	</ui:define>
+
+	<ui:define name="topnav">
+		<ui:include src="/layout/menu.xhtml">
+			<ui:param name="page" value="execution" />
+			<ui:param name="detailPage" value="true" />
+		</ui:include>
+	</ui:define>
+    
+    <ui:define name="maincontent">
+    	<script type="text/javascript">
+		</script> 
+		<div class="headercontent" style="padding-bottom:3px;">
+			<div class="headerdetails" style="width:70%;">
+				<span class="headertext" >
+					<s:fragment rendered="#{executionModule.managed}">#{executionModule.config.label}: #{executionModule.instance.type} #{executionModule.instance.name}</s:fragment>
+					<s:fragment rendered="#{not executionModule.managed}">#{executionModule.config.label}: #{messages.get('global.new')}</s:fragment>
+				</span>		
+			</div>
+			<div class="headerdetails detailtagwrapper">
+				<span class="headertextsmall" style="float:left;">Project: #{executionModule.instance.component.project.name}</span>
+			</div>
+		</div>
+		<h:panelGroup layout="block" styleClass="contenttab" id="content">
+			<h:form id="mainform">
+				<s:validateAll>
+					<div class="formwrapper">
+						<h:panelGrid styleClass="attributeTable" columns="2" columnClasses="labelCol, attributCol" >
+							<span class="inputlabel">#{messages.get('ui.status')}: </span>
+		          			<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml" >
+								<h:outputText value="#{executionModule.instance.getStateString()}">
+								</h:outputText>
+							</s:decorate>
+		          			<span class="inputlabel">#{messages.get('ui.start')}: </span>
+		          			<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml" >
+								<h:outputText value="#{executionModule.instance.startDate}">
+									 <s:convertDateTime type="both" dateStyle="medium"/>
+								</h:outputText>
+							</s:decorate>
+							<span class="inputlabel">#{messages.get('ui.end')}: </span>
+		          			<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml" >
+								<h:outputText value="#{executionModule.instance.startDate}">
+									 <s:convertDateTime type="both" dateStyle="medium"/>
+								</h:outputText>
+							</s:decorate>
+							<span class="inputlabel">#{messages.get('ui.errors')}: </span>
+		          			<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml" >
+								<h:outputText value="#{executionModule.instance.errors}">
+								</h:outputText>
+							</s:decorate>
+							<span class="inputlabel">#{messages.get('ui.warnings')}: </span>
+		          			<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml" >
+								<h:outputText value="#{executionModule.instance.warnings}">
+								</h:outputText>
+							</s:decorate>
+							<span class="inputlabel">#{messages.get('ui.responsible')}: </span>
+								<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml">
+									<h:inputText value="#{executionModule.instance.component.contactPerson}" styleClass="inputfield" required="false" readonly="true">
+									</h:inputText>
+								</s:decorate>
+						</h:panelGrid>
+						<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml"  id="logPanel"> 
+					   		<s:fragment rendered="#{executionModule.executing or not empty executionModule.etlLogs}">
+						     	<p:tabView id="tabs">
+						     		<p:tab id="LogsTab" title="Logs">
+						     			<h:inputTextarea styleClass="inputfield" rows="15"	cols="120" style="width:99.4%;"	value="#{executionModule.etlLogs}" id="logDisplay" readonly="true">
+								 		</h:inputTextarea>
+						     		</p:tab>
+						     	</p:tabView>
+					     	</s:fragment>
+					   </s:decorate>
+					   <h:panelGroup id="actions">
+						<div class="actions">
+							<p:commandButton type="submit" action="#{executionModule.close}" value="#{messages.get('global.hide')}" immediate="true"/>
+						</div>
+						 <div class="actions">
+							<p:commandButton global="true" type="submit" action="#{executionModule.stopExecution()}" value="#{messages.get('global.stop')}" update=":content :messages" rendered="#{executionModule.executing}"/>
+						 </div>
+						 <div class="actions">
+							<p:commandButton global="true" type="submit" value="Refresh" update=":content :messages" rendered="#{executionModule.executing}"/>
+						 </div>
+						</h:panelGroup>	
+					</div>
+				</s:validateAll>
+				<p:socket channel="/log/#{executionModule.instance.id}" rendered="#{not empty executionModule.instance.id}" onMessage="handleMessage"> 
+				</p:socket>
+				<p:socket channel="/completed/#{executionModule.instance.id}" rendered="#{not empty executionModule.execution}"> 
+				   <p:ajax global="false" process="@this" event="message" update=":mainform:actions"/>
+				</p:socket>
+			</h:form>
+			
+			
+		</h:panelGroup>
+    </ui:define>
+    
+    <ui:define name="rightcontent">
+    	<h:form id="rightform"> 
+    		<div class="subspacer marginplus14pix">&nbsp;</div>
+    		
+ 			<h:panelGroup id="projectList">
+    		<ui:include src="/modules/common/rightContentList.xhtml">
+    			<ui:param name="id" value="projects" />
+    			<ui:param name="title" value="Project" />
+    			<ui:param name="backingBean" value="#{projectModule}" />
+    			<ui:param name="emptyText" value="No Project" />
+    			<ui:param name="listImage" value="icon.png" />
+    			<ui:param name="results" value="#{executionModule.getProjectInList()}" />
+    			<ui:param name="collapsed" value="false"></ui:param>
+    		</ui:include>
+    		</h:panelGroup> 
+    		
+    		<s:fragment rendered="#{executionModule.instance.component.dType == 2}">
+    			<h:panelGroup id="extractList">
+	    		<ui:include src="/modules/common/rightContentList.xhtml">
+	    			<ui:param name="id" value="extracts" />
+	    			<ui:param name="title" value="Extract" />
+	    			<ui:param name="backingBean" value="#{extractModule}" />
+	    			<ui:param name="emptyText" value="No Extracts" />
+	    			<ui:param name="listImage" value="icon.png" />
+	    			<ui:param name="results" value="#{executionModule.getComponentInList()}" />
+	    			<ui:param name="collapsed" value="false"></ui:param>
+	    		</ui:include>
+	    		</h:panelGroup> 
+    		</s:fragment>
+    		
+    		<s:fragment rendered="#{executionModule.instance.component.dType == 3}">
+    			<h:panelGroup id="transformList">
+	    		<ui:include src="/modules/common/rightContentList.xhtml">
+	    			<ui:param name="id" value="transforms" />
+	    			<ui:param name="title" value="Transform" />
+	    			<ui:param name="backingBean" value="#{transformModule}" />
+	    			<ui:param name="emptyText" value="No Transforms" />
+	    			<ui:param name="listImage" value="icon.png" />
+	    			<ui:param name="results" value="#{executionModule.getComponentInList()}" />
+	    			<ui:param name="collapsed" value="false"></ui:param>
+	    		</ui:include>
+	    		</h:panelGroup> 
+    		</s:fragment>
+    		
+    		<s:fragment rendered="#{executionModule.instance.component.dType == 4}">
+    			<h:panelGroup id="loadList">
+	    		<ui:include src="/modules/common/rightContentList.xhtml">
+	    			<ui:param name="id" value="loads" />
+	    			<ui:param name="title" value="Load" />
+	    			<ui:param name="backingBean" value="#{loadModule}" />
+	    			<ui:param name="emptyText" value="No Loads" />
+	    			<ui:param name="listImage" value="icon.png" />
+	    			<ui:param name="results" value="#{executionModule.getComponentInList()}" />
+	    			<ui:param name="collapsed" value="false"></ui:param>
+	    		</ui:include>
+	    		</h:panelGroup> 
+    		</s:fragment>
+    		
+    		<s:fragment rendered="#{executionModule.instance.component.dType == 5}">
+    			<h:panelGroup id="jobList">
+	    		<ui:include src="/modules/common/rightContentList.xhtml">
+	    			<ui:param name="id" value="jobs" />
+	    			<ui:param name="title" value="Job" />
+	    			<ui:param name="backingBean" value="#{jobModule}" />
+	    			<ui:param name="emptyText" value="No Jobs" />
+	    			<ui:param name="listImage" value="icon.png" />
+	    			<ui:param name="results" value="#{executionModule.getComponentInList()}" />
+	    			<ui:param name="collapsed" value="false"></ui:param>
+	    		</ui:include>
+	    		</h:panelGroup> 
+    		</s:fragment>
+    
+    	</h:form>
+    </ui:define>
+    
+</ui:composition>

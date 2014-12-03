@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagram model-entity="SeamPagesDiagram">
+ <item ID="#login.xhtml" NAME="#xlogin.xhtml" PATH="/login.xhtml"
+  SHAPE="344,17,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/modules/project/list.xhtml" NAME="output"
+   PATH="/modules/project/list.xhtml"
+   TARGET="#xmodules#xproject#xlist.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#help.xhtml" NAME="#xhelp.xhtml" PATH="/help.xhtml"
+  SHAPE="24,2409,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#welcome.xhtml" NAME="#xwelcome.xhtml" PATH="/welcome.xhtml"
+  SHAPE="696,121,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/modules/project/edit.xhtml" NAME="output"
+   PATH="/modules/project/edit.xhtml"
+   TARGET="#xmodules#xproject#xedit.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#system.xhtml" NAME="#xsystem.xhtml" PATH="/system.xhtml"
+  SHAPE="344,2409,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#modules#account#list.xhtml"
+  NAME="#xmodules#xaccount#xlist.xhtml"
+  PATH="/modules/account/list.xhtml" SHAPE="24,225,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/modules/account/edit.xhtml" NAME="output"
+   PATH="/modules/account/edit.xhtml"
+   TARGET="#xmodules#xaccount#xedit.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#modules#account#edit.xhtml"
+  NAME="#xmodules#xaccount#xedit.xhtml"
+  PATH="/modules/account/edit.xhtml" SHAPE="344,225,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#modules#account#userrole#list.xhtml"
+  NAME="#xmodules#xaccount#xuserrole#xlist.xhtml"
+  PATH="/modules/account/userrole/list.xhtml" SHAPE="24,329,0,0"
+  TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/modules/account/userrole/edit.xhtml" NAME="output"
+   PATH="/modules/account/userrole/edit.xhtml"
+   TARGET="#xmodules#xaccount#xuserrole#xedit.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#modules#account#userrole#edit.xhtml"
+  NAME="#xmodules#xaccount#xuserrole#xedit.xhtml"
+  PATH="/modules/account/userrole/edit.xhtml" SHAPE="344,329,0,0"
+  TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/modules/account/userrole/list.xhtml" NAME="output"
+   PATH="/modules/account/userrole/list.xhtml"
+   TARGET="#xmodules#xaccount#xuserrole#xlist.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#modules#account#myaccount#edit.xhtml"
+  NAME="#xmodules#xaccount#xmyaccount#xedit.xhtml"
+  PATH="/modules/account/myaccount/edit.xhtml" SHAPE="344,121,0,0"
+  TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/modules/project/list.xhtml" NAME="output"
+   PATH="/modules/project/list.xhtml"
+   TARGET="#xmodules#xproject#xlist.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#modules#fetchinterval#list.xhtml"
+  NAME="#xmodules#xfetchinterval#xlist.xhtml"
+  PATH="/modules/fetchinterval/list.xhtml" SHAPE="24,433,0,0"
+  TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/modules/fetchinterval/edit.xhtml" NAME="output"
+   PATH="/modules/fetchinterval/edit.xhtml"
+   TARGET="#xmodules#xfetchinterval#xedit.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#modules#fetchinterval#edit.xhtml"
+  NAME="#xmodules#xfetchinterval#xedit.xhtml"
+  PATH="/modules/fetchinterval/edit.xhtml" SHAPE="344,433,0,0"
+  TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/modules/fetchinterval/list.xhtml" NAME="output"
+   PATH="/modules/fetchinterval/list.xhtml"
+   TARGET="#xmodules#xfetchinterval#xlist.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#admin.xhtml" NAME="#xadmin.xhtml" PATH="/admin.xhtml"
+  SHAPE="664,2409,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#modules#dashboard#list.xhtml"
+  NAME="#xmodules#xdashboard#xlist.xhtml"
+  PATH="/modules/dashboard/list.xhtml" SHAPE="984,2409,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#modules#project#list.xhtml"
+  NAME="#xmodules#xproject#xlist.xhtml"
+  PATH="/modules/project/list.xhtml" SHAPE="696,17,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/modules/project/edit.xhtml" NAME="output"
+   PATH="/modules/project/edit.xhtml"
+   TARGET="#xmodules#xproject#xedit.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#modules#project#edit.xhtml"
+  NAME="#xmodules#xproject#xedit.xhtml"
+  PATH="/modules/project/edit.xhtml" SHAPE="1048,17,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#modules#project#projecttype#list.xhtml"
+  NAME="#xmodules#xproject#xprojecttype#xlist.xhtml"
+  PATH="/modules/project/projecttype/list.xhtml" SHAPE="24,537,0,0"
+  TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/modules/project/projecttype/edit.xhtml" NAME="output"
+   PATH="/modules/project/projecttype/edit.xhtml"
+   TARGET="#xmodules#xproject#xprojecttype#xedit.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#modules#project#projecttype#edit.xhtml"
+  NAME="#xmodules#xproject#xprojecttype#xedit.xhtml"
+  PATH="/modules/project/projecttype/edit.xhtml" SHAPE="344,537,0,0"
+  TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/modules/project/projecttype/list.xhtml" NAME="output"
+   PATH="/modules/project/projecttype/list.xhtml"
+   TARGET="#xmodules#xproject#xprojecttype#xlist.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#modules#connection#list.xhtml"
+  NAME="#xmodules#xconnection#xlist.xhtml"
+  PATH="/modules/connection/list.xhtml" SHAPE="24,641,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/modules/connection/edit.xhtml" NAME="output"
+   PATH="/modules/connection/edit.xhtml"
+   TARGET="#xmodules#xconnection#xedit.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#modules#connection#edit.xhtml"
+  NAME="#xmodules#xconnection#xedit.xhtml"
+  PATH="/modules/connection/edit.xhtml" SHAPE="344,641,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#lostpassword.xhtml" NAME="#xlostpassword.xhtml"
+  PATH="/lostpassword.xhtml" SHAPE="24,1265,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/lostpasswordsuccessful.xhtml" NAME="output"
+   PATH="/lostpasswordsuccessful.xhtml"
+   TARGET="#xlostpasswordsuccessful.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#resetpassword.xhtml" NAME="#xresetpassword.xhtml"
+  PATH="/resetpassword.xhtml" SHAPE="24,1369,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/resetpasswordsuccessful.xhtml" NAME="output"
+   PATH="/resetpasswordsuccessful.xhtml"
+   TARGET="#xresetpasswordsuccessful.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="org.jboss.seam.framework.EntityNotFoundException"
+  NAME="exception:org.jboss.seam.framework.EntityNotFoundException"
+  PATH="org.jboss.seam.framework.EntityNotFoundException"
+  SHAPE="24,1473,0,0" TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/error.xhtml" NAME="output" PATH="/error.xhtml"
+   TARGET="#xerror.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="javax.persistence.EntityNotFoundException"
+  NAME="exception:javax.persistence.EntityNotFoundException"
+  PATH="javax.persistence.EntityNotFoundException" SHAPE="24,1577,0,0"
+  TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/error.xhtml" NAME="output" PATH="/error.xhtml"
+   TARGET="#xerror.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="javax.persistence.EntityExistsException"
+  NAME="exception:javax.persistence.EntityExistsException"
+  PATH="javax.persistence.EntityExistsException" SHAPE="24,1681,0,0"
+  TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/error.xhtml" NAME="output" PATH="/error.xhtml"
+   TARGET="#xerror.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="javax.persistence.OptimisticLockException"
+  NAME="exception:javax.persistence.OptimisticLockException"
+  PATH="javax.persistence.OptimisticLockException" SHAPE="24,1785,0,0"
+  TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/error.xhtml" NAME="output" PATH="/error.xhtml"
+   TARGET="#xerror.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="org.jboss.seam.security.AuthorizationException"
+  NAME="exception:org.jboss.seam.security.AuthorizationException"
+  PATH="org.jboss.seam.security.AuthorizationException"
+  SHAPE="24,1889,0,0" TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/error.xhtml" NAME="output" PATH="/error.xhtml"
+   TARGET="#xerror.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="org.jboss.seam.security.NotLoggedInException"
+  NAME="exception:org.jboss.seam.security.NotLoggedInException"
+  PATH="org.jboss.seam.security.NotLoggedInException" SHAPE="24,17,0,0"
+  TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/login.xhtml" NAME="output" PATH="/login.xhtml"
+   TARGET="#xlogin.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="javax.faces.application.ViewExpiredException"
+  NAME="exception:javax.faces.application.ViewExpiredException"
+  PATH="javax.faces.application.ViewExpiredException"
+  SHAPE="24,1993,0,0" TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/error.xhtml" NAME="output" PATH="/error.xhtml"
+   TARGET="#xerror.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="org.jboss.seam.ConcurrentRequestTimeoutException"
+  NAME="exception:org.jboss.seam.ConcurrentRequestTimeoutException"
+  PATH="org.jboss.seam.ConcurrentRequestTimeoutException"
+  SHAPE="24,2097,0,0" TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/error.xhtml" NAME="output" PATH="/error.xhtml"
+   TARGET="#xerror.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="org.hibernate.exception.ConstraintViolationException"
+  NAME="exception:org.hibernate.exception.ConstraintViolationException"
+  PATH="org.hibernate.exception.ConstraintViolationException"
+  SHAPE="24,2201,0,0" TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/error.xhtml" NAME="output" PATH="/error.xhtml"
+   TARGET="#xerror.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item NAME="exception:" SHAPE="24,2305,0,0" TYPE="exception" model-entity="SeamPagesDiagramItem">
+  <output ID="/error.xhtml" NAME="output" PATH="/error.xhtml"
+   TARGET="#xerror.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item NAME="#xresetpasswordsuccessful.xhtml"
+  PATH="/resetpasswordsuccessful.xhtml" SHAPE="344,1369,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item NAME="#xerror.xhtml" PATH="/error.xhtml" SHAPE="472,1473,0,0"
+  TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item NAME="#xlostpasswordsuccessful.xhtml"
+  PATH="/lostpasswordsuccessful.xhtml" SHAPE="344,1265,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#modules#extract#list.xhtml"
+  NAME="#xmodules#xextract#xlist.xhtml"
+  PATH="/modules/extract/list.xhtml" SHAPE="24,2409,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/modules/extract/edit.xhtml" NAME="output"
+   PATH="/modules/extract/edit.xhtml"
+   TARGET="#xmodules#xextract#xedit.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#modules#extract#edit.xhtml"
+  NAME="#xmodules#xextract#xedit.xhtml"
+  PATH="/modules/extract/edit.xhtml" SHAPE="344,2513,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#modules#transform#list.xhtml"
+  NAME="#xmodules#xtransform#xlist.xhtml"
+  PATH="/modules/transform/list.xhtml" SHAPE="24,2617,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/modules/transform/edit.xhtml" NAME="output"
+   PATH="/modules/transform/edit.xhtml"
+   TARGET="#xmodules#xtransform#xedit.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#modules#transform#edit.xhtml"
+  NAME="#xmodules#xtransform#xedit.xhtml"
+  PATH="/modules/transform/edit.xhtml" SHAPE="344,2617,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#modules#load#list.xhtml" NAME="#xmodules#xload#xlist.xhtml"
+  PATH="/modules/load/list.xhtml" SHAPE="24,2721,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/modules/load/edit.xhtml" NAME="output"
+   PATH="/modules/load/edit.xhtml" TARGET="#xmodules#xload#xedit.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#modules#load#edit.xhtml" NAME="#xmodules#xload#xedit.xhtml"
+  PATH="/modules/load/edit.xhtml" SHAPE="344,2721,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#modules#job#list.xhtml" NAME="#xmodules#xjob#xlist.xhtml"
+  PATH="/modules/job/list.xhtml" SHAPE="24,2825,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/modules/job/edit.xhtml" NAME="output"
+   PATH="/modules/job/edit.xhtml" TARGET="#xmodules#xjob#xedit.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#modules#job#edit.xhtml" NAME="#xmodules#xjob#xedit.xhtml"
+  PATH="/modules/job/edit.xhtml" SHAPE="344,2825,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#modules#execution#list.xhtml"
+  NAME="#xmodules#xexecution#xlist.xhtml"
+  PATH="/modules/execution/list.xhtml" SHAPE="24,2929,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/modules/execution/edit.xhtml" NAME="output"
+   PATH="/modules/execution/edit.xhtml"
+   TARGET="#xmodules#xexecution#xedit.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#modules#execution#edit.xhtml"
+  NAME="#xmodules#xexecution#xedit.xhtml"
+  PATH="/modules/execution/edit.xhtml" SHAPE="344,2929,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#resolvecomponent.xhtml" NAME="#xresolvecomponent.xhtml"
+  PATH="/resolvecomponent.xhtml" SHAPE="24,3033,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#modules#library#list.xhtml"
+  NAME="#xmodules#xlibrary#xlist.xhtml"
+  PATH="/modules/library/list.xhtml" SHAPE="344,3033,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/modules/library/edit.xhtml" NAME="output"
+   PATH="/modules/library/edit.xhtml"
+   TARGET="#xmodules#xlibrary#xedit.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#modules#library#edit.xhtml"
+  NAME="#xmodules#xlibrary#xedit.xhtml"
+  PATH="/modules/library/edit.xhtml" SHAPE="24,3137,0,0" TYPE="page" model-entity="SeamPagesDiagramItem">
+  <output ID="/modules/library/list.xhtml" NAME="output"
+   PATH="/modules/library/list.xhtml"
+   TARGET="#xmodules#xlibrary#xlist.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+ </item>
+ <item ID="#version.xhtml" NAME="#xversion.xhtml" PATH="/version.xhtml"
+  TYPE="page" model-entity="SeamPagesDiagramItem"/>
+</diagram>

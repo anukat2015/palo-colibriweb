@@ -1,0 +1,40 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
+	xmlns:p="http://primefaces.org/ui"
+	>
+
+
+	<ui:include src="/elements/gridinputfield.xhtml">
+		<ui:param name="inputType" value="inputText" />
+		<ui:param name="label" value="#{messages.get('ui.name')}" />
+		<ui:param name="inputValue" value="#{module.instance.name}" />
+		<ui:param name="fieldrequired" value="true" />
+		<ui:param name="disabled" value="#{module.instance.immutable}" />
+	</ui:include>
+
+	<ui:include src="/elements/gridinputfield.xhtml">
+		<ui:param name="inputType" value="inputText" />
+		<ui:param name="label" value="#{messages.get('ui.label')}" />
+		<ui:param name="inputValue" value="#{module.instance.label}" />
+	</ui:include>
+
+	<ui:include src="/elements/gridinputfield.xhtml">
+		<ui:param name="inputType" value="inputTextArea" />
+		<ui:param name="label" value="#{messages.get('ui.description')}" />
+		<ui:param name="inputValue" value="#{module.instance.description}" />
+	</ui:include>
+	
+	
+	<ui:include src="/elements/gridinputfield.xhtml">
+		<ui:param name="inputType" value="inputText" />
+		<ui:param name="label" value="Sortierung" />
+		<ui:param name="inputValue" value="#{module.instance.sortOrder}" />
+		<ui:param name="notRendered" value="#{not sortable}" />
+		<ui:param name="wrapperClass" value="inputwrapper numberinput" />
+	</ui:include>
+
+</ui:composition>
+

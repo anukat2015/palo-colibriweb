@@ -1,0 +1,32 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+   	>
+   	
+   <span class="inputlabel">#{messages.get('ui.type')}:</span>
+   <s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml" style="margin-bottom:3px;">
+		<p:selectOneMenu id="typeSelection" styleClass="inputfield" value="#{module.instance.type}" requiredMessage=""
+					                         effect="fade" var="p" style="width:150px;" filter="true" filterMatchMode="startsWith">
+		   <s:selectItems value="#{module.getAvailableTypes()}" var="selectionItem" label="#{selectionItem}" itemValue="#{selectionItem}"/>
+		   <p:ajax process="@this" event="change" listener="#{module.typeChanged()}" update="#{empty render ? ':content' : render}"/> 
+		</p:selectOneMenu>
+		<s:link view="/help.xhtml" style="float:right;" propagation="none" target="_blank" rendered="#{not empty module.instance.type}">
+			<h:graphicImage value="/img/help_medium_glow.png" title="Help"/> 
+			<f:param name="type" value="#{module.config.name}" />
+			<f:param name="name" value="#{module.instance.type}" />
+		</s:link>
+	</s:decorate>
+	<span class="inputlabel">#{messages.get('ui.name')}:</span>
+	<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml">
+		<h:inputText value="#{module.instance.name}" styleClass="inputfield" style="#{not empty module.instance.id ? 'width:92%;' : ''}" required="true" validator="#{module.validateName}" readonly="#{not empty module.instance.id}">
+			 <p:ajax global="false" process="@this" event="change" listener="#{module.nameChanged()}" update="#{empty render ? '' : render}"/> 
+			 <p:ajax global="false" process="@this" event="click" disabled="#{empty module.instance.id}" oncomplete="PF('clonePanel').show()" update=":clonePanel" /> 
+		</h:inputText>
+		<p:commandButton id="renameButton" type="button" icon="renameButtonIcon" style="width:4%;float:right;" title="Copy / Rename" update=":clonePanel" onclick="PF('clonePanel').show()" rendered="#{not empty module.instance.id}"></p:commandButton>
+	</s:decorate>
+</ui:composition>

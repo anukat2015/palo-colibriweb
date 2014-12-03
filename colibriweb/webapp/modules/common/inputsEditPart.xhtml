@@ -1,0 +1,36 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	>
+	
+	
+	
+	<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml" id="inputSelection">
+	
+		 <p:selectOneMenu value="#{item}" panelStyle="width:250px"  
+                         effect="fade" var="p" style="width:150px;float:left"  filter="true" filterMatchMode="startsWith">  
+                         
+            <s:selectItems value="#{component.outputDescription}" var="selectionItem" label="#{selectionItem.name}" itemValue="#{selectionItem.name}"/>
+		  	<s:convertEntity/>
+            <p:column>  
+                #{p.name} 
+            </p:column>  
+            <p:column>  
+                #{p.type}  
+            </p:column>  
+             <p:ajax global="false" process="@this" event="change" update="#{render}"/>
+        </p:selectOneMenu>  
+		<h:panelGroup layout="block"  style="float:left;">
+			<p:dataList value="#{module.getUIInputAttributes(field,item)}" var="attribute" styleClass="repeat" type="none" emptyMessage="">
+			 	<ui:include src="/modules/common/componentAttributes.xhtml">
+					<ui:param name="field" value="#{module.getUISourceAttributesValue(field,item,attribute.name)}" />
+				</ui:include>
+			</p:dataList>
+		</h:panelGroup>
+	</s:decorate>
+
+</ui:composition>

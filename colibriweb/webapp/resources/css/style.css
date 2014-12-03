@@ -1,0 +1,1995 @@
+/* reset.css */
+html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,code,del,dfn,em,img,q,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	/*
+	macht probleme: z.B. bei rich:listshuttle
+	vertical-align: baseline;*/
+	font-family: Verdana, sans-serif;
+	font-size: 11px;
+	font-color: #505050;
+	color: #505050;
+}
+
+body {
+	background-color: #ededed;
+	background: #ededed;
+	padding: 0 0 100px 0;
+}
+
+/***********************
+* Input elements global
+************************/
+input,textarea,select {
+	font-family: Verdana;
+	font-size: 11px;
+	font-weight: normal;
+	color: #505050;
+}
+
+input[type="submit"],input[type="button"] {
+	padding: 2px 10px;
+	font-weight: normal;
+}
+
+/*************************
+* container elements global
+*************************/
+div.actions {
+	float: right;
+}
+
+.ajaxwaitwrapper {
+	text-align: center;
+}
+
+/*************************
+* Link elements global
+*************************/
+a {
+	text-decoration: underline;
+	font-weight: normal;
+}
+
+a:hover {
+	color: #417fb0;
+}
+
+a.delete:hover {
+	color: red;
+}
+
+a.add:hover {
+	color: #8ec26f;
+}
+
+a.smalllink {
+	font-size: 9px;
+}
+
+div.actions a {
+	margin: 0 2px 0 2px;
+	padding: 0 2px 0px 2px;
+}
+
+/************************
+* Text Elements Global
+************************/
+span.infotext {
+	color: #afafaf;
+}
+
+span.infotextsmall {
+	color: #afafaf;
+	font-size: 9px;
+}
+
+span.infotextsmallbold {
+	color: #afafaf;
+	font-size: 9px;
+	font-weight: bold;
+}
+
+span.freitext {
+	margin-right: 4px;
+}
+
+div.listentryheader span.infotext,div.listentryheader span.infotextsmall,div.listentryheader span.infotextsmallbold {
+	color: #909090;
+}
+
+/******************************
+* Formvalidation Styles
+******************************/
+.edit {
+	float: left;
+	width: 100%;
+	clear: both;
+}
+
+.invalid {
+	
+}
+
+.invalid .errortext {
+	color: red !important;
+	display: block;
+	font-weight: normal;
+	line-height: 14px;
+}
+
+.invalid input,.invalid textarea,.invalid select {
+	border: 1px solid red !important;
+}
+
+/*********************
+* Styles Messaging 
+*********************/
+div.messageboxwrapper {
+	padding-left: 10px;
+}
+
+ul.messages {
+	list-style-type: none;
+	margin-bottom: 10px;
+	width: 99%
+}
+
+ul.messages li {
+	padding: 8px 0 8px 40px;
+	background-position: left center;
+	background-repeat: no-repeat;
+}
+
+ul.messages img {
+	float: left;
+	padding-right: 10px;
+	padding-top: 3px;
+}
+
+ul.messages li.warn {
+	background-image: url("../img/messagebox_warning.png");
+	background-color: #ebe6d7;
+	border-top: 1px solid orange;
+	border-bottom: 1px solid orange;
+}
+
+ul.messages li.error {
+	background-image: url(../img/messagebox_critical.png);
+	background-color: #ebe1e1;
+	border-top: 1px solid red;
+	border-bottom: 1px solid red;
+}
+
+ul.messages li.info {
+	background-image: url(../img/messagebox_info.png);
+	background-color: #e6f5e6;
+	border-top: 1px solid #8EC26F;
+	border-bottom: 1px solid #8EC26F;
+}
+
+ul.messages li.help {
+	background-image: url("../img/messagebox_help.png");
+	background-color: #e1eaf2;
+	border-top: 1px solid #417fb0;
+	border-bottom: 1px solid #417fb0;
+}
+
+/*******************************
+* Header section + InfoBox right
+********************************/
+div.header { /**background-image: url("../img/background_header.png");
+	background-repeat: repeat-x;*/
+	background-color: 245881;
+	height: 30px;
+	min-width: 1200px;
+	max-width: 2400px;
+	width: 100%;
+	border: 1px solid #afafaf;
+}
+
+div.header img {
+	margin-left: 58px;
+	float: left;
+}
+
+div.header div.infobox {
+	border: 1px solid #afafaf;
+	margin: 3px 60px 3px 0;
+	float: right;
+	padding: 3px;
+	text-align: left;
+	background-color: #FFF;
+}
+
+div.header div.infobox span.text {
+	font-size: 9px;
+	color: #505050;
+	margin-top: 2px;
+}
+
+div.header div.infobox a {
+	color: #505050;
+	font-size: 11px;
+}
+
+div.header div.infobox a:hover {
+	color: #505050;
+}
+
+
+/************************************
+* Footer section with Copyright Info
+*************************************/
+div.footer {
+	font-size: 9px;
+	color: #afafaf;
+	min-width: 1176px;
+	margin: 0 1%;
+	padding: 10px;
+	text-align: center;
+}
+
+div.footer a {
+	color: #afafaf;
+}
+
+div.footer a:hover {
+	color: #417fb0;
+}
+
+/**********************************
+* InfoBox
+**********************************/
+div.infobox {
+	text-align: right
+}
+
+div.infobox span.text {
+	font-size: 9px;
+}
+
+div.infobox a {
+	color: #417FB0;
+	font-size: 11px;
+	float: right;
+}
+
+div.infobox a:hover {
+	color: #417FB0;
+}
+
+/********************************
+* Main-Menu and Tab Styles 
+*******************************/
+div.menu {
+	width: 98%;
+	margin: 10px 1% 0 1%;
+	min-width: 1176px;
+	overflow: hidden;
+}
+
+div.navigation_wrap {
+	padding-bottom: 10px;
+	padding-right: 2px;
+}
+
+#nav {
+	position: relative;
+	line-height: normal;
+	height: 16px;
+}
+
+#nav ul {
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+	position: absolute;
+	margin-top: 1px;
+	list-style: none;
+	text-align: center;
+}
+
+#nav li {
+	float: left;
+	margin: 0 2px 0 0;
+	padding: 0 0 0 4px;
+}
+
+#nav li.right {
+	float: right;
+}
+
+#nav li a {
+	display: block;
+	background: transparent url(../img/menu_right.png) no-repeat scroll right top;
+	font-size: 13px;
+	padding: 3px 20px 6px 16px;
+	text-decoration: none;
+	color: #333;
+}
+
+#nav li a:hover {
+	color: #044c9c;
+}
+
+#nav .current {
+	border-bottom: 1px solid #fff;
+}
+
+#nav .current a {
+	background: transparent url(../img/menu_active.png) no-repeat scroll right top;
+}
+
+/*******************************
+* Styles Haupbereich (Content) 
+*******************************/
+div.main {
+	background-color: #ffffff;
+	width: 98%;
+	min-width: 1176px;
+	overflow: hidden;
+	padding: 10px 0 5px 0;
+	margin: 0 1% 0 1%;
+	min-height: 500px;
+}
+
+div.main div.block {
+	overflow: hidden;
+	min-height: 600px;
+}
+
+/*******************************
+* Styles Hauptfilter 
+*******************************/
+div.mainfilter {
+	padding: 0 0 0 10px;
+	overflow: hidden;
+	float: left;
+	margin-left: 20px;
+	margin-top: 18px;
+	width: 445px;
+}
+
+div.filterelement {
+	background-color: #FFFFFF;
+	border: 1px solid #AFAFAF;
+	color: #505050;
+	float: left;
+	font-size: 12px;
+	font-weight: bold;
+	margin-bottom: 5px;
+	margin-right: 10px;
+	padding: 5px 8px;
+}
+
+div.filterelement2 {
+	background-color: #E1EAF2;
+	border: 1px solid #417FB0;
+	color: #417FB0;
+	float: left;
+	font-size: 13px;
+	margin-right: 5px;
+	padding: 3px 10px;
+}
+
+/*******************************************
+* Content 2 Spalten (content, rightcontent)
+********************************************/
+div.main div.block div.content {
+	float: left;
+	width: 68%;
+	min-width: 655px;
+}
+
+div.main div.block div.rightcontent {
+	float: right;
+	width: 30%;
+	min-width: 288px;
+	margin-right: 1%;
+}
+
+/**************************************************
+* Header Content 2 Spalten (Listen, Detailansichten)
+***************************************************/
+div.main div.content div.headercontent {
+	padding: 0 0 7px 0;
+	width: 100%;
+	border-bottom: 2px solid #505050;
+	overflow: hidden;
+	min-width: 653px;
+	margin-top: 7px;
+}
+
+div.main div.content div.headercontent div.headerdetails {
+	padding-left: 10px;
+}
+
+div.main div.content div.headercontent div.detailtagwrapper {
+	overflow: hidden;
+	float: left;
+	width: 50%;
+	height: 20px;
+}
+
+div.main div.content div.headercontent .headertext, div.main div.content div.headercontent .headertext a {
+	font-size: 20px;
+	font-weight: bold;
+}
+
+div.main div.content div.headercontent .headertextsmall {
+	font-size: 13px;
+	font-weight: normal;
+}
+
+div.main div.content div.headercontent a.subheaderlink {
+	font-size: 13px;
+	color: #505050;
+	/*text-decoration: none;*/
+}
+
+div.main div.content div.headercontent a.subheaderlink:hover {
+	color: #417fb0;
+}
+
+div.main div.content div.headercontent div.actions {
+	padding: 28px 10px 0 0;
+}
+
+div.main div.content div.headercontent div.detailactions {
+	padding-top: 0px;
+	margin-top: 5px;
+}
+
+div.main div.content div.headercontent div.listheader {
+	margin-top: 9px;
+	padding-left: 10px;
+}
+
+/*actionsearch auf searchwrapper + actions dazu*/
+div.main div.content div.headercontent div.actionssearch {
+	float: right;
+	padding: 0px 10px 0 0;
+	height: 41px;
+}
+
+div.main div.content div.headercontent div.actionssearch .searchwrapper {
+	margin-top: -2px; !
+	margin-top: -3px;
+	float: right;
+}
+
+.nodetailsearch {
+	margin-top: 18px; !
+	margin-top: 17px;
+}
+
+div.main div.content div.headercontent div.actionssearch label {
+	color: #417fb0;
+	margin-right: 2px;
+	vertical-align: middle;
+}
+
+div.main div.content div.headercontent div.actionssearch input {
+	border: 1px solid #417fb0;
+	height: 15px;
+	width: 142px;
+	padding: 3px 4px 3px 4px;
+}
+
+div.main div.content div.headercontent div.actionssearch input,div.main div.content div.headercontent div.actionssearch select {
+	vertical-align: middle;
+	margin-bottom: 0px;
+}
+
+div.main div.content div.headercontent div.actionssearch .status {
+	float: right;
+	padding-top: 10px;
+	padding-left: 10px;
+	width: 16px;
+}
+
+tr.detailsearch {
+	height: 18px; !
+	height: 15px;
+}
+
+tr.detailsearch td {
+	text-align: right;
+	padding-right: 5px;
+	padding-bottom: 2px;
+}
+
+}
+div.main div.content div.headercontent input.titleInput {
+	border: 1px solid #F0F0F0;
+	font-size: 22px;
+	font-weight: bold;
+	margin-right: 4px;
+	padding: 0 2px 0 2px;
+	width: 45%;
+}
+
+/***************************************
+* Content 1 Spalte (Login, Accountdaten)
+****************************************/
+div.main div.block div.fullcontent {
+	width: 100%;
+	margin-left: 1%;
+	margin-right: 1%;
+	min-width: 970px;
+	text-align: center;
+}
+
+div.settingscontent {
+	padding: 0px;
+	width: 99%;
+	background-color: #F7F7F7;
+	overflow: hidden;
+	border-bottom: 2px solid #417FB0;
+}
+
+/***********************************
+* Styles für FULLWIDTH Layout ohne rechte Spalte
+**********************************/
+div.onecolumncontent {
+	float: left;
+	margin-left: 1%;
+	min-width: 1156px !important;
+	width: 99% !important;
+}
+
+/**********************************************
+* Formulare
+**********************************************/
+div.formwrapper {
+	padding: 15px 10px 10px 10px;
+	overflow: hidden;
+	background-color: #F7F7F7;
+}
+
+div.formwrapper input.submit {
+	float: right;
+}
+
+div.formwrapper_row {
+	overflow: hidden;
+	padding: 4px 0;
+	width: 100%;
+}
+
+div.formwrapper_1cols {
+	width: 720px;
+	overflow: hidden;
+	float: left;
+}
+
+div.formwrapper_2cols {
+	width: 367px;
+	overflow: hidden;
+	float: left;
+}
+
+div.formwrapper_3cols {
+	width: 245px;
+	overflow: hidden;
+	float: left;
+}
+
+div.formwrapper_4cols {
+	width: 183px;
+	overflow: hidden;
+	float: left;
+}
+
+div.formwrapper_1cols div.inputwrapper,div.formwrapper_2cols div.inputwrapper,div.formwrapper_3cols div.inputwrapper,div.formwrapper_4cols div.inputwrapper {
+	margin: 5px 0;
+}
+
+div.formwrapper_1cols div.disabled,div.formwrapper_2cols div.disabled,div.formwrapper_3cols div.disabled,div.formwrapper_4cols div.disabled {
+	margin: 5px 0;
+}
+
+.savebutton {
+	margin: 0 10px 10px 10px;
+}
+
+.dateSelector {
+	float: right;
+}
+
+.dateSelector img {
+	float: right;
+}
+
+div.inputwrapper {
+	width: 100%;
+	float: left;
+}
+
+div.disabled {
+	width: 100%;
+	float: left;
+}
+
+span.inputlabel {
+	font-weight: bold;
+	line-height: 23px;
+}
+
+span.searchlabel {
+	color: #417fb0;
+	margin-right: 2px;
+	vertical-align: middle;
+}
+
+.searchinput {
+	border: 1px solid #417fb0 !important;
+}
+
+div.inputwrapper span.bluelabel {
+	color: #417FB0;
+}
+
+div.inputwrapper input.inputfield,div.inputwrapper textarea.inputfield {
+	width: 99%;
+}
+
+input.inputfieldFloat {
+	margin-left: 5px;
+}
+
+div.inputwrapper  input.inputfieldFloat {
+	margin-left: 5px;
+}
+
+div.inputwrapper input.checkbox {
+	width: auto;
+}
+
+div.inputwrapper textarea {
+	border: 1px solid #AFAFAF;
+	margin: 0 10px 5px 0;
+	padding: 3px 4px;
+}
+
+.rich-calendar-input {
+	width: 75px;
+	margin-right: 5px;
+}
+
+input.inputfield,select.inputfield,password.inputfield {
+	border: 1px solid #afafaf;
+	height: 15px;
+	padding: 3px 4px; 
+	padding: 2px 4px 3px 4px;
+	margin: 0 10px 5px 0;
+}
+
+select.inputfield {
+	height: 23px;
+	padding: 2px;
+}
+
+select.typeselector {
+	margin-bottom: 5px;
+	height: 23px;
+	border: 1px solid #417FB0;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
+div.rightcontent div.noresults {
+	padding: 5px 10px 5px 10px;
+}
+
+div.rightcontent div.list {
+	border-bottom: 1px solid #505050;
+}
+
+div.main div.block div.fullcontent span.header {
+	font-size: 15px;
+	font-weight: bold;
+}
+
+div.main div.block div.fullcontent div.inputbox {
+	margin-left: 25%;
+	margin-right: 25%;
+	margin-top: 40px;
+	overflow: hidden;
+	padding: 10px;
+	width: 40%;
+}
+
+div.main div.block div.fullcontent div.loginbox {
+	margin-left: 35%;
+	margin-right: 35%;
+	margin-top: 40px;
+	overflow: hidden;
+	padding: 10px;
+	width: 30%;
+}
+
+div.main div.block div.fullcontent div.inputbox div.actions,div.main div.block div.fullcontent div.loginbox div.actions {
+	text-align: right;
+}
+
+div.main div.block div.fullcontent div.inputbox div.spanwrapper,div.main div.block div.fullcontent div.loginbox div.spanwrapper {
+	margin-bottom: 5px;
+}
+
+div.main div.block div.fullcontent div.inputbox div.fields {
+	overflow: hidden;
+	border: 1px solid #AFAFAF;
+	padding: 15px 30px;
+	text-align: left
+}
+
+div.main div.block div.fullcontent div.loginbox div.fields {
+	background: none repeat scroll 0 0 #F1F1F1;
+	border: 1px solid #AFAFAF;
+	overflow: hidden;
+	padding: 15px 30px;
+	text-align: left;
+	border-radius: 6px 6px 6px 6px;
+}
+
+div.main div.block div.fullcontent div.loginbox span.label {
+	font-weight: bold;
+}
+
+div.main div.block div.fullcontent div.loginbox div.loginselection {
+	background: #F7F7F7;
+	padding: 10px;
+	margin-bottom: 10px;
+	border: 1px solid #AFAFAF;
+}
+
+div.main div.block div.fullcontent div.loginbox div.inputwrapper {
+	float: none;
+}
+
+/***************************************
+* Styles für Listen in Tablen dargestellt 
+*****************************************/ /*Allgemeiner Resulttable*/
+table.results {
+	width: 100%;
+}
+
+div.content table.results div.inactive div.listcontent {
+	text-decoration: line-through;
+}
+
+table.results tr.even {
+	background: #FFFFFF;
+}
+
+table.results tr.uneven {
+	background: #f7f7f7;
+}
+
+/*Styles Hauptlisten*/
+table.listresults {
+	border-bottom: 2px solid #417fb0;
+	min-width: 653px;
+	/*float: left;*/
+	width: 99%;
+}
+
+table.listresults tr.uneven td.uneven  div.listElement div.textbox {
+	background-color: #F7F7F7;
+}
+
+table.listresults tr.last td {
+	border-bottom: none;
+}
+
+table.listresults td div.listElement {
+	float: left;
+	width: 100%;
+}
+
+table.listresults td div.inactive div.listcontent {
+	text-decoration: line-through;
+}
+
+table.listresults td {
+	padding: 0;
+	border-bottom: 1px solid #C0C0C0;
+	line-height: 20px;
+}
+
+table.listresults td div.listElement div.listImage {
+	float: left;
+	padding-right: 10px;
+	margin: 10px;
+}
+
+table.listresults td div.listElement div.attributes {
+	float: left;
+	margin: 5px 1px;
+	word-wrap: break-word;
+	width: 45%; !
+	padding-bottom: 5px;
+}
+
+table.listresults td div.listElement div.attributes h3 {
+	margin: 0;
+	word-wrap: break-word;
+	font-size: 13px;
+	font-weight: bold;
+}
+
+table.listresults td div.listElement div.attributes div.inactive h3 {
+	text-decoration: line-through;
+}
+
+table.listresults td div.listElement div.attributes h3 a {
+	font-size: 13px;
+	color: #417fb0;
+}
+
+table.listresults td div.listElement div.attributes a.titlelink {
+	font-size: 13px;
+	font-weight: bold;
+	color: #505050;
+}
+
+table.listresults td div.listElement div.attributes h3 .restricted,table.listresults td div.listElement div.attributes h3 .simpletext {
+	font-size: 13px;
+}
+
+table.listresults td div.listElement div.attributes .restricted {
+	color: #AFAFAF;
+}
+
+table.listresults td div.listElement div.attributes div.infopanel {
+	padding: 5px;
+}
+
+table.listresults td div.listElement div.attributes div.infopanel img {
+	margin-right: 6px;
+}
+
+table.listresults td div.listElement div.infos {
+	float: left;
+	margin: 5px 1px;
+	word-wrap: break-word;
+	width: 35%; !
+	padding-bottom: 5px;
+}
+
+table.listresults td div.listElement div.infos div.infodetail {
+	margin-bottom: 5px;
+	overflow: hidden;
+}
+
+table.listresults td div.listElement div.infos div.infodetail img.infodetailimage {
+	float: left;
+	margin-right: 5px;
+	clear: left;
+}
+
+table.listresults td div.listElement div.infos div.infodetail div.infodetailtext {
+	float: left;
+	clear: right;
+	width: 80%;
+}
+
+table.listresults td div.listElement div.actions {
+	text-align: right;
+	color: #afafaf;
+	margin: 10px;
+	margin-bottom: 1px; !
+	padding-bottom: 5px;
+}
+
+table.listresults td div.listElement div.actions div.infodiv {
+	margin-top: 5px;
+	padding-bottom: 2px;
+}
+
+table.listresults td div.listElement div.actions span.info {
+	height: 10px;
+	padding: 1px 2px 1px 2px;
+	border: 1px solid #afafaf;
+	background-color: #ffffff;
+	margin: 0 2px 0 2px;
+}
+
+table.listresults td div.listElement div.actions span.infogreen {
+	color: #8ec26f;
+}
+
+table.listresults td div.listElement div.actions span.infoorange {
+	color: orange;
+}
+
+table.listresults td div.listElement div.actions span.infored {
+	color: red;
+}
+
+/*Styles Listen allgemein rechts*/
+div.rightcontent table.results tr {
+	padding: 10px 10px 10px 10px;
+	vertical-align: top;
+}
+
+div.rightcontent table.results tr.uneven td,div.rightcontent table.results tr.even td {
+	border-bottom: 1px solid #E3E3E3;
+	padding: 10px;
+}
+
+div.rightcontent table.results tr.lastuneven td,div.rightcontent table.results tr.last td {
+	border-bottom: 0px solid #417fb0;
+	padding: 10px;
+}
+
+div.rightcontent  table.results img {
+	float: left;
+	margin-right: 9px;
+}
+
+div.rightcontent table.results a.item,div.content table.results a.item {
+	color: #417fb0;
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+div.content table.results span.item,div.rightcontent table.results span.item {
+	color: #417fb0;
+	font-weight: bold;
+}
+
+div.rightcontent table.results div.listcontent {
+	float: left;
+	width: 70%;
+}
+
+div.rightcontent table.results div.inactive div.listcontent {
+	text-decoration: line-through;
+}
+
+div.noresultwrapper {
+	width: 98%;
+	margin-left: 10px;
+	padding: 5px 0 5px 0;;
+}
+
+/********************************************
+* List Footer Styles (Pagination)
+********************************************/
+div.content div.listfooter {
+	padding: 0 10px 0 10px;
+}
+
+div.content div.listfooter div.paginationpanel,div.rightcontent div.paginationpanel {
+	float: right;
+	margin: 5px 10px 5px 0;
+	padding: 2px;
+}
+
+div.content div.listfooter div.paginationpanel a,div.rightcontent div.paginationpanel a {
+	font-size: 9px;
+	text-decoration: none;
+	color: #417fb0;
+	padding: 0px 2px 0px 2px;
+	border: 1px solid #417fb0;
+	margin: 0 2px 0 2px;
+}
+
+div.content div.listfooter div.paginationpanel a.active,div.rightcontent div.paginationpanel a.active {
+	background-color: #417fb0;
+	text-decoration: none;
+	color: #FFFFFF;
+	font-weight: bold;
+}
+
+div.content div.listfooter div.paginationpanel a.pagnav,div.rightcontent div.paginationpanel a.pagnav {
+	text-decoration: underline;
+	border: none;
+}
+
+/****************************
+* Right Side Styles
+****************************/
+div.main div.rightcontent div.boxheader {
+	overflow: hidden;
+	border-bottom: 1px solid #417FB0;
+	padding-bottom: 2px;
+}
+
+div.boxheader div.actions {
+	margin-right: 10px;
+}
+
+.marginplus14pix {
+	margin-top: 14px;
+}
+
+.marginplus17pix {
+	margin-top: 17px;
+}
+
+.marginplus55pix {
+	margin-top: 55px;
+}
+
+div.subspacer {
+	clear: both;
+	height: 20px;
+}
+
+div.main div.rightcontent div.rightcolheader {
+	font-size: 13px;
+	font-weight: bold;
+	color: #505050;
+	padding-left: 10px;
+	float: left;
+}
+
+div.main div.rightcontent div.rightcolheader a {
+	font-size: 13px;
+	font-weight: bold;
+	color: #505050;
+}
+
+div.main div.rightcontent div.rightcolheader img {
+	float: right;
+}
+
+/****************
+* Text Box Styles
+*****************/
+div.textbox {
+	background-color: #f1f6fa;
+	padding: 9px 10px 9px 10px;
+	margin-top: 4px;
+	overflow: hidden;
+}
+
+div.rightcontent div.textbox {
+	border-bottom: 1px solid #417fb0;
+	/*border-top: 1px solid #417fb0;*/
+	padding: 12px 15px;
+	margin-top: 0px;
+}
+
+div.rightcontent div.textbox .searchfield {
+	border: 1px solid #afafaf;
+	width: 98%;
+	height: 15px;
+	padding: 3px 4px 3px 4px;
+	margin-bottom: 5px;
+}
+
+/*****************************
+* Styles Submenü rechts
+******************************/
+div.submenuheader {
+	background-color: #E3E3E3;
+	border: 1px solid #417fb0;
+	overflow: hidden;
+	padding: 7px 0 7px 0;
+}
+
+div.submenubox {
+	background-color: #E1EAF2;
+	border: 1px solid #417fb0;
+	border-top: none;
+	/*border-bottom: 2px solid #417FB0;*/
+	padding: 9px 10px;
+}
+
+div.submenubox .menulink {
+	margin-left: 10px;
+}
+
+div.submenubox .menulink td {
+	padding: 3px 0 3px 0;
+	vertical-align: top;
+}
+
+div.submenubox .menulink td img{
+	width:16px;
+	}
+
+div.submenubox .menulink a {
+	margin: 0 2px;
+	padding: 0 2px 0;
+	cursor: pointer;
+}
+
+div.submenubox .parentmenulink {
+	margin-top: 10px;
+}
+
+div.submenubox .parentmenulink a {
+	font-weight: bold;
+}
+
+div.submenubox table.menulink a.selected,div.submenubox table.menulink a.selected:hover,div.submenubox .menulink a.selected,div.submenubox .menulink a.selected:hover,table.results a.selected,table.results a.selected
+	{
+	font-weight: bold;
+	color: #417fb0;
+}
+
+/********************************
+* Search Filter Styles
+********************************/
+.searchfilters {
+	
+}
+
+.searchfilters div.filtergroup_wrapper {
+	border-bottom: 1px solid #417fb0;
+}
+
+.searchfilters div.filtervalues_wrapper {
+	overflow: hidden;
+	padding-left: 21px;
+}
+
+.searchfilters div.filtervalues_wrapper div.50percent {
+	width: 50%;
+}
+
+.searchfilters .row {
+	overflow: hidden;
+	width: 100%;
+	padding: 5px;
+	padding-left: 0px;
+}
+
+.searchfilters .addlink {
+	float: left !important;
+	padding: 5px 0 5px 0;
+}
+
+.searchfilters .row .select {
+	border: 1px solid #AFAFAF;
+	height: 28px;
+	line-height: 18px;
+	margin-bottom: 5px;
+	padding: 3px 4px;
+}
+
+.searchfilters .top {
+	width: 100%;
+	color: #417FB0;
+	line-height: 18px;
+	margin-bottom: 5px;
+}
+
+.searchfilters .right {
+	float: right;
+	width: 25px;
+	padding-top: 5px;
+}
+
+.searchfilters .middle {
+	margin: 0 50px 0 0px;
+}
+
+.restrictiontypeselect {
+	
+}
+
+.searchfilters .inputs {
+	line-height: normal;
+}
+
+.searchfilters .selectmany {
+	max-height: 150px;
+	overflow-y: auto;
+}
+
+.searchfilters a,.searchfilters a:active,searchfilters a:hover,searchfilters a:link,searchfilters a:visited {
+	padding-left: 5px;
+	vertical-align: top;
+}
+
+.searchfilters .actions {
+	padding-top: 10px;
+	float: none !important;
+}
+
+.searchfilters .inputs .inputfield {
+	width: 100%
+}
+
+/**********************************
+* DELETE
+***********************************/
+div.contenttab {
+	width: 99%;
+	background-color: #FFFFFF;
+	overflow: visible;
+}
+
+div.contenttab div.contentbox {
+	background: #FFFFFF;
+	border: 1px solid #C0C0C0;
+	display: block;
+	margin: 10px;
+	padding: 10px;
+	overflow: hidden;
+}
+
+div.contenttab div.contentbox table.listresults {
+	float: none;
+	border-bottom: 1px solid #417FB0;
+	min-width: none;
+	width: 100%;
+}
+
+div.contenttab div.contentbox .headertext {
+	font-weight: bold;
+	font-size: 13px;
+	margin-top: 10px;
+	padding: 5px;
+	padding-bottom: 7px;
+	border-bottom: 1px solid #417FB0;
+}
+
+div.contenttab div.contentbox div.boxheader {
+	height: 20px;
+}
+
+div.contenttab div.contentbox div.listfooter {
+	height: 25px;
+}
+
+div.main div.content div.contentbox div.actionssearch {
+	float: right;
+	padding: 0 10px 0 0;
+}
+
+div.main div.content div.contentbox div.actionssearch label {
+	color: #417FB0;
+	margin-right: 2px;
+	margin-top: 5px;
+	float: left;
+	font-weight: normal;
+	padding-right: 2px;
+}
+
+div.main div.content div.contentbox div.actionssearch div.searchwrapper {
+	float: left;
+}
+
+div.main div.content div.contentbox div.actionssearch input {
+	border: 1px solid #417FB0;
+	height: 15px;
+	padding: 3px 4px;
+	width: 206px;
+}
+
+div.main div.content div.contentbox div.actionssearch select {
+	padding: 3px 4px;
+	float: left;
+	margin-right: 20px;
+}
+
+div.main div.content div.contentbox div.actionssearch .status {
+	float: left;
+	padding: 5px 0 0 10px;
+	width: 16px;
+}
+
+/**********************************
+* Styles Search Filters
+**********************************/
+div.searchfilters .filteractivation {
+	float: left;
+}
+
+.searchfilters .disabled,.searchfilters .disabled div,.searchfilters .disabled span,.searchfilters .disabled a {
+	color: #AFAFAF;
+}
+
+/*****************************
+* ModalPanel
+*****************************/
+div.modalpanel {
+	
+}
+
+div.modalpanel img {
+	padding-top: 2px;
+	cursor: pointer;
+}
+
+.modalselection {
+	
+}
+
+.modalselection div.actions {
+	margin-top: 10px;
+}
+
+.modalselection .inputfield {
+	width: 150px !important;
+}
+
+.modalselection img.opendialog {
+	cursor: pointer;
+	margin-left: 5px;
+}
+
+.modalselection table.listresults {
+	border-top: 2px solid #417FB0;
+}
+
+.modalselection .inputfieldswrapper {
+	/*float: right;*/
+}
+
+/*******************************
+* Edit Sections
+*******************************/
+/* wkrat weggenommen wegen Raffung client-view.xhtml 
+	div.content div.detailseditpanel {
+	margin-bottom: 20px;
+}*/
+
+div.content div.detailseditpanel .title {
+	border-bottom: 1px solid #417FB0;
+	font-weight: bold;
+	margin-bottom: 10px;
+	padding: 2px;
+	color: #417FB0;
+}
+
+div.content div.detailseditpanel div.detailseditwrapper {
+	overflow: hidden;
+	clear: both;
+	padding: 0 10px;
+}
+
+div.content div.detailseditpanel div.detailseditwrapper .inputwrapper {
+	float: left;
+	margin-right: 20px;
+}
+
+div.content div.detailseditpanel div.detailseditwrapper div.actions {
+	float: right !important;
+	margin-top: 4px !important;
+	margin-left: 0px !important;
+}
+
+div.content div.detailseditpanel div.detailseditwrapper .disabled label {
+	color: #AFAFAF;
+}
+
+/**********************************************
+* width classes
+*********************************************/
+.left {
+	float: left;
+}
+
+/************************************************
+* Fragebogen	
+***********************************************/
+div.scrollable {
+	overflow-x: auto;
+	padding: 10px 0;
+}
+
+/************************************************
+* Tree	
+***********************************************/
+.tree .actions {
+	float: right;
+}
+
+.tree .actions input {
+	margin-left: 5px;
+}
+
+.tree .itemlink {
+	float: left;
+	margin-top: 3px;
+}
+
+.tree .selected {
+	font-weight: bold;
+}
+
+/****************************
+* PanelGrid 
+***************************/
+table.attributeTable {
+	overflow: hidden;
+	padding: 4px 0;
+	width: 100%;
+	table-layout:fixed;
+}
+
+table.attributeTable tr {
+	height: 23px;
+}
+
+td.firstLabelCol {
+	text-align: left;
+	vertical-align: top;
+	padding-right: 10px;
+}
+
+td.firstAttributCol {
+	text-align: left;
+	vertical-align: top;
+	padding-right: 30px;
+}
+
+td.labelCol {
+	text-align: left;
+	vertical-align: top;
+	padding-right: 15px;
+}
+
+td.attributCol {
+	text-align: left;
+	vertical-align: top;
+	padding-right: 30px;
+	width: 85%;
+}
+
+td.attributCol80 {
+	text-align: left;
+	vertical-align: top;
+	padding-right: 10px;
+	width: 80%;
+}
+
+td.labelCol20 {
+	text-align: left;
+	vertical-align: top;
+	padding-right: 1px;
+	width: 20%;
+}
+
+td.labelCol20 {
+	text-align: left;
+	vertical-align: top;
+	padding-right: 10px;
+}
+
+td.labelCol2 {
+	text-align: left;
+	vertical-align: top;
+	padding-right: 10px;
+}
+
+td.labelColFixed {
+	text-align: left;
+	vertical-align: top;
+	padding-right: 10px;
+	width: 200px;
+}
+
+td.labelColFixed150 {
+	text-align: left;
+	vertical-align: top;
+	padding-right: 10px;
+	width: 150px;
+}
+
+td.attributColVar {
+	text-align: left;
+	vertical-align: top;
+	padding-right: 30px;
+}
+
+td.attributCol2 {
+	text-align: left;
+	vertical-align: top;
+	padding-right: 10px;
+}
+
+
+
+/*****************************
+* Outputfields
+****************************/
+span.outputlabel {
+	color: #417FB0;
+}
+
+span.importantoutput {
+	font-weight: bold;
+}
+
+div.subheader {
+	font-weight: bold;
+	color: #417fb0;
+	border-top: 1px solid #417fb0;
+	border-bottom: 1px solid #417fb0;
+	background-color: #e1eaf2;
+	width: 99%;
+	height: 32px;
+	line-height: 32px;
+	vertical-align: middle;
+	margin-top: 10px;
+}
+
+span.textsubheader {
+	padding-left: 10px;
+}
+
+div.main div.content div.subheadercontent div.actionssearch {
+	float: right;
+	padding: 0 10px 0 0;
+}
+
+div.main div.content div.subheadercontent div.actionssearch label,div.main div.content div.subheadercontent div.actionssearch span.label {
+	color: #417FB0;
+	margin-right: 2px;
+	float: left;
+	font-weight: normal;
+	padding-right: 2px;
+}
+
+div.main div.content div.subheadercontent div.actionssearch input {
+	border: 1px solid #417FB0;
+	height: 15px;
+	padding: 3px 4px;
+	width: 206px;
+	margin-top: 4px; !
+	margin-top: 0;
+}
+
+div.main div.content div.subheadercontent div.actionssearch input.checkbox {
+	float: left;
+	width: auto;
+	margin-right: 10px;
+	margin-top: 9px;
+}
+
+div.main div.content div.subheadercontent div.actionssearch select {
+	padding: 3px 4px;
+	margin-top: 4px;
+	float: left;
+	margin-right: 20px;
+}
+
+div.main div.content div.subheadercontent div.actionssearch .status {
+	float: left;
+	padding: 5px 0 0 10px;
+	width: 16px;
+}
+
+div.main div.content div.listfooter div.exportpanel,div.main div.rightcontent div.exportpanel {
+	float: left;
+	margin: 5px 0 5px 0;
+}
+
+.ajaxwaitwrapper,.ajaxdownloadwaitwrapper {
+	text-align: center;
+}
+
+.ajaxdownloadwaitwrapper {
+	font-weight: bold;
+}
+
+.ajaxdownloadwaitwrapper img,.ajaxdownloadwaitwrapper input {
+	margin-top: 20px;
+}
+
+
+/**************************
+* Import Styles
+****************************/
+.importpreview {
+	overflow: hidden;
+	width: 99%;
+	border-bottom: 2px solid #417FB0;
+	margin-bottom: 7px;
+	padding-top: 7px;
+}
+
+.importcoltable {
+	float: left;
+	width: 32%;
+	border: 1px #afafaf solid;
+	margin-right: 1%;
+	margin-bottom: 1%;
+	border-bottom: none;
+}
+
+.importcoltable .importcolheader {
+	background: none repeat scroll 0 0 #E1EAF2;
+	border-bottom: 1px solid #AFAFAF;
+	padding: 5px 10px;
+	text-align: center;
+}
+
+.importcoltable table {
+	width: 100%;
+	height: 100%;
+}
+
+.importcoltable th {
+	background-color: #E1EAF2;
+	border-bottom: 1px solid #afafaf;
+	padding: 5px 10px 5px 10px;
+}
+
+.importcoltable tr.even {
+	background: #f1f6fa;
+}
+
+.importcoltable tr.uneven {
+	background: #f7f7f7;
+}
+
+.importcoltable td {
+	border-bottom: 1px solid #afafaf;
+	height: 22px;
+}
+
+.importcoltable td div {
+	height: 22px;
+	line-height: 22px;
+	overflow: hidden;
+	padding: 2px 5px;
+	line-height: 22px;
+}
+
+input.importbutton {
+	float: right;
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+
+.importmessages {
+	width: 99%;
+}
+
+.importmessages .warn {
+	background-color: #ebe6d7;
+	border-top: 1px solid orange;
+	border-bottom: 1px solid orange;
+	padding: 3px 10px;
+}
+
+.importmessages .error {
+	background-color: #ebe1e1;
+	padding: 10px 10px;
+	overflow: hidden;
+}
+
+.importmessages .info {
+	background-color: #e6f5e6;
+	padding: 10px 10px;
+}
+
+
+div.progressbar {
+	border: 1px solid #417FB0;
+	height: 30px;
+}
+
+div.progressbarwrapper {
+	margin-top: 20px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+div.progressbarheader {
+	margin-bottom: 10px;
+	font-weight: bold;
+	font-size: 12px;
+	text-align: center;
+}
+
+div.progressbar div.complete {
+	background: #9CE08F;
+	height: 100%;
+}
+
+div.progressbar div.completetext {
+	float: right;
+	font-weight: bold;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	width: 100%;
+}
+
+td.labelColobs{
+ 
+	width:85px;
+	}
+	
+td.labelColobsview{
+	width:81px;
+	 
+	}
+	
+td.labelColMid
+{
+	text-align: left;
+	vertical-align: middle;
+}
+
+td.firstlabelColCons{
+ 	vertical-align:top;
+	width:118px;
+	}
+	
+td.firstvalueColCons{
+	width:200px;
+	vertical-align:top;
+	}
+	
+td.labelColCons{
+ vertical-align:top;
+	width:70px;
+	}
+	
+td.valueColCons{
+	vertical-align:top;
+	width:90px;
+	}
+	
+td.labelCol135{
+	width:135px;
+	}
+	
+td.labelCol125{
+	width:125px;
+	padding:0 5px;
+	}
+	
+td.attributeCol20{
+	vertical-align: middle;
+	width:20px;
+	}
+
+td.attributeColSingle{
+	width:100%;
+	}
+	
+table.measuretable{
+ 	border:1px solid #afafaf;
+ 	width:100%;	
+ 	background-color:#FFF;
+}
+
+table.measuretable th{
+	font-weight:bold;
+	background-color:#E1EAF2;
+	padding:2px 4px;
+	border:1px solid #FFF;
+	}
+
+table.measuretable td{
+	
+	padding:2px 2px;
+	text-align:center;
+	border:none;
+	vertical-align: top;
+}
+
+ .statuslabelgreen{
+	font-weight:bold; 
+	padding:2px 3px; 
+	color:#FFF; 
+	background-color:green;
+	}
+	
+ .statuslabelorange{
+	font-weight:bold; 
+	padding:2px 3px; 
+	color:#FFF; 
+	background-color:orange;
+	}
+	
+/*****************
+* Filter styles
+**************/
+
+div.filterwrapper {
+	border: 1px solid #A19591;
+	/*padding: 15px 10px;
+	background-color: #F1F6FA;*/
+	overflow:hidden;
+}
+
+div.innerwrapper{
+	margin:5px 0px 0px 2px;
+	}
+
+div.filterwrapper div.uneven{
+	/*background-color:#E1EAF2;*/
+	}
+
+input.filterinput{
+	border: 1px solid #7F9DB9;
+	margin: 2px 2px 2px 2px;
+	width:98%;
+	}
+	
+input.dateinput{
+	/*width:70px;*/
+	width:68%;
+	}
+
+select.operatorinput{
+	width:98%;
+	}
+select.filterselect{
+	margin:2px;
+	width:98%;
+	}
+	
+.datepickericon{
+	margin-top:-4px;
+	
+	}
+div.filterdecoration {
+	float: left;
+	margin-left:2px;
+	margin-right:2px;
+}
+
+.filtericon{
+float:left;
+margin-right:2px; 
+margin-top:3px;
+}
+
+.rf-edt-c {
+  height: auto;
+}
+
+.rf-edt-c-cnt {
+  white-space: normal;
+}
+
+fieldset.formfieldbox table {
+	font-size: 12px;
+	width: 100%;
+}
+
+/*****************************
+* Code Editor
+****************************/
+div.codeeditor {
+	font-size: 13px;
+}
+
+/* data list */
+.repeat .ui-widget-content {
+	border: none;
+	background: transparent;
+	background-image: none;
+}
+
+.ui-widget-content .ui-datalist-content{
+  	border: none;
+}
+
+.tree .ui-widget-content {
+	border: none;
+}
+
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
+    background-color: #E6E6E6;
+    background-image: linear-gradient(to bottom, #E6E6E6, #E7E7E7);
+    background-position: 0 center;
+    text-decoration: none;
+    color: #000000;
+}
+.ui-state-highlight a, .ui-widget-content .ui-state-highlight a, .ui-widget-header .ui-state-highlight a {
+	color: #000000;
+}
+
+.ui-treenode-unselected .treenodeeven {
+	background-color: #FEFEFE;
+	border: 1px solid #DDDDDD;
+	border-radius: 4px;
+}
+
+.ui-treenode-unselected .treenodeuneven {
+	background-color: #F7F7F7;
+	border: 1px solid #E0E0E0;
+	border-radius: 4px;
+}
+
+.ui-treenode-unselected .treenodesingle{
+	background-color: #F7F7F7;
+	border: 1px solid #E0E0E0;
+	border-radius: 4px;
+}
+
+.ui-column-dnd-bottom {
+	visibility: hidden;
+}
+
+
+.ui-tabs.ui-tabs-top .ui-tabs-nav.ui-widget-header li.ui-state-active {
+	border-bottom: 0 none;
+    margin-bottom: 1px;
+}
+
+
+.ui-tabs.ui-tabs-top > .ui-tabs-nav li {
+    border-bottom: 0 none;
+    top: 1px;
+}
+
+.ui-fileupload-content  .ui-progressbar {
+    height: 20px;
+    margin: 0;
+    width: 50px;
+}
+
+.ui-fileupload-files {
+	width: 98%;
+}
+
+.ui-fileupload-files td {
+    padding: 0px 0px;
+}
+
+.functionContent {	
+	display: block;
+}
+
+.functionContentHidden {
+	display:none;
+}
+
+/*
+.functionFieldSet .ui-fieldset, .ui-fieldset .ui-fieldset-legend {
+	width: 95%;
+	height: 15px;
+}
+*/
+
+
+.functionTabTitle .ui-button-text {  
+    color: #0088cc !important;
+    font-weight: normal;
+}
+
+.ui-widget-content .ui-editor {
+	background: none repeat scroll 0 0 #ffffff!important; 
+}
+/*
+.repeat .ui-fieldset  {
+	padding: 0 0;
+}
+*/
+
+.deleteButtonIcon {
+background-image: url("../img/decline.png") !important;
+}
+
+.functionButtonIcon {
+background-image: url("../img/gear24.png") !important;
+}
+
+.renameButtonIcon {
+background-image: url("../img/settings_small.png") !important;
+}
+
+.optional .ui-inputfield {
+background: none repeat scroll 0 0 #f7f7f7 !important;
+}
+
+.add {
+	font-size: 1.0em !important;
+	font-family: Verdana,​sans-serif;
+}
+
+
+

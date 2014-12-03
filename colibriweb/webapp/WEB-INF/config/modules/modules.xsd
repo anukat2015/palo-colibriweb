@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://schemas.opensmc.proclos.com/modules"
+	xmlns:tns="http://schemas.opensmc.proclos.com/modules">
+	
+	<complexType name="parameterType">
+		<simpleContent>
+			<extension base="string">
+				<attribute name="name" type="string" use="required" />
+			</extension>
+		</simpleContent>
+	</complexType>
+	
+	<complexType name="parametersType">
+		<sequence>
+			<element ref="tns:parameter" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	
+	<complexType name="conditionType">
+		<simpleContent>
+			<extension base="string">
+				<attribute name="type" type="string" use="required" />
+				<attribute name="short" type="boolean"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+	
+	<simpleType name="criterionOpType">
+ 		 <restriction base="string">
+    		<enumeration value="eq"/>
+    		<enumeration value="eqProperty"/>
+    		<enumeration value="ge"/>
+    		<enumeration value="geProperty"/>
+    		<enumeration value="gt"/>
+    		<enumeration value="gtProperty"/>
+    		<enumeration value="idEq"/>
+    		<enumeration value="ilike"/>
+    		<enumeration value="in"/>
+    		<enumeration value="isEmpty"/>
+    		<enumeration value="isNotEmpty"/>
+    		<enumeration value="isNotNull"/>
+    		<enumeration value="isNull"/>
+    		<enumeration value="le"/>
+    		<enumeration value="leProperty"/>
+    		<enumeration value="like"/>
+    		<enumeration value="lt"/>
+    		<enumeration value="ltProperty"/>
+    		<enumeration value="ne"/>
+    		<enumeration value="neProperty"/>
+    		<enumeration value="sizeEq"/>
+    		<enumeration value="sizeGe"/>
+    		<enumeration value="sizeGt"/>
+    		<enumeration value="sizeLe"/>
+    		<enumeration value="sizeLt"/>
+    		<enumeration value="sizeNe"/>
+    		<enumeration value="sqExists"/>
+    		<enumeration value="sqNotExists"/>
+    		<enumeration value="sqPropertyEq"/>
+    		<enumeration value="sqPropertyEqAll"/>
+    		<enumeration value="sqPropertyGe"/>
+    		<enumeration value="sqPropertyGeAll"/>
+    		<enumeration value="sqPropertyGeSome"/>
+    		<enumeration value="sqPropertyGt"/>
+    		<enumeration value="sqPropertyGtAll"/>
+    		<enumeration value="sqPropertyGtSome"/>
+    		<enumeration value="sqPropertyIn"/>
+    		<enumeration value="sqPropertyLe"/>
+    		<enumeration value="sqPropertyLeAll"/>
+    		<enumeration value="sqPropertyLeSome"/>
+    		<enumeration value="sqPropertyLt"/>
+    		<enumeration value="sqPropertyLtAll"/>
+    		<enumeration value="sqPropertyLtSome"/>
+    		<enumeration value="sqPropertyNe"/>
+    		<enumeration value="sqPropertyNotIn"/>
+  		</restriction>
+	</simpleType>   
+
+	
+	<simpleType name="criterionJoinType">
+ 		 <restriction base="string">
+    		<enumeration value="inner"/>
+    		<enumeration value="left"/>
+  		</restriction>
+	</simpleType>  
+	
+	<simpleType name="criteriaOpType">
+ 		 <restriction base="string">
+    		<enumeration value="and"/>
+    		<enumeration value="or"/>
+    		<enumeration value="not"/>
+  		</restriction>
+	</simpleType>  
+	
+	<complexType name="criterionType">
+		<sequence>
+			<element ref="tns:criteria" minOccurs="0" maxOccurs="1"/>
+		</sequence>
+		<attribute name="op" type="tns:criterionOpType"/>
+		<attribute name="field" type="string"/>
+		<attribute name="value" type="string"/>
+		<attribute name="join" type="tns:criterionJoinType"/>
+	</complexType>
+	
+	<complexType name="criteriaType">
+		<choice minOccurs="0" maxOccurs="unbounded">
+			<element ref="tns:criteria" />
+			<element ref="tns:criterion"/>
+		</choice>
+		<attribute name="op" type="tns:criteriaOpType"/>
+		<attribute name="clazz" type="string"/>
+	</complexType>
+	
+	<complexType name="itemType">
+		<all>
+			<element ref="tns:default" minOccurs="0" maxOccurs="1"/>
+			<element ref="tns:condition" minOccurs="0" maxOccurs="1"/>
+		    <element ref="tns:criteria" minOccurs="0" maxOccurs="1"/>
+		</all>
+		<attribute name="name" type="string" use="required" />
+	</complexType>
+	
+	<complexType name="itemListType">
+		<sequence>
+			<element ref="tns:item" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		<attribute name="name" type="string" use="required" />
+		<attribute name="mode" type="string"/>
+		<attribute name="enabled" type="string"/>
+	</complexType>
+	
+	<complexType name="filterDefinition">
+		<choice minOccurs="0" maxOccurs="unbounded">
+			<element ref="tns:selectmanycheckbox" />
+			<element ref="tns:selectmanydate"/>
+			<element ref="tns:selectonemenu"/>
+			<element ref="tns:selectoneradio"/>
+			<element ref="tns:nondisplay"/>
+		</choice>
+	</complexType>
+	
+	<complexType name="order">
+		<attribute name="name" type="string" use="required" />
+		<attribute name="label" type="string"/>
+		<attribute name="enabled" type="boolean"/>
+		<attribute name="mode" type="string"/>
+	</complexType>
+	
+	<complexType name="sorterDefinition">
+		<sequence>
+			<element ref="tns:order" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	
+	<simpleType name="triggerops">
+  		<restriction base="string">
+   			<enumeration value="eq"/>
+    		<enumeration value="gt"/>
+    		<enumeration value="lt"/>
+  		</restriction>
+	</simpleType>
+	
+	<complexType name="trigger">
+		<simpleContent>
+			<extension base="nonNegativeInteger">
+				<attribute name="op" type="tns:triggerops" use="required" />
+			</extension>
+		</simpleContent>
+	</complexType>
+	
+	<complexType name="alert">
+		<all>
+			<element ref="tns:text" minOccurs="1" maxOccurs="1"/>
+			<element ref="tns:link" minOccurs="0" maxOccurs="1"/>
+			<element ref="tns:action" minOccurs="0" maxOccurs="1"/>
+			<element ref="tns:trigger" minOccurs="1" maxOccurs="1"/>
+			<element ref="tns:icon" minOccurs="0" maxOccurs="1"/>
+			<element ref="tns:condition" minOccurs="0" maxOccurs="1"/>
+			<element ref="tns:criteria" minOccurs="0" maxOccurs="1"/>
+		</all>
+	</complexType>
+	
+	<complexType name="columnDefinition">
+		<attribute name="text" type="string" use="required" />
+		<attribute name="value" type="string" use="required" />
+	</complexType>
+	
+	<complexType name="alertDefinition">
+		<sequence>
+			<element ref="tns:alert" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	
+	<complexType name="exportConfiguration">
+		<sequence>
+			<element ref="tns:columnDefinition" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	
+	<complexType name="dependencies">
+		<sequence>
+			<element ref="tns:dependency" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	
+	<complexType name="dependency">
+		<sequence>
+			<element ref="tns:event" minOccurs="0" maxOccurs="unbounded"/>
+			<element ref="tns:property" minOccurs="0" maxOccurs="unbounded"/>
+			<element ref="tns:restriction" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		<attribute name="name" type="string" use="required" />
+	</complexType>
+	
+	<complexType name="event">
+		<sequence>
+			<element ref="tns:action" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		<attribute name="type" type="string" use="required" />
+	</complexType>
+	
+	<complexType name="action">
+		<attribute name="execute" type="string" use="required" />
+	</complexType>
+	
+	<complexType name="restriction">
+		<attribute name="value" type="string" use="required" />
+	</complexType>
+	
+	<complexType name="property">
+		<all>
+			<element ref="tns:parameters" minOccurs="0" maxOccurs="1"/>
+		</all>
+		<attribute name="value" type="string" use="required" />
+		<attribute name="source" type="string" use="required" />
+		<attribute name="inputValue" type="string" />
+	</complexType>
+
+	<complexType name="moduleType">
+		<all>
+			<element ref="tns:submodules" minOccurs="0" maxOccurs="1"/>
+			<element ref="tns:filterDefinition" minOccurs="0" maxOccurs="1"/>
+			<element ref="tns:sorterDefinition" minOccurs="0" maxOccurs="1"/>
+			<element ref="tns:alertDefinition" minOccurs="0" maxOccurs="1"/>
+			<element ref="tns:exportConfiguration" minOccurs="0" maxOccurs="1"/>
+			<element ref="tns:parameters" minOccurs="0" maxOccurs="1"/>
+			<element ref="tns:dependencies" minOccurs="0" maxOccurs="1"/>
+		</all>
+		<!--  
+		<sequence>
+			<any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		-->
+		<attribute name="name" type="string" use="required" />
+		<attribute name="label" type="string" use="optional" />
+		<attribute name="navigable" type="boolean" use="optional" />
+		<attribute name="location" type="string" use="optional" />
+		<attribute name="administrable" type="boolean" use="optional" />
+		<attribute name="lockable" type="boolean" use="optional" default="false" />
+		<attribute name="parent" type="string" use="optional" />
+		<attribute name="minSearchChars" type="positiveInteger" use="optional" default="2"/>
+	</complexType>
+
+	<complexType name="modulesType">
+		<sequence maxOccurs="unbounded">
+			<element ref="tns:module" minOccurs="1" maxOccurs="1"/>
+		</sequence>
+	</complexType>
+	
+	
+	
+	
+	<element name="parameter" type="tns:parameterType" />
+	
+	<element name="module" type="tns:moduleType" />
+
+	<element name="modules" type="tns:modulesType" >
+		<unique name="modulenames">
+			<selector xpath=".//tns:module" />
+			<field xpath="@name" />
+		</unique>
+	</element>
+	
+	<element name="submodules" type="tns:modulesType">
+		<unique name="submodulenames">
+			<selector xpath=".//tns:module" />
+			<field xpath="@name" />
+		</unique>
+	</element>
+	
+	<element name="filterDefinition" type="tns:filterDefinition"/>
+	<element name="sorterDefinition" type="tns:sorterDefinition"/>
+	<element name="alertDefinition" type="tns:alertDefinition"/>
+	<element name="exportConfiguration" type="tns:exportConfiguration"/>
+	<element name="dependencies" type="tns:dependencies"/>
+	<element name="dependency" type="tns:dependency"/>
+	<element name="event" type="tns:event"/>
+	<element name="restriction" type="tns:restriction"/>
+	<element name="action" type="tns:action"/>
+	<element name="property" type="tns:property"/>
+	
+	<element name="parameters" type="tns:parametersType"/> 
+	
+	<element name="selectmanycheckbox" type="tns:itemListType"/> 
+	<element name="selectmanydate" type="tns:itemListType"/> 
+	<element name="selectoneradio" type="tns:itemListType"/> 
+	<element name="selectonemenu" type="tns:itemListType"/> 
+	<element name="nondisplay" type="tns:itemListType"/> 
+	
+	<element name="item" type="tns:itemType"/> 
+	<element name="default" type="string"/> 
+	<element name="condition" type="tns:conditionType"/> 
+	<element name="criteria" type="tns:criteriaType"/> 
+	<element name="criterion" type="tns:criterionType"/> 
+	
+	<element name="alert" type="tns:alert"/>
+	<element name="columnDefinition" type="tns:columnDefinition"/>
+	<element name="trigger" type="tns:trigger"/>
+	<element name="text" type="string"/>
+	<element name="link" type="string"/>
+	<element name="icon" type="string"/>
+	
+	<element name="order" type="tns:order"/>
+
+</schema>

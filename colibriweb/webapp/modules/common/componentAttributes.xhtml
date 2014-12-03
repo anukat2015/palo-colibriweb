@@ -1,0 +1,82 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+   	>
+ 
+ 		
+		<span class="inputlabel" style="float:left;#{empty nomargin ? 'margin-left:5px;' : ''}#{field.required ? '': 'font-weight:normal;'}">#{field.displayName}:</span>
+		<s:decorate template="/layout/fieldvalidation.xhtml" rendered="#{field.isMetadataField()}" style="float:left;margin-left:5px;margin-bottom:5px;" id="attmetadata">
+			<p:selectOneMenu styleClass="inputfield" value="#{field.value}" required="#{field.required}" editable="true" style="width:100px;float:left;#{not field.required ? 'background: none repeat scroll 0 0 #f7f7f7;' : ''}" widgetVar="metadataWidget#{field.name}">
+			   <s:selectItems value="#{builder.getMetadataList(field)}" var="selectionItem" label="#{selectionItem}" itemValue="#{selectionItem}"/>
+			   <p:ajax global="false" process="@this" event="change"/> 
+			</p:selectOneMenu>
+			<p:commandLink rendered="#{field.isMetadataField()}"  global="false" title="reload" action="#{builder.calculateMetadataList(field)}" process="@this" update="attmetadata :messages" oncomplete="PF('metadataWidget#{field.name}').show();">
+				 <h:graphicImage value="/img/reload_small.png" />
+			</p:commandLink>
+		</s:decorate> 
+		<s:decorate template="/layout/fieldvalidation.xhtml" rendered="#{field.isInputField()}" style="float:left;margin-left:5px;margin-bottom:5px;margin-right:5px;">
+			 <p:selectOneMenu value="#{field.value}" editable="true" required="#{field.required}" requiredMessage=""
+	                         effect="fade" var="p" style="width:100px;float:left;margin-bottom:3px;#{not field.required ? 'background: none repeat scroll 0 0 #f7f7f7;' : ''}" filter="true" filterMatchMode="startsWith"> 
+	           <s:selectItems value="#{builder.getInputList(inputList,module.getComponentExtraSourcesTypedInputList(builder.instance),field)}" var="selectionItem" label="#{selectionItem.name}" itemValue="#{selectionItem.name}" noSelectionLabel="#{messages['global.noSelectionLabel']}" />
+	           <p:ajax event="change" global="false" process="@this"></p:ajax>
+	        </p:selectOneMenu> 
+		</s:decorate>
+		<s:decorate template="/layout/fieldvalidation.xhtml" rendered="#{field.isSourceField()}" style="float:left;margin-left:5px;margin-bottom:5px;margin-right:5px;" >
+			<p:selectOneMenu value="#{field.value}" required="#{field.required}" effect="fade" var="p" style="width:100px;margin-right:5px;#{not field.required ? 'background: none repeat scroll 0 0 #f7f7f7;' : ''}"  filter="true" editable="true" filterMatchMode="startsWith">   
+	            <s:selectItems value="#{module.getSources(field.getSourceCategory(),builder.instance)}" var="selectionItem" label="#{selectionItem.label}" itemValue="#{selectionItem.name}" noSelectionLabel="#{messages['global.noSelectionLabel']}"/>
+					<p:ajax global="false" event="change" process="@this" update=":rightform" oncomplete="loadNodes(PF('#{treeVar}'), $(document.getElementById('#{builder.getNodeToUpdate(nodeBase, field.owner)}')));"/>
+	        </p:selectOneMenu>  
+	    </s:decorate>
+	    <s:decorate template="/layout/fieldvalidation.xhtml" rendered="#{field.isConnectionField()}" style="float:left;margin-left:5px;margin-bottom:5px;margin-right:5px;">
+			<p:selectOneMenu value="#{field.value}" required="#{field.required}" effect="fade" var="p" style="width:100px;margin-right:5px;#{not field.required ? 'background: none repeat scroll 0 0 #f7f7f7;' : ''}"  editable="true" filter="true" filterMatchMode="startsWith">   
+	            <s:selectItems value="#{module.getConnections(field.getConnectionCategory())}" var="selectionItem" label="#{selectionItem.label}" itemValue="#{selectionItem.name}" noSelectionLabel="#{messages['global.noSelectionLabel']}"/>
+	            <p:ajax global="false" process="@this" event="change" listener="#{module.setComponentExtraConnection(builder.instance,field.input)}" oncomplete="loadNodes(PF('#{treeVar}'), $(document.getElementById('#{builder.getParentNodeToUpdate(nodeBase, field.owner)}')));"/>
+	        </p:selectOneMenu>  
+	    </s:decorate>
+		
+		<s:decorate template="/layout/fieldvalidation.xhtml" style="float:left;margin-left:5px;margin-bottom:5px;" rendered="#{field.isNormalField() and field.isString()}">
+			<p:inputText value="#{field.value}" styleClass="inputfield" style="width:100px;#{not field.required ? 'background: none repeat scroll 0 0 #f7f7f7;' : ''}" required="#{field.required}" requiredMessage="" onfocus="this.value = this.value;">
+				<p:ajax global="false" process="@this" event="change"/> 
+			</p:inputText>
+		</s:decorate>
+
+		<s:decorate template="/layout/fieldvalidation.xhtml" style="float:left;margin-left:5px;margin-right:7px;margin-bottom:5px;" rendered="#{field.isNormalField() and  field.isInteger()}" id="integer">
+			<p:spinner readonly="false" value="#{field.value}" min="#{empty field.value ? '0' : field.type.minValue}" max="#{field.type.maxValue}" styleClass="inputfield #{not field.required ? 'optional' : ''}" required="#{field.required}" stepFactor="1" size="5" > 
+				<p:ajax global="false" process="@this" event="change" update="integer" disabled="#{not empty field.value}"/> 
+				<p:ajax global="false" process="@this" event="change"/> 
+			</p:spinner>
+			<p:commandLink rendered="#{not field.required}" immediate="true" global="false" title="Reset" action="#{field.setValue(null)}" process="@this" update="integer">
+				<h:graphicImage value="/img/arrow_left.png" />
+			</p:commandLink>
+		</s:decorate>
+	
+		<s:decorate template="/layout/fieldvalidation.xhtml" style="float:left;margin-left:5px;margin-right:7px;margin-bottom:5px;"  rendered="#{field.isNormalField() and  field.isFloat()}" id="float">
+			<p:spinner readonly="false" value="#{field.value}" min="#{empty field.value ? '0' : field.type.minValue}" max="#{field.type.maxValue}" styleClass="inputfield #{not field.required ? 'optional' : ''}" required="#{field.required}" stepFactor="0.25" size="5"> 
+				<p:ajax global="false" process="@this" event="change" update="float" disabled="#{not empty field.value}"/> 
+				<p:ajax global="false" process="@this" event="change"/> 
+			</p:spinner>
+			<p:commandLink rendered="#{not field.required}" immediate="true" global="false" title="Reset" action="#{field.setValue(null)}" process="@this" update="float">
+				<h:graphicImage value="/img/arrow_left.png" />
+			</p:commandLink>
+		</s:decorate>
+	
+		<s:decorate template="/layout/fieldvalidation.xhtml" style="float:left;margin-left:5px;margin-bottom:5px;"  rendered="#{field.isNormalField() and  field.isEnum()}">
+			<p:selectOneMenu value="#{field.value}" styleClass="inputfield" style="width:100px;margin-right:5px;#{not field.required ? 'background: none repeat scroll 0 0 #f7f7f7;' : ''}">
+			   <s:selectItems value="#{field.enumeration}" var="selectionItem" label="#{selectionItem}" itemValue="#{selectionItem}" style="float:left;" required="#{field.required}" noSelectionLabel="#{messages['global.noSelectionLabel']}"/>
+			   <p:ajax global="false" process="@this" event="change"/> 
+			</p:selectOneMenu>
+		</s:decorate>
+	
+		<s:decorate template="/layout/fieldvalidation.xhtml" style="float:left;margin-left:5px;margin-right:5px;margin-bottom:5px;" rendered="#{field.isNormalField() and  field.isBoolean()}">
+			<h:selectBooleanCheckbox value="#{field.value}" style="#{not field.required ? 'background: none repeat scroll 0 0 #f7f7f7;' : ''}">
+				<p:ajax global="false" process="@this" event="change"/> 
+			</h:selectBooleanCheckbox>
+		</s:decorate>
+
+</ui:composition>

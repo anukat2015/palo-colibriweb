@@ -1,0 +1,24 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    template="/layout/templateNoColumns.xhtml">
+
+    <ui:param name="showGlobalMessages" value="false"/>
+    <ui:define name="maincontent">
+    	<h:form>
+    		<hr></hr>
+		 	 <h:outputText value="#{org.jboss.seam.handledException}" />
+		  	<hr/>
+    		<s:fragment rendered="#{!org.jboss.seam.navigation.pages.authenticate}">
+    			<s:button view="/login.xhtml" propagation="none" action="#{identity.logout()}" value="Logout" />
+    		</s:fragment> 
+    		<s:fragment rendered="#{org.jboss.seam.navigation.pages.authenticate}">
+    			<s:button view="/welcome.xhtml" action="#{identity.logout()}" value="Neue Session" />
+    		</s:fragment>	 
+		</h:form>
+    </ui:define>
+</ui:composition>

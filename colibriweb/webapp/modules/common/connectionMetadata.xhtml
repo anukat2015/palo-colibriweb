@@ -1,0 +1,93 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core" 
+   	>
+   <p:dialog maximizable="false" dynamic="true" closeOnEscape="true" onShow="resizeDataDialog();" widgetVar="dataDisplayPanel"  header="#{module.instance.name} Metadata" modal="true" styleClass="modalpanel" minWidth="670" minHeight="400" closable="true" resizable="false" position="left top">
+	 <s:decorate template="/layout/fieldvalidation.xhtml" id="dataDisplay"> 
+	   	<h:panelGroup id="metadataPanelContent" layout="block" rendered="true" styleClass="detailseditpanel" style="overflow:hidden;">	
+	   		
+	   			<h:panelGroup id="options">	 			 		
+					<span class="inputlabel" style="margin-left:5px;vertical-align:5px;">Selector:</span>
+					<p:selectOneMenu styleClass="inputfield" value="#{module.metadataSelector}" style="margin-left:5px;margin-top:5px;">
+					   <s:selectItems value="#{module.getMetadataCriterias()}" var="selectionItem" label="#{selectionItem}" itemValue="#{selectionItem}"/>
+					   <p:ajax process="@this" event="change" listener="#{module.calculateMetadata()}" update=":mainform:actions options" global="false" oncomplete="PF('dataDisplayPanel').hide();"/> 
+					</p:selectOneMenu>
+					<div class="actions">
+						<p:commandButton global="true" type="submit" action="#{module.stopExecution()}" value="#{messages.get('global.stop')}" update="options :mainform:actions" rendered="#{module.executing}">
+							<p:effect type="scale" speed="1000">  
+				    		</p:effect>  
+						</p:commandButton>
+					</div>
+	   			</h:panelGroup>
+	   			
+	   			<div style="clear:both;"></div>   
+	   			<div class="subspacer"></div>   
+	   			
+				<p:dataTable id="metadataTable" value="#{module.data}" var="metadata" sortMode="multiple" filteredValue="#{module.filteredData}" filterDelay="600"
+				                resizableColumns="true" rowKey="#{metadata}"  selection="#{module.selectedData}" selectionMode="multiple"
+				                scrollable="true" draggableColumns="false" liveScroll="true" scrollRows="100" rows="100">   
+				      
+				     <p:columns value="#{module.dataHeader}" var="dataHeader" sortBy="#{metadata.getData()[dataHeader.id]}" filterBy="#{metadata.getData()[dataHeader.id]}" resizable="true" width="100px;"  > 
+                		<f:facet name="header">  
+                			<h:outputText value="#{dataHeader.name}"/>  
+			             </f:facet>   
+			             <h:outputText value="#{metadata.getData()[dataHeader.id]}" style="white-space: normal;"/>  
+                	 </p:columns> 
+				</p:dataTable>   
+					
+
+				<h:panelGroup style="width:100%;text-align:center;" rendered="#{module.executing}">
+					<div style="margin:auto;">
+					  <p:graphicImage value="/img/loading.gif" style="margin-top:20px;margin-bottom:20px;"/>  
+					</div>
+				</h:panelGroup>
+				<div class="subspacer"></div>   	
+		     	<h:panelGroup id="metadataactions">
+		     		<div class="actions" style="float:left;">
+						 <h:commandLink>  
+					          <p:graphicImage value="/img/excel.png" />  
+					          <p:dataExporter  type="xls" target="metadataTable" fileName="#{module.instance.name}" selectionOnly="#{module.exportSelection}"/>  
+					      </h:commandLink> 
+					</div>
+					<div class="actions" style="float:left;">
+						 <h:commandLink>  
+					          <p:graphicImage value="/img/pdf.png" />  
+					          <p:dataExporter  type="pdf" target="metadataTable" fileName="#{module.instance.name}" selectionOnly="#{module.exportSelection}"/>  
+					      </h:commandLink> 
+					</div>
+					<div class="actions" style="float:left;">
+						 <h:commandLink>  
+					          <p:graphicImage value="/img/csv.png" />  
+					          <p:dataExporter  type="csv" target="metadataTable" fileName="#{module.instance.name}" selectionOnly="#{module.exportSelection}"/>  
+					      </h:commandLink> 
+					</div>
+					<div class="actions" style="float:left;">
+						 <h:commandLink>  
+					          <p:graphicImage value="/img/xml.png" />  
+					          <p:dataExporter  type="xml" target="metadataTable" fileName="#{module.instance.name}" selectionOnly="#{module.exportSelection}"/>  
+					      </h:commandLink> 
+					</div>
+					<!--  
+					<div class="actions" style="float:left;margin-top:5px;">
+						<span class="inputlabel" style="margin-left:5px;">Selection Only:</span>
+						<h:selectBooleanCheckbox value="#{module.exportSelection}" style="margin-left:5px;">
+			        		<p:ajax global="false" process="@this" update="metadataactions"  /> 
+			        	</h:selectBooleanCheckbox>
+					</div>
+					-->
+					<div class="actions">
+						<p:commandButton type="button" value="#{messages.get('global.hide')}" onclick="PF('dataDisplayPanel').hide()"/>
+					</div>
+				</h:panelGroup>
+			
+	     </h:panelGroup>
+	   </s:decorate>
+	</p:dialog>
+   
+</ui:composition>

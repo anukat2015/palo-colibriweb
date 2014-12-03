@@ -1,0 +1,32 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
+	xmlns:p="http://primefaces.org/ui"
+	>
+
+		<div class="marginplus17pix" style="margin-top:36px;"></div>
+		<p:fieldset legend="Import File" toggleable="true" collapsed="true" toggleSpeed="200">
+			<div class="searchfilters">
+					<h:form id="uploadForm" enctype="multipart/form-data">
+						<h:panelGroup styleClass="content">
+							<p:fileUpload fileUploadListener="#{connectionModule.importFile}" mode="advanced" dragDropSupport="false"  auto="false"
+                  			update="@this :messages" sizeLimit="100000000" fileLimit="1" style="margin-bottom:10px;"/>  
+                  			<!--  
+				  			<s:fileUpload data="#{connectionModule.uploadedFile}" fileName="#{connectionModule.filename}"/>
+				   			<div style="clear:both"/>
+							<h:panelGroup>
+					   			<div class="actions">
+									<h:commandButton value="Import" action="#{connectionModule.importFile()}" render="messages" >
+									</h:commandButton>
+								</div>
+							</h:panelGroup>
+							-->
+						</h:panelGroup>
+					</h:form>
+			</div>
+		</p:fieldset>
+	
+</ui:composition>
+

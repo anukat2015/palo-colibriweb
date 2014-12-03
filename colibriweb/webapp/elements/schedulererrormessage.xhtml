@@ -1,0 +1,17 @@
+<m:message xmlns="http://www.w3.org/1999/xhtml" xmlns:m="http://jboss.com/products/seam/mail" xmlns:h="http://java.sun.com/jsf/html">
+	<m:from name="Colibri Support" address="#{taskController.mailUser}" />
+	<m:to name="#{taskController.taskHolder.contactPerson}">#{taskController.taskHolder.contactOnError}</m:to>
+	<m:subject>Error executing #{taskController.taskHolder.name} (#{taskController.taskHolder.id})</m:subject>
+	<m:body>
+		<p>
+		<h:outputText value="Dear #{taskController.taskHolder.contactPerson}" />
+		 
+		 </p>
+		<p>An error occured while execution a scheduled job:</p>
+		<p/>
+		<p>#{taskController.mailMessage}"</p>
+		<p/>
+		<p>Sorry,</p>
+		<p>Yours Colibri</p>
+	</m:body>
+</m:message>

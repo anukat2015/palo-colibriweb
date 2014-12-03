@@ -1,0 +1,43 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	
+	>
+
+	<h:panelGrid id="variableInputGrid" styleClass="block" columns="6" columnClasses="labelCol2, attributCol2, labelCol2, attributCol2, labelCol2, attributCol2">
+		<span class="inputlabel">#{messages.get('ui.name')}:</span>
+		<s:decorate template="/layout/fieldvalidation.xhtml" styleClass="inputwrapper" >
+			 <p:selectOneMenu value="#{item.name}" panelStyle="width:350px;" editable="true" required="true"
+	                         effect="fade" var="p" style="width:150px;float:left;margin-bottom:3px;" filter="true" filterMatchMode="startsWith"> 
+	           <s:selectItems value="#{availableVariables}" var="selectionItem" label="#{selectionItem.name}" itemValue="#{selectionItem.name}"/>
+	            <p:column>  
+	                #{p.name} 
+	            </p:column>  
+	            <p:column>  
+	                #{p.value} 
+	            </p:column>  
+	        </p:selectOneMenu> 
+		</s:decorate>
+	
+		<span class="inputlabel">#{messages.get('ui.value')}:</span>
+		<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml">
+			<h:inputText required="false" value="#{item.value}" styleClass="filterinput">
+			</h:inputText>
+		</s:decorate>
+		
+		<span class="inputlabel">Comment:</span>
+		<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml">
+			<h:inputText required="false" value="#{item.comment}" styleClass="filterinput">
+			</h:inputText>
+		</s:decorate>
+		
+	</h:panelGrid>
+
+
+
+</ui:composition>

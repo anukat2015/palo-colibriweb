@@ -1,0 +1,90 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+   	>
+	<h:panelGroup layout="block"  rendered="true" style="overflow:auto;" id="xmlEditPanelContent">
+   		<s:decorate template="/layout/fieldvalidation.xhtml" id="codearea"> 
+			  	 <div class="codeeditor">
+					<h:inputTextarea id="code" styleClass="inputfield" rows="20"
+						cols="120" style="width:99.4%;"
+						value="#{module.instance.code}">
+					 	<p:ajax process="@this" event="change" listener="#{module.xmlChanged()}"/> 
+					 </h:inputTextarea>
+					<script type="text/javascript" language="JavaScript">
+						//<![CDATA[
+					
+						#{module.getEditorAutoCompletion()}
+			
+						function completeAfter(cm, pred) {
+					        var cur = cm.getCursor();
+					        if (!pred || pred()) setTimeout(function() {
+					          if (!cm.state.completionActive)
+					            CodeMirror.showHint(cm, CodeMirror.hint.xml, {schemaInfo: tags, completeSingle: false});
+					        }, 100);
+					        return CodeMirror.Pass;
+					      }
+			
+					      function completeIfAfterLt(cm) {
+					        return completeAfter(cm, function() {
+					          var cur = cm.getCursor();
+					          return cm.getRange(CodeMirror.Pos(cur.line, cur.ch - 1), cur) == "<";
+					        });
+					      }
+			
+					      function completeIfInTag(cm) {
+					        return completeAfter(cm, function() {
+					          var tok = cm.getTokenAt(cm.getCursor());
+					          if (tok.type == "string" && (!/['"]/.test(tok.string.charAt(tok.string.length - 1)) || tok.string.length == 1)) return false;
+					          var inner = CodeMirror.innerMode(cm.getMode(), tok.state).state;
+					          return inner.tagName;
+					        });
+					      }
+			
+					      var editor = CodeMirror.fromTextArea(document.getElementById('mainform:codearea:code'), {
+			    				mode: "xml",
+			    				htmlMode: true,
+			    		        lineNumbers: true,
+			    		        textWrapping: false,
+			    		        autoCloseTags: false,
+			    		        extraKeys: {
+			    		            "'<'": completeAfter,
+			    		            "'/'": completeIfAfterLt,
+			    		            "' '": completeIfInTag,
+			    		            "'='": completeIfInTag,
+			    		            "Ctrl-Space": function(cm) {
+			    		              CodeMirror.showHint(cm, CodeMirror.hint.xml, {schemaInfo: tags});
+			    		       	  }
+			    		        }
+			 					});
+							//]]>
+				    </script>	
+			    </div>	
+		</s:decorate>
+		<div class="spacer">&#160;</div>	
+		<s:fragment>
+			<div class="actions">
+				<p:commandButton type="submit" action="#{module.updateXMLFromCode()}" value="#{messages.get('global.save')}" update=":content :rightform :messages" onclick="editor.save();" widgetVar="saveButton"/>
+			</div>
+			<div class="actions">
+				<p:commandButton onclick="editor.save();" type="submit" action="#{module.validateFromCode()}" value="#{messages.get('global.validate')}" update=":messages" global="true" rendered="#{not empty module.instance.id}"/>
+			</div>
+			<div class="actions" style="float:left;">
+				<p:commandButton type="submit" 
+					value="#{messages.get('global.flowgraph')}" 
+					update=":flowGraphSelectionPanel" oncomplete="callGraph()" rendered="#{not empty module.instance.id}">
+				</p:commandButton>
+			</div>
+			<div class="actions">
+				<p:commandButton type="submit" action="#{module.close}" value="#{messages.get('global.hide')}" immediate="true"/>
+			</div>
+			<div class="actions" style="float:left;">
+				<p:commandButton type="submit" value="Editor" update=":content" action="#{module.switchToEditor()}"></p:commandButton>
+			</div>
+		</s:fragment>
+	</h:panelGroup>
+</ui:composition>

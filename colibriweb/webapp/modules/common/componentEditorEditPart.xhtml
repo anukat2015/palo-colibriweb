@@ -1,0 +1,82 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+   	>
+   	<h:panelGroup layout="block" style="#{(field.isValueHolder() and field.isNormalField() and field.isString()) ? 'width:100%;' : ''}float:left;">
+		<h:panelGroup layout="block" style="float:left;">
+				<p:dataList value="#{field.getAttributeList()}" var="attribute" styleClass="repeat" type="none" emptyMessage="" rendered="#{not empty field.getAttributeList()}">
+					<h:panelGroup style="float:left;" rendered="#{attribute.visible}">
+					 	<ui:include src="/modules/common/componentAttributes.xhtml">
+							<ui:param name="field" value="#{field.attributes.get(attribute.name)}" />
+							<ui:param name="nomargin" value="true" />
+						</ui:include>
+					</h:panelGroup>
+					<h:panelGroup style="float:left;margin-right:5px;" rendered="#{field.isInputField() and attribute.name.equals('nameref')}" id="input">
+						<s:decorate template="/layout/fieldvalidation.xhtml" rendered="#{not field.holdsConstantInput}" style="float:left;">
+							 <p:selectOneMenu value="#{field.input}" editable="true" required="#{field.required}" requiredMessage=""
+					                         effect="fade" var="p" style="width:150px;float:left;margin-bottom:3px;" filter="true" filterMatchMode="startsWith"> 
+					           <s:selectItems value="#{builder.getInputList(inputList,module.getComponentExtraSourcesTypedInputList(builder.instance),field)}" var="selectionItem" label="#{selectionItem.name}" itemValue="#{selectionItem.name}"/>
+					           <p:ajax event="change" global="false" process="@this"></p:ajax>
+					        </p:selectOneMenu> 
+						</s:decorate>
+						<s:decorate template="/layout/fieldvalidation.xhtml" rendered="#{field.holdsConstantInput}" style="float:left;">
+							<h:inputText value="#{field.attributes.get('constant').value}" styleClass="inputfield" style="width:130px;" required="false">
+								<p:ajax global="false" process="@this" event="change"/> 
+							</h:inputText>
+						</s:decorate>
+						<p:commandLink style="float:left" global="false" title="Source Input" action="#{field.setHoldsConstantInput(true)}" update="input" process="@this input" rendered="#{not field.holdsConstantInput and not empty field.attributes.get('constant')}" immediate="true">
+							 <p:graphicImage value="/img/next.png" width="16" height="16" />
+						</p:commandLink>
+						<p:commandLink style="float:left" global="false" title="Constant Input" action="#{field.setHoldsConstantInput(false)}" update="input" process="@this input" rendered="#{field.holdsConstantInput}" immediate="true">
+							 <p:graphicImage value="/img/pin.png" width="16" height="16" />
+						</p:commandLink>
+					</h:panelGroup>
+					<h:panelGroup style="float:left;" rendered="#{field.isSourceField() and attribute.name.equals('nameref')}" id="source">
+						<s:decorate template="/layout/fieldvalidation.xhtml" id="sourceSelection" style="float:left;" >
+							<p:selectOneMenu value="#{field.input}" panelStyle="width:250px" required="#{field.required}" editable="true"
+					                         effect="fade" var="p" style="width:150px;margin-right:5px;"  filter="true" filterMatchMode="startsWith">  
+					                         
+					            <s:selectItems value="#{module.getSources(field.getSourceCategory(),builder.instance)}" var="selectionItem" label="#{selectionItem.label}" itemValue="#{selectionItem.name}"/>
+					             <p:ajax global="false" event="change" process="@this" update=":rightform" oncomplete="loadNodes(PF('#{treeVar}'), $(document.getElementById('#{builder.getParentNodeToUpdate(nodeBase, field)}')));"/>
+					        </p:selectOneMenu>  
+					    </s:decorate>
+					</h:panelGroup>
+					<h:panelGroup style="float:left;" rendered="#{field.isMetadataField() and attribute.name.equals('name')}" id="metadata">
+						<s:decorate template="/layout/fieldvalidation.xhtml" id="metadataSelection" style="float:left;" >
+							<p:selectOneMenu value="#{field.input}" editable="true" required="#{field.required}" widgetVar="metadataWidget#{field.id}"
+					                         effect="fade" var="p" style="width:150px;"  filter="true" filterMatchMode="startsWith">  
+					                         
+					            <s:selectItems value="#{builder.getMetadataList(field)}" var="selectionItem" label="#{selectionItem}" itemValue="#{selectionItem}"/>
+					            <p:ajax global="false" process="@this" event="change"/>
+					        </p:selectOneMenu>  
+					    </s:decorate>
+					   <p:commandLink  global="false" title="reload" action="#{builder.calculateMetadataList(field)}" process="@this" update="metadata :messages" style="margin-right:10px;" oncomplete="PF('metadataWidget#{field.id}').show();">
+							<h:graphicImage value="/img/reload_small.png" />
+						</p:commandLink>
+					</h:panelGroup>
+					<h:panelGroup style="float:left;" rendered="#{field.isConnectionField() and attribute.name.equals('nameref')}" id="connection">
+						<s:decorate template="/layout/fieldvalidation.xhtml" id="connectionSelection" style="float:left;" >
+							<p:selectOneMenu value="#{field.input}" panelStyle="width:250px" required="#{field.required}" editable="true"
+					                         effect="fade" var="p" style="width:150px;margin-right:5px;"  filter="true" filterMatchMode="startsWith">       
+					            <s:selectItems value="#{module.getConnections(field.getConnectionCategory())}" var="selectionItem" label="#{selectionItem.label}" itemValue="#{selectionItem.name}"/>
+					             <p:ajax global="false" process="@this" event="change" listener="#{module.setComponentExtraConnection(builder.instance,field.input)}" oncomplete="loadNodes(PF('#{treeVar}'), $(document.getElementById('#{builder.getParentNodeToUpdate(nodeBase, field)}')));"/>
+					        </p:selectOneMenu>  
+					    </s:decorate>
+					</h:panelGroup>
+				</p:dataList>
+		</h:panelGroup>
+		<h:panelGroup layout="block" rendered="#{field.isValueHolder()}">
+			<ui:include src="/modules/common/componentEditorValuePart.xhtml">
+				<ui:param name="field" value="#{field}" />
+			</ui:include>
+		</h:panelGroup>
+		
+	</h:panelGroup>
+   	
+</ui:composition>

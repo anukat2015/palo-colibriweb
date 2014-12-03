@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://schemas.jedox.com/etlcore"
+	elementFormDefault="qualified"
+	xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:c="http://schemas.jedox.com/etlcore">
+
+	<element name="connection" type="c:connectiontype">
+		<annotation>
+			<documentation xml:lang="en">
+				  Connection to a postgresql database server
+			</documentation>
+		</annotation>
+	</element>
+
+	<complexType name="parameter">
+		<simpleContent>
+			<extension base="string">
+				<attribute name="name" type="string" use="required">
+					<annotation>
+						<documentation xml:lang="en">
+							  The name of the parameter as passed to the jdbc driver.
+						</documentation>
+					</annotation>
+				</attribute>
+			</extension>
+		</simpleContent>
+	</complexType>
+
+	<complexType name="password">
+		<simpleContent>
+			<extension base="string">
+				<attribute name="encrypted" type="boolean" default="false">
+					<annotation>
+						<documentation xml:lang="en">
+							  Check this for password encryption
+						</documentation>
+					</annotation>
+				</attribute>
+			</extension>
+		</simpleContent>
+	</complexType>
+
+    <simpleType name="fetchmode">
+ 		 <restriction base="string">
+    		<enumeration value="buffered"/>
+    		<enumeration value="full"/>
+  		</restriction>
+	</simpleType>
+
+	<complexType name="parameters">
+		<sequence>
+			<element name="parameter" type="c:parameter" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+						<documentation xml:lang="en">
+							  Any additional parameter for the jdbc connection
+						</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="connectiontype">
+		<all>
+			<element name="host" type="string" minOccurs="1" maxOccurs="1">
+				<annotation>
+				  <documentation xml:lang="en">
+				  		The host name (or ip address) of the database server.
+				  </documentation>
+				</annotation>
+			</element>
+			<element name="port" type="string" minOccurs="1" maxOccurs="1" default="5432">
+				<annotation>
+				  <documentation xml:lang="en">
+				  		The database server port.
+				  </documentation>
+				</annotation>
+			</element>
+			<element name="database" type="string" minOccurs="1" maxOccurs="1">
+				<annotation>
+				  <documentation xml:lang="en">
+				  		The database server port.
+				  </documentation>
+				</annotation>
+			</element>
+			<element name="user" type="string" minOccurs="1" maxOccurs="1">
+				<annotation>
+				  <documentation xml:lang="en">
+				  		The user name to use for the database connection. Has to be existent in the database server and has to have sufficient rights to for the given database.
+				  </documentation>
+				</annotation>
+			</element>
+			<element name="password" type="c:password" minOccurs="1" maxOccurs="1">
+				<annotation>
+			 	  <documentation xml:lang="en">
+				  		The password for the given user.
+				  </documentation>
+				</annotation>
+			</element>	  
+			<element name="encoding" type="string" minOccurs="0" maxOccurs="1">
+				<annotation>
+				 <documentation xml:lang="en">
+				  		The encoding of the data from the database. As default UTF8 is assumed.
+				  </documentation>
+				 </annotation>
+			</element>
+            <element name="fetch" type="c:fetchmode" minOccurs="0" maxOccurs="1" default="buffered">
+            	<annotation>
+				 <documentation xml:lang="en">
+				  		The mode, how data is fetched for this connection.
+				  		<p>Buffered (default): Data is streamed, which consumes less memory in ETL</p>
+				  		<p>Full: Data is fetched one shot. May lead to significant memory consumption in ETL, but may be faster if network connectability is weak between Colibri and the database host.</p>
+				  </documentation>
+				</annotation>
+            </element>
+           	<element name="parameters" type="c:parameters" minOccurs="0" maxOccurs="1"/>
+			<element name="comment" type="string" minOccurs="0" maxOccurs="1"/>
+		</all>
+		<attribute name="name" type="string" use="required"/>
+		<attribute name="type" type="string" use="required"/>
+		<attribute name="modified" type="string"/>
+        <attribute name="modifiedBy" type="string"/>
+	</complexType>
+
+</schema>

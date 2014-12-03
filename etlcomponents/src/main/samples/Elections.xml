@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Elections" version="6.01" format="strict" modified="1396340805532" modifiedBy="">
+  <variables />
+  <connections>
+    <connection name="Elections" type="Directory" modified="1396335618725" modifiedBy="">
+      <comment />
+      <database>wahlen</database>
+      <delimiter>\t</delimiter>
+      <quote>#none</quote>
+      <enableEscape>false</enableEscape>
+      <header>true</header>
+      <skip>0</skip>
+      <pattern>csv</pattern>
+    </connection>
+    <connection name="Jedox" type="Jedox" modified="1396335618725" modifiedBy="">
+      <comment />
+      <host>localhost</host>
+      <port>7777</port>
+      <database>Wahlen</database>
+      <user>admin</user>
+      <password encrypted="true">uuIkvoanZ5segK4Ewb2Kvw==</password>
+    </connection>
+  </connections>
+  <extracts>
+    <extract name="Elections" type="File" modified="1396340805532" modifiedBy="">
+      <comment />
+      <connection nameref="Elections" />
+    </extract>
+    <extract name="Measures" type="Tree" modified="1396335618725" modifiedBy="">
+      <comment />
+      <constants>
+        <constant name="Wahlberechtigte" weight="1.0">
+          <attribute name="de">Wahlberechtigte</attribute>
+          <attribute name="en">Eligible Voters</attribute>
+        </constant>
+        <constant name="Nicht-Waehler" weight="1.0">
+          <attribute name="de">Nicht-Wähler</attribute>
+          <attribute name="en">Non Voters</attribute>
+        </constant>
+        <constant name="Ungueltig" weight="1.0">
+          <attribute name="de">Ungültig</attribute>
+          <attribute name="en">Invalid</attribute>
+        </constant>
+        <constant name="Gueltig" weight="1.0">
+          <attribute name="de">Gültig</attribute>
+          <attribute name="en">Valid</attribute>
+          <constant name="GRUE" weight="1.0">
+            <attribute name="de">Grüne</attribute>
+            <attribute name="en">Greens</attribute>
+          </constant>
+          <constant name="SPOE" weight="1.0">
+            <attribute name="de">SPÖ</attribute>
+            <attribute name="en">Social Democratics</attribute>
+          </constant>
+          <constant name="OEVP" weight="1.0">
+            <attribute name="de">ÖVP</attribute>
+            <attribute name="en">Conservatives</attribute>
+          </constant>
+          <constant name="FPOE" weight="1.0">
+            <attribute name="de">FPÖ</attribute>
+            <attribute name="en">Nationalists</attribute>
+          </constant>
+          <constant name="BZOE" weight="1.0">
+            <attribute name="de">BZÖ</attribute>
+            <attribute name="en">National Liberals</attribute>
+          </constant>
+          <constant name="LIF" weight="1.0">
+            <attribute name="de">LIF</attribute>
+            <attribute name="en">Liberals</attribute>
+          </constant>
+          <constant name="MARTI" weight="1.0">
+            <attribute name="de">HPM</attribute>
+            <attribute name="en">EU Critics</attribute>
+          </constant>
+          <constant name="KPOE" weight="1.0">
+            <attribute name="de">KPÖ</attribute>
+            <attribute name="en">Communists</attribute>
+          </constant>
+          <constant name="Sonstige" weight="1.0">
+            <attribute name="de">Sonstige</attribute>
+            <attribute name="en">Others</attribute>
+          </constant>
+          <constant name="FRANK" weight="1.0">
+            <attribute name="de">Team Stronach</attribute>
+            <attribute name="en">Team Stronach</attribute>
+          </constant>
+          <constant name="NEOS" weight="1.0">
+            <attribute name="de">NEOS</attribute>
+            <attribute name="en">Neo Liberals</attribute>
+          </constant>
+        </constant>
+      </constants>
+    </extract>
+    <extract name="Datatypes" type="Tree" modified="1396335618725" modifiedBy="">
+      <comment />
+      <constants>
+        <constant name="Stimmen" weight="1.0" />
+        <constant name="%Gueltig" weight="1.0" />
+        <constant name="%Berechtigt" weight="1.0" />
+      </constants>
+    </extract>
+    <extract name="BaseRules" type="Rule" modified="1396335618725" modifiedBy="">
+      <comment />
+      <rules>
+        <rule comment="%Gültig" active="true">['Datatypes':'%Gueltig'] = (['Datatypes':'Stimmen'] * 100) / ['Datatypes':'Stimmen','Measures':'Gueltig']</rule>
+        <rule comment="%Berechtigt" active="true">['Datatypes':'%Berechtigt'] = (['Datatypes':'Stimmen'] * 100) / ['Datatypes':'Stimmen','Measures':'Wahlberechtigte']</rule>
+      </rules>
+    </extract>
+  </extracts>
+  <transforms>
+    <transform name="RegionsFH" type="TreeFH" modified="1396335618725" modifiedBy="">
+      <comment />
+      <sources>
+        <source nameref="ElectionsSorted" />
+      </sources>
+      <target skipEmpty="false">
+        <levels>
+          <level>
+            <input constant="Wien" />
+          </level>
+          <level>
+            <input nameref="BezirkC" />
+          </level>
+          <level>
+            <input nameref="SprengelC" />
+          </level>
+        </levels>
+        <attributes />
+      </target>
+    </transform>
+    <transform name="ElectionFacts" type="TableNormalization" modified="1396335618725" modifiedBy="">
+      <comment />
+      <sources>
+        <source nameref="ElectionsSorted" />
+      </sources>
+      <ignoreEmpty>false</ignoreEmpty>
+      <target>
+        <coordinates>
+          <coordinate>
+            <input nameref="Jahr" />
+          </coordinate>
+          <coordinate>
+            <input nameref="Wahl" />
+          </coordinate>
+          <coordinate>
+            <input nameref="SprengelC" />
+          </coordinate>
+          <coordinate name="Datatypes">
+            <input constant="Stimmen" />
+          </coordinate>
+        </coordinates>
+        <measures normalize="Measures" valuename="Value">
+          <measure name="Wahlberechtigte" aggregate="none" type="numeric">
+            <input nameref="WBER" />
+          </measure>
+          <measure name="Nicht-Waehler" aggregate="none" type="numeric">
+            <input nameref="Nicht-Waehler" />
+          </measure>
+          <measure name="Ungueltig" aggregate="none" type="numeric">
+            <input nameref="UNG." />
+          </measure>
+          <measure aggregate="none" type="numeric" name="SPOE">
+            <input nameref="SPOE" />
+          </measure>
+          <measure aggregate="none" type="numeric" name="OEVP">
+            <input nameref="OEVP" />
+          </measure>
+          <measure aggregate="none" type="numeric" name="FPOE">
+            <input nameref="FPOE" />
+          </measure>
+          <measure aggregate="none" type="numeric" name="GRUE">
+            <input nameref="GRUE" />
+          </measure>
+          <measure aggregate="none" type="numeric" name="NEOS">
+            <input nameref="NEOS" />
+          </measure>
+          <measure aggregate="none" type="numeric" name="LIF">
+            <input nameref="LIF" />
+          </measure>
+          <measure aggregate="none" type="numeric" name="BZOE">
+            <input nameref="BZOE" />
+          </measure>
+          <measure aggregate="none" type="numeric" name="FRANK">
+            <input nameref="FRANK" />
+          </measure>
+          <measure aggregate="none" type="numeric" name="MARTI">
+            <input nameref="MARTI" />
+          </measure>
+          <measure aggregate="none" type="numeric" name="KPOE">
+            <input nameref="KPOE" />
+          </measure>
+          <measure aggregate="none" type="numeric" name="Sonstige">
+            <input nameref="Sonstige" />
+          </measure>
+        </measures>
+      </target>
+    </transform>
+    <transform name="ElectionsFT" type="FieldTransform" modified="1396335618725" modifiedBy="">
+      <comment />
+      <sources>
+        <source nameref="Elections" />
+      </sources>
+      <functions>
+        <function name="Wahl" type="Concatenation">
+          <comment />
+          <parameters>
+            <delimiter>-</delimiter>
+          </parameters>
+          <inputs>
+            <input nameref="Typ" />
+            <input nameref="Jahr" />
+          </inputs>
+        </function>
+        <function name="Jahr" type="LastNonEmpty">
+          <comment />
+          <parameters />
+          <inputs>
+            <input nameref="Jahr" />
+          </inputs>
+        </function>
+        <function name="Typ" type="LastNonEmpty">
+          <comment />
+          <parameters />
+          <inputs>
+            <input nameref="Typ" />
+          </inputs>
+        </function>
+        <function name="Sprengel3" type="NumberFormat">
+          <comment />
+          <parameters>
+            <pattern>000</pattern>
+          </parameters>
+          <inputs>
+            <input nameref="SPR" />
+          </inputs>
+        </function>
+        <function name="Bezirk2" type="NumberFormat">
+          <comment />
+          <parameters>
+            <pattern>00</pattern>
+          </parameters>
+          <inputs>
+            <input nameref="BZ" />
+          </inputs>
+        </function>
+        <function name="SprengelC" type="Concatenation">
+          <inputs>
+            <input nameref="Bezirk2" />
+            <input nameref="Sprengel3" />
+          </inputs>
+        </function>
+        <function name="BezirkC" type="Concatenation">
+          <inputs>
+            <input nameref="Bezirk2" />
+          </inputs>
+          <parameters>
+            <template>#{Bezirk2}.Bezirk</template>
+          </parameters>
+        </function>
+        <function name="Nicht-Waehler" type="Groovy">
+          <comment />
+          <parameters>
+            <script><![CDATA[WBER-_input2]]></script>
+            <forceEval>true</forceEval>
+          </parameters>
+          <inputs>
+            <input nameref="WBER" type="Integer" />
+            <input nameref="ABG." type="Integer" />
+          </inputs>
+        </function>
+      </functions>
+    </transform>
+    <transform name="ElectionsFH" type="TreeFH" modified="1396335618725" modifiedBy="">
+      <comment />
+      <sources>
+        <source nameref="ElectionsSorted" />
+      </sources>
+      <target skipEmpty="false">
+        <levels>
+          <level>
+            <input constant="Alle Wahlen" />
+          </level>
+          <level>
+            <input nameref="Typ" />
+          </level>
+          <level>
+            <input nameref="Wahl" />
+          </level>
+        </levels>
+        <attributes />
+      </target>
+    </transform>
+    <transform name="ElectionsSorted" type="TableView" modified="1396335618725" modifiedBy="">
+      <comment />
+      <sources>
+        <source nameref="ElectionsFT" />
+      </sources>
+      <cache>memory</cache>
+      <sorter>
+        <input nameref="Jahr" order="asc" />
+        <input nameref="Typ" order="asc" />
+        <input nameref="SprengelC" order="asc" />
+      </sorter>
+    </transform>
+    <transform name="YearsFH" type="TreeFH" modified="1396336808471" modifiedBy="">
+      <comment />
+      <sources>
+        <source nameref="ElectionsSorted" />
+      </sources>
+      <target skipEmpty="false">
+        <levels>
+          <level>
+            <input constant="Alle Jahre" />
+          </level>
+          <level>
+            <input nameref="Jahr" />
+          </level>
+        </levels>
+      </target>
+    </transform>
+  </transforms>
+  <loads>
+    <load name="Measures" type="Dimension" modified="1396335618725" modifiedBy="">
+      <comment />
+      <connection nameref="Jedox" />
+      <source nameref="Measures" />
+      <dimension name="Measures" deactivateRules="false">
+        <elements mode="update" />
+        <consolidations mode="update" />
+        <attributes mode="update" />
+      </dimension>
+    </load>
+    <load name="Datatypes" type="Dimension" modified="1396336865851" modifiedBy="">
+      <comment />
+      <connection nameref="Jedox" />
+      <source nameref="Datatypes" />
+      <dimension name="Datatypes" deactivateRules="false" />
+    </load>
+    <load name="Regions" type="Dimension" modified="1396335618725" modifiedBy="">
+      <comment />
+      <connection nameref="Jedox" />
+      <source nameref="RegionsFH" />
+      <dimension name="Regions" deactivateRules="false">
+        <elements mode="update" />
+        <consolidations mode="update" />
+        <attributes mode="update" />
+      </dimension>
+    </load>
+    <load name="Years" type="Dimension" modified="1396335618725" modifiedBy="">
+      <comment />
+      <connection nameref="Jedox" />
+      <source nameref="YearsFH" />
+      <dimension name="Years" deactivateRules="false">
+        <elements mode="update" />
+        <consolidations mode="update" />
+        <attributes mode="update" />
+      </dimension>
+    </load>
+    <load name="Elections" type="Dimension" modified="1396335618725" modifiedBy="">
+      <comment />
+      <connection nameref="Jedox" />
+      <source nameref="ElectionsFH" />
+      <dimension name="Elections" deactivateRules="false">
+        <elements mode="update" />
+        <consolidations mode="update" />
+        <attributes mode="update" />
+      </dimension>
+    </load>
+    <load name="ElectionFacts" type="Cube" modified="1396335618725" modifiedBy="">
+      <comment />
+      <connection nameref="Jedox" />
+      <source nameref="ElectionFacts" />
+      <cube name="Elections" deactivateRules="false" deactivateSVS="false" completelock="false">
+        <dimensions>
+          <dimension name="Years" input="Jahr" />
+          <dimension name="Elections" input="Wahl" />
+          <dimension name="Regions" input="SprengelC" />
+          <dimension name="Datatypes" input="Datatypes" />
+          <dimension name="Measures" input="Measures" />
+        </dimensions>
+      </cube>
+    </load>
+    <load name="BaseRules" type="Rule" modified="1396335618725" modifiedBy="">
+      <comment />
+      <connection nameref="Jedox" />
+      <source nameref="BaseRules" />
+      <cube name="Elections" />
+    </load>
+  </loads>
+  <jobs>
+    <job name="Dimensions" type="Standard" modified="1396335618725" modifiedBy="">
+      <comment />
+      <execution nameref="Datatypes" type="load" />
+      <execution nameref="Elections" type="load" />
+      <execution nameref="Measures" type="load" />
+      <execution nameref="Regions" type="load" />
+      <execution nameref="Years" type="load" />
+    </job>
+    <job name="Cubes" type="Standard" modified="1396335618725" modifiedBy="">
+      <comment />
+      <execution nameref="ElectionFacts" type="load" />
+    </job>
+    <job name="default" type="Standard" modified="1396335618725" modifiedBy="">
+      <comment />
+      <execution nameref="Dimensions" type="job" />
+      <execution nameref="Cubes" type="job" />
+      <execution nameref="Rules" type="job" />
+    </job>
+    <job name="Rules" type="Standard" modified="1396335618725" modifiedBy="">
+      <comment />
+      <execution nameref="BaseRules" type="load" />
+    </job>
+  </jobs>
+</project>
+

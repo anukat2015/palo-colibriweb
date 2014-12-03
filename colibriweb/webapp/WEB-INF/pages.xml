@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages login-view-id="/login.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:schemaLocation="http://jboss.org/schema/seam/pages http://jboss.org/schema/seam/pages-2.3.xsd">
+ <page view-id="/login.xhtml">
+  <navigation from-action="#{identity.login}">
+   <rule if="#{identity.loggedIn}">
+    <redirect view-id="/modules/project/list.xhtml"/>
+   </rule>
+  </navigation>
+  <!--  <rewrite pattern="/login"/> -->
+ </page>
+  <page login-required="false" view-id="/version.xhtml">
+  <!-- <rewrite pattern="/version"/> -->
+ </page>
+ <page login-required="false" view-id="/help.xhtml">
+ </page>
+ <page view-id="/resolvecomponent.xhtml">
+  <action execute="#{componentResolver.resolveComponent()}"/>
+ </page>
+ <page login-required="true" view-id="/welcome.xhtml">
+  <action execute="#{projectModule.clearAll}" on-postback="false"/>
+  <begin-conversation flush-mode="manual" join="true"/>
+  <navigation>
+   <rule if-outcome="created">
+    <redirect view-id="/modules/project/edit.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+ <page login-required="true" view-id="/system.xhtml">
+  <restrict>#{s:hasRole('admin')}</restrict>
+ </page>
+ <!-- begin user module -->
+ <page login-required="true" view-id="/modules/account/list.xhtml">
+  <action execute="#{accountModule.clearAll}" on-postback="false"/>
+  <begin-conversation flush-mode="manual" join="true"/>
+  <navigation>
+   <rule if-outcome="created">
+    <redirect view-id="/modules/account/edit.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+ <page login-required="true" view-id="/modules/account/edit.xhtml">
+  <restrict>#{s:hasRole('admin')}</restrict>
+  <!-- <rewrite pattern="/useredit"/> -->
+  <begin-conversation flush-mode="manual" join="true"/>
+  <action execute="#{accountModule.checkInstance}" on-postback="false"/>
+ </page>
+ <!-- begin userrole module -->
+ <page login-required="true" view-id="/modules/account/userrole/list.xhtml">
+  <restrict>#{s:hasRole('admin')}</restrict>
+  <action execute="#{userRoleModule.clearAll}" on-postback="false"/>
+  <!--  <rewrite pattern="/account/rolelist"/> -->
+  <begin-conversation flush-mode="manual" join="true"/>
+  <navigation>
+   <rule if-outcome="created">
+    <redirect view-id="/modules/account/userrole/edit.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+ <page login-required="true" view-id="/modules/account/userrole/edit.xhtml">
+  <restrict>#{s:hasRole('admin')}</restrict>
+  <begin-conversation flush-mode="manual" join="true"/>
+  <action execute="#{userRoleModule.checkInstance}" on-postback="false"/>
+  <navigation>
+   <rule if-outcome="persisted">
+    <redirect view-id="/modules/account/userrole/list.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+ <!--  begin myAccount setting (via user module) -->
+ <page login-required="true" view-id="/modules/account/myaccount/edit.xhtml">
+  <begin-conversation flush-mode="manual" join="true"/>
+  <action execute="#{accountModule.checkInstance}" on-postback="false"/>
+  <navigation>
+   <rule if-outcome="persisted">
+    <redirect view-id="/modules/project/list.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+ <!-- begin fetch interval module -->
+ <page login-required="true" view-id="/modules/fetchinterval/list.xhtml">
+  <action execute="#{fetchIntervalModule.clearAll}" on-postback="false"/>
+  <begin-conversation flush-mode="manual" join="true"/>
+  <navigation>
+   <rule if-outcome="created">
+    <redirect view-id="/modules/fetchinterval/edit.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+ <page login-required="true" view-id="/modules/fetchinterval/edit.xhtml">
+  <begin-conversation flush-mode="manual" join="true"/>
+  <action execute="#{fetchIntervalModule.checkInstance}" on-postback="false"/>
+  <navigation>
+   <rule if-outcome="persisted">
+    <redirect view-id="/modules/fetchinterval/list.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+ <page login-required="true" view-id="/admin.xhtml">
+  <restrict>#{s:hasRole('admin')}</restrict>
+ </page>
+ <page login-required="true" view-id="/modules/dashboard/list.xhtml">
+  <begin-conversation flush-mode="manual" join="true"/>
+  <action execute="#{dashboardModule.setDirty()}" on-postback="false"/>
+ </page>
+ 
+  <!-- begin project module -->
+ <page login-required="true" view-id="/modules/project/list.xhtml">
+  <action execute="#{projectModule.clearAll}" on-postback="false"/>
+  <begin-conversation flush-mode="manual" join="true"/>
+  <navigation>
+   <rule if-outcome="created">
+    <redirect view-id="/modules/project/edit.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+ <page login-required="true" view-id="/modules/project/edit.xhtml">
+  <begin-conversation flush-mode="manual" join="true"/>
+  <action execute="#{projectModule.checkInstance}" on-postback="false"/>
+ </page>
+ <!-- begin project type module -->
+ <page login-required="true" view-id="/modules/project/projecttype/list.xhtml">
+  <action execute="#{projectTypeModule.clearAll}" on-postback="false"/>
+  <begin-conversation flush-mode="manual" join="true"/>
+  <navigation>
+   <rule if-outcome="created">
+    <redirect view-id="/modules/project/projecttype/edit.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+ <page login-required="true" view-id="/modules/project/projecttype/edit.xhtml">
+  <begin-conversation flush-mode="manual" join="true"/>
+  <action execute="#{projectTypeModule.checkInstance}" on-postback="false"/>
+  <navigation>
+   <rule if-outcome="persisted">
+    <redirect view-id="/modules/project/projecttype/list.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+  <!-- begin connection module -->
+ <page login-required="true" view-id="/modules/connection/list.xhtml">
+  <action execute="#{connectionModule.clearAll}" on-postback="false"/>
+  <begin-conversation flush-mode="manual" join="true"/>
+  <navigation>
+   <rule if-outcome="created">
+    <redirect view-id="/modules/connection/edit.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+ <page login-required="true" view-id="/modules/connection/edit.xhtml">
+  <begin-conversation flush-mode="manual" join="true"/>
+  <action execute="#{connectionModule.checkInstance}" on-postback="false"/>
+ </page>
+ 
+ <!-- begin extract module -->
+ <page login-required="true" view-id="/modules/extract/list.xhtml">
+  <action execute="#{extractModule.clearAll}" on-postback="false"/>
+  <begin-conversation flush-mode="manual" join="true"/>
+  <navigation>
+   <rule if-outcome="created">
+    <redirect view-id="/modules/extract/edit.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+ <page login-required="true" view-id="/modules/extract/edit.xhtml">
+  <begin-conversation flush-mode="manual" join="true"/>
+  <action execute="#{extractModule.checkInstance}" on-postback="false"/>
+ </page>
+ <!-- begin transform module -->
+ <page login-required="true" view-id="/modules/transform/list.xhtml">
+  <action execute="#{transformModule.clearAll}" on-postback="false"/>
+  <begin-conversation flush-mode="manual" join="true"/>
+  <navigation>
+   <rule if-outcome="created">
+    <redirect view-id="/modules/transform/edit.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+ <page login-required="true" view-id="/modules/transform/edit.xhtml">
+  <begin-conversation flush-mode="manual" join="true"/>
+  <action execute="#{transformModule.checkInstance}" on-postback="false"/>
+ </page>
+ <!-- begin load module -->
+ <page login-required="true" view-id="/modules/load/list.xhtml">
+  <action execute="#{loadModule.clearAll}" on-postback="false"/>
+  <begin-conversation flush-mode="manual" join="true"/>
+  <navigation>
+   <rule if-outcome="created">
+    <redirect view-id="/modules/load/edit.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+ <page login-required="true" view-id="/modules/load/edit.xhtml">
+  <begin-conversation flush-mode="manual" join="true"/>
+  <action execute="#{loadModule.checkInstance}" on-postback="false"/>
+ </page>
+ <!-- begin job module -->
+ <page login-required="true" view-id="/modules/job/list.xhtml">
+  <action execute="#{jobModule.clearAll}" on-postback="false"/>
+  <begin-conversation flush-mode="manual" join="true"/>
+  <navigation>
+   <rule if-outcome="created">
+    <redirect view-id="/modules/job/edit.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+ <page login-required="true" view-id="/modules/job/edit.xhtml">
+  <begin-conversation flush-mode="manual" join="true"/>
+  <action execute="#{jobModule.checkInstance}" on-postback="false"/>
+ </page>
+ <!-- begin execution module -->
+ <page login-required="true" view-id="/modules/execution/list.xhtml">
+  <action execute="#{executionModule.clearAll}" on-postback="false"/>
+  <begin-conversation flush-mode="manual" join="true"/>
+  <navigation>
+   <rule if-outcome="created">
+    <redirect view-id="/modules/execution/edit.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+ <page login-required="true" view-id="/modules/execution/edit.xhtml">
+  <begin-conversation flush-mode="manual" join="true"/>
+  <action execute="#{executionModule.checkInstance}" on-postback="false"/>
+ </page>
+ <!-- begin library module -->
+ <page login-required="true" view-id="/modules/library/list.xhtml">
+  <action execute="#{libraryModule.clearAll}" on-postback="false"/>
+  <begin-conversation flush-mode="manual" join="true"/>
+  <navigation>
+   <rule if-outcome="created">
+    <redirect view-id="/modules/library/edit.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+ <page login-required="true" view-id="/modules/library/edit.xhtml">
+  <begin-conversation flush-mode="manual" join="true"/>
+  <action execute="#{libraryModule.checkInstance}" on-postback="false"/>
+  <navigation>
+   <rule if-outcome="persisted">
+    <redirect view-id="/modules/library/list.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+ 
+ <page view-id="/lostpassword.xhtml">
+  <restrict>#{!identity.loggedIn}</restrict>
+  <param name="from"/>
+  <navigation from-action="#{lostPasswordManager.startLostPasswordProcess}">
+   <rule if-outcome="true">
+    <redirect view-id="/lostpasswordsuccessful.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+ <page view-id="/resetpassword.xhtml">
+  <restrict>#{!identity.loggedIn}</restrict>
+  <action execute="#{lostPasswordManager.validateToken}"/>
+  <navigation from-action="#{lostPasswordManager.resetPassword}">
+   <rule if-outcome="true">
+    <redirect view-id="/resetpasswordsuccessful.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+ <exception class="org.jboss.seam.framework.EntityNotFoundException">
+  <redirect view-id="/error.xhtml">
+   <message severity="warn">#{messages.entityNotFoundExceptionMessage}</message>
+  </redirect>
+ </exception>
+ <exception class="javax.persistence.EntityNotFoundException">
+  <redirect view-id="/error.xhtml">
+   <message severity="warn">#{messages.entityNotFoundExceptionMessage}</message>
+  </redirect>
+ </exception>
+ <exception class="javax.persistence.EntityExistsException">
+  <redirect view-id="/error.xhtml">
+   <message severity="warn">#{messages.entityExistsExceptionMessage}</message>
+  </redirect>
+ </exception>
+ <exception class="javax.persistence.OptimisticLockException">
+  <end-conversation/>
+  <redirect view-id="/error.xhtml">
+   <message severity="warn">#{messages.optimisticLockExceptionMessage}</message>
+  </redirect>
+ </exception>
+ <exception class="org.jboss.seam.security.AuthorizationException">
+  <redirect view-id="/error.xhtml">
+   <message severity="error">#{messages.authorizationExceptionMessage}</message>
+  </redirect>
+ </exception>
+ <exception class="org.jboss.seam.security.NotLoggedInException">
+  <redirect view-id="/login.xhtml">
+   <message severity="warn">#{messages['org.jboss.seam.NotLoggedIn']}</message>
+  </redirect>
+ </exception>
+ <exception class="javax.faces.application.ViewExpiredException" log="false">
+  <redirect view-id="/error.xhtml">
+   <message severity="warn">#{messages.viewExpiredException}</message>
+  </redirect>
+ </exception>
+ <exception class="org.jboss.seam.ConcurrentRequestTimeoutException">
+  <redirect view-id="/error.xhtml">
+   <message>#{messages.concurrentRequestTimeoutException}</message>
+  </redirect>
+ </exception>
+ <exception class="org.hibernate.exception.ConstraintViolationException">
+  <redirect view-id="/error.xhtml">
+   <message severity="warn">#{messages.constraintViolationException}</message>
+  </redirect>
+ </exception>
+ <exception>
+  <redirect view-id="/error.xhtml">
+   <message severity="error">#{messages.unexpectedErrorMessage}</message>
+  </redirect>
+ </exception>
+</pages>

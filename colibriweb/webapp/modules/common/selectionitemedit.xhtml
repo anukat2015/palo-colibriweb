@@ -1,0 +1,40 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+   	>
+
+	<div class="headercontent" style="padding-bottom:3px;">
+		<div class="headerdetails" style="width:70%;">
+			<span class="headertext" >
+				<s:fragment rendered="#{backingBean.managed}">#{backingBean.config.label}: #{backingBean.instance.name}</s:fragment>
+				<s:fragment rendered="#{not backingBean.managed}">#{backingBean.config.label}:  #{messages.get('global.new')}</s:fragment>
+			</span>		
+		</div>
+		<div class="headerdetails detailtagwrapper">
+			<span class="headertextsmall" style="float:left;"> #{messages.get('global.detailsView')}</span>
+		</div>
+	</div>
+	<h:panelGroup layout="block" styleClass="contenttab" id="content">
+		<h:form>
+			<s:validateAll>
+				<div class="formwrapper">
+					<h:panelGrid styleClass="attributeTable" columns="2" columnClasses="labelCol, attributCol" >
+						<ui:include src="/elements/defaultAdministrationEditForm.xhtml">
+							<ui:param name="module" value="#{backingBean}"/>
+							<ui:param name="sortable" value="#{sortable}"/>
+						</ui:include>
+					</h:panelGrid>
+					<div class="actions">
+						<p:commandButton type="submit" action="#{backingBean.persist}" value="Speichern" update=":content :messages" global="true"/>
+					</div>
+				</div>
+			</s:validateAll>
+		</h:form>
+	</h:panelGroup>
+    
+</ui:composition>

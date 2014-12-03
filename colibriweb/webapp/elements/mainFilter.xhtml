@@ -1,0 +1,28 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
+	xmlns:p="http://primefaces.org/ui"
+	>
+
+	<p:outputPanel layout="block" styleClass="mainfilter" id="mainfilter" style="float:left;margin-top:4px;margin-left:8px">
+		<h:form >
+			<p:dataList value="#{moduleManager.navigableModules}" var="module" styleClass="repeat" type="none" emptyMessage="">
+				<h:panelGroup styleClass="filterelement" layout="block" rendered="#{module.config.name eq 'project' and module.managed}" style="padding:2px 8px;border-radius: 4px 4px 4px 4px;">
+					<h:graphicImage style="float:left;margin-left:0px; margin-top:1px;" title="Active Project" value="/img/colibri_icon.png" />
+					<s:link view="/modules/project/edit.xhtml" value="#{module.instance.name}" style="float:left;font-size:12px;font-weight:bold;">
+						<f:param name="id" value="#{module.instance.id}"/>
+					</s:link>
+				</h:panelGroup>
+				<h:panelGroup styleClass="filterelement" layout="block" rendered="#{(module.config.name eq 'project') and (not module.managed)}" style="padding:2px 8px;border-radius: 4px 4px 4px 4px;">
+					<h:graphicImage style="float:left;margin-left:0px; margin-top:1px;" title="Active Project" value="/img/colibri_icon.png" />
+					<s:link view="/modules/project/list.xhtml" value="Choose Project" style="float:left;font-size:12px;font-weight:bold;">
+					</s:link>
+				</h:panelGroup>
+			</p:dataList>
+		</h:form>
+	</p:outputPanel>
+	
+</ui:composition>
+

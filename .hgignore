@@ -1,0 +1,49 @@
+syntax: regexp
+^etlclient/\.settings$
+syntax: regexp
+^etlclient/target$
+syntax: regexp
+\.classpath$
+syntax: regexp
+^etlcomponents/target$
+syntax: regexp
+^etlcomponents/\.settings$
+syntax: regexp
+\.project$
+syntax: regexp
+^etlcore/target$
+syntax: regexp
+^etlcore/\.settings$
+syntax: regexp
+^etlserver/target$
+syntax: regexp
+^etlserver/\.settings$
+syntax: regexp
+^etlstandalone/target$
+syntax: regexp
+^etlstandalone/\.settings$
+syntax: regexp
+^palojlib/target$
+syntax: regexp
+^palojlib/\.settings$
+syntax: regexp
+^adaptive-commons/target$
+syntax: regexp
+^colibriweb/target$
+syntax: regexp
+^adaptive-commons/\.settings$
+syntax: regexp
+^colibriweb/\.settings$
+
+syntax: regexp
+^colibriweb/\.settings$
+syntax: regexp
+^opensmc/target$
+syntax: regexp
+^opensmc/\.settings$
+syntax: regexp
+^\.settings$
+syntax: regexp
+^palosubsets/target$
+syntax: regexp
+^palosubsets/\.settings$

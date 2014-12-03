@@ -1,0 +1,16 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+   	>
+
+	<p:dialog maximizable="false" dynamic="true" position="left top" closeOnEscape="true" onShow="resizeGraph();" widgetVar="flowGraphSelectionPanel" id="flowGraphSelectionPanel" header="Flow Graph" modal="true" styleClass="modalpanel" minWidth="670" minHeight="400" closable="true" resizable="false">
+		<h:panelGroup layout="block"  rendered="#{not empty module.instance.id}" style="overflow:auto;" id="flowGraphSelectionPanelContent">
+	       <h:outputText value="#{module.getFlowGraph()}" escape="false"/> 
+	   </h:panelGroup>
+	</p:dialog>
+</ui:composition>

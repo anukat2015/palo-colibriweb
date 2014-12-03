@@ -1,0 +1,33 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	
+	template="/layout/template.xhtml">
+
+	<ui:define name="maincontent">
+		<h:panelGroup layout="block" styleClass="contenttab" id="content">
+
+			<h:form>
+				<h:panelGrid styleClass="attributeTable" columns="2" columnClasses="labelCol,attributCol"  style="width:60%;">	
+					
+					<ui:include src="/elements/gridinputfield.xhtml">
+          				<ui:param name="inputType" value="inputText"/>
+          				<ui:param name="readOnly" value="true"/>
+          				<ui:param name="label" value="Version"/>
+          				<ui:param name="inputValue" value="1.0 Alpha"/>
+          			</ui:include>
+					
+				</h:panelGrid>
+				
+			</h:form>
+
+		</h:panelGroup>
+	</ui:define>
+
+
+</ui:composition>

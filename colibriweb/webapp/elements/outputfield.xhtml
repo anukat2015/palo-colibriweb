@@ -1,0 +1,38 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
+	xmlns:p="http://primefaces.org/ui"
+	>
+
+
+		<h:panelGroup styleClass="#{not empty labelClass ? labelClass : 'outputlabel'}" rendered="#{not notrendered}" style="#{not empty labelStyle ? labelStyle :''}">
+		#{label}
+		</h:panelGroup>
+		
+		<s:fragment rendered="#{(empty outputType or outputType == 'outputText') and not notrendered}">	
+			<h:outputText escape="#{not nonEscape}" value="#{outputValue}" styleClass="#{not empty outputClass ? outputClass : ''}" style="#{not empty outputStyle ? outputStyle :''}" rendered="#{not empty outputValue}"/>		
+			<h:outputText escape="#{not nonEscape}" value="#{not empty emptyValue ? emptyValue : ''}" styleClass="#{not empty outputClass ? outputClass : ''}" style="#{not empty outputStyle ? outputStyle :''}" rendered="#{empty outputValue}"/>	
+			<h:outputText escape="#{not nonEscape}" value="#{postValue}" styleClass="#{not empty outputClass ? outputClass : ''}" style="#{not empty outputStyle ? outputStyle :''}" rendered="#{not empty postValue}"/>
+		</s:fragment>
+		
+		<s:fragment rendered="#{outputType == 'checkBox' and not notrendered}">
+			<h:selectBooleanCheckbox value="#{outputValue}" disabled="true" styleClass="#{not empty outputClass ? outputClass : 'outputfield'}" style="#{not empty outputStyle ? outputStyle :''}" />
+		</s:fragment>
+		
+		<s:fragment rendered="#{outputType == 'dateField' and not notrendered}">
+			<h:panelGroup styleClass="#{not empty outputClass ? outputClass : 'outputfield'}" style="#{not empty outputStyle ? outputStyle :''}">
+				<h:outputText value="#{outputValue}" >
+					<s:convertDateTime pattern="#{not empty datePattern ? datePattern : 'dd.MM.yyyy'}"/>
+				</h:outputText>
+			</h:panelGroup>
+		</s:fragment>
+		
+		<s:fragment rendered="#{outputType == 'timeField'}">
+			<h:outputText  converter="#{timeValidator}"  value="#{outputValue}"   styleClass="#{not empty outputClass ? inputClass : 'outputfield'}" />	
+		</s:fragment>
+		
+	
+</ui:composition>
+

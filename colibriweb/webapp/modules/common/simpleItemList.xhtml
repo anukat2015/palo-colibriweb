@@ -1,0 +1,51 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+   	>
+   	
+	<h:panelGroup id="#{id}Results">
+		<ui:param name="results" value="#{empty clientFilter ? backingBean.results : backingBean.getResults(clientFilter)}" />
+		<h:panelGroup layout="block" style="padding: 9px 10px" rendered="#{empty results}">
+			<span class="infotext">#{emptyText}</span>
+		</h:panelGroup>
+		<h:panelGroup styleClass="list" layout="block" rendered="#{not empty results}">
+			<h:dataTable rowClasses="#{rowClassGenerator.getRowClasses(backingBean.pageResultCount)}" cellspacing="0" styleClass="results listresults" var="result" value="#{results}" rendered="#{not empty results}">
+				<h:column>
+					<div class="#{result.active ? '' : 'inactive'}">
+						<div class="listElement">
+							<div class="listImage">
+ 
+								<h:graphicImage rendered="#{empty listImage and empty multiItemList}" value="/img/modules/#{backingBean.config.path}/icon.png" />
+								<h:graphicImage rendered="#{not empty listImage and empty multiItemList}}" value="/img/modules/#{backingBean.config.path}/#{listImage}" />
+								<h:graphicImage rendered="#{not empty multiItemList}" value="/img/modules/#{backingBean.config.path}/icon#{backingBean.checkImage(result)}.png" />
+							</div>
+							<div class="attributes" style="#{not empty attributesStyle ? attributesStyle : 'width: 70%'}">
+								<ui:include src="/modules/#{backingBean.config.path}/elements/text.xhtml" >
+									<ui:param name="readOnly" value="#{readOnly}" />
+								</ui:include>
+							</div>
+							<!--<h:panelGroup layout="block" styleClass="actions" rendered="#{not readOnly}">
+								<a4j:commandLink styleClass="delete" value="Stornieren" rendered="#{result.active}" action="#{backingBean.deactivateAndPersist(result)}" execute="@this" render="#{id}Results"/>
+								<a4j:commandLink value="Stornierung aufheben" rendered="#{not result.active}" action="#{backingBean.activateAndPersist(result)}" execute="@this" render="#{id}Results"/>
+							</h:panelGroup>
+						--></div>
+					</div>
+				</h:column>
+			</h:dataTable>
+			<div class="listfooter">
+				<ui:include src="/elements/paginationPart.xhtml" >
+					<ui:param name="backingBean" value="#{backingBean}" />
+					<ui:param name="render" value="#{id}Results" />
+					<ui:param name="max" value="10" />
+					<ui:param name="center" value="6" />
+		</ui:include>
+			</div>
+	   </h:panelGroup>
+  	</h:panelGroup>
+	
+</ui:composition>

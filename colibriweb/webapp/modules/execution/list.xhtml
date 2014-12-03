@@ -1,0 +1,39 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+   	
+    template="/layout/template.xhtml">
+
+	<ui:define name="topnav">
+		<ui:include src="/layout/menu.xhtml">
+			<ui:param name="page" value="execution" />
+		</ui:include>
+	</ui:define>
+    
+    <ui:define name="maincontent">
+		<ui:include src="/modules/common/moduleItemList.xhtml">
+			<ui:param name="title"  value="Executions" />
+			<ui:param name="label"  value="Execution" />
+			<ui:param name="backingBean" value="#{executionModule}" />
+			<ui:param name="searchEnabled" value="true" />
+			<ui:param name="deactivationDisabled" value="true" />
+			<ui:param name="deleteLinkDisabled" value="false" />
+			<ui:param name="disableCreatePart" value="true" />
+			<ui:param name="listImage" value="true" />
+			<ui:param name="searchField" value="#{executionModule.getRestrictionGroup('listSearchProperties')}" />
+		</ui:include>
+    </ui:define>
+    
+    <ui:define name="rightcontent">
+    	<ui:include src="/modules/common/moduleFilter.xhtml">
+			<ui:param name="backingBean" value="#{executionModule}" />
+		</ui:include>
+		<p:commandButton value="Delete All" global="true" action="#{executionModule.deleteAll()}" update=":listform:content" style="float:right;margin-top:-8px;margin-right:8px;"></p:commandButton>
+	</ui:define>
+	
+</ui:composition>

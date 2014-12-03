@@ -1,0 +1,26 @@
+<beans xmlns="http://www.springframework.org/schema/beans"  
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+      xmlns:jaxws="http://cxf.apache.org/jaxws"  
+      xmlns:seam="http://jboss.org/schema/seam/spring-seam"  
+      xsi:schemaLocation="http://www.springframework.org/schema/beans  
+http://www.springframework.org/schema/beans/spring-beans.xsd  
+http://cxf.apache.org/jaxws  
+http://cxf.apache.org/schemas/jaxws.xsd  
+http://jboss.org/schema/seam/spring-seam  
+http://jboss.org/schema/seam/spring-seam-2.3.xsd">  
+
+   <import resource="classpath:META-INF/cxf/cxf.xml" />  
+   
+   <jaxws:endpoint id="etlServiceEndpoint"  
+                  implementor="#etlServiceSpring"  
+                  address="/ETLServer">  
+                   
+                  <jaxws:handlers>  
+                      <bean id="seamHandler" class="org.jboss.seam.webservice.SOAPRequestHandler"/>  
+                  </jaxws:handlers>
+                  
+                
+  </jaxws:endpoint>  
+    
+  <seam:instance name="ETLServer" id="etlServiceSpring" proxy="true"/>  
+</beans> 

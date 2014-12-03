@@ -1,0 +1,37 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    >
+
+
+	<div class="submenuheader marginplus55pix">
+		<div class="rightcolheader">Administration</div> 
+	</div>
+	<h:form>
+	
+		<p:accordionPanel value="#{moduleManager.getAdministrableModuleContainers()}" var="moduleContainer" multiple="true" activeIndex="#{moduleManager.getActiveModuleContainerPositionByParent(selectedParent)}">  
+			<p:tab title="#{moduleContainer.parent.config.label}">
+				<s:fragment>
+						<h:panelGrid columns="2" styleClass="menulink" rendered="#{moduleContainer.parent.config.administrable}">
+							<h:graphicImage value="/img/modules/#{moduleContainer.parent.config.path}/icon_small.png" />
+							<s:link propagation="none" styleClass="#{selected == moduleContainer.parent.config.name ? 'selected' : ''}" value="#{moduleContainer.parent.config.label}" view="/modules/#{moduleContainer.parent.config.path}/list.xhtml" rendered="#{moduleContainer.parent.config.administrable}" />
+						</h:panelGrid>
+						<h:dataTable value="#{moduleContainer.children}" var="module" styleClass="menulink">
+							<h:column>
+								<h:graphicImage value="/img/modules/#{module.config.path}/icon_small.png" />
+							</h:column>
+							<h:column>
+								<s:link propagation="none" styleClass="#{selected == module.config.name ? 'selected' : ''}" value="#{module.config.label}" view="/modules/#{module.config.path}/list.xhtml" />		
+							</h:column>
+						</h:dataTable>
+				</s:fragment>
+			</p:tab>
+		</p:accordionPanel>
+	
+	</h:form>
+</ui:composition>

@@ -1,0 +1,237 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+   	xmlns:c="http://java.sun.com/jsp/jstl/core" 
+    template="/layout/template.xhtml">
+
+	<ui:define name="head">
+		<script src="#{facesContext.externalContext.request.contextPath}/js/component.js"></script>
+		<script src="#{facesContext.externalContext.request.contextPath}/codemirror/lib/codemirror.js" type="text/javascript"></script>
+		<script src="#{facesContext.externalContext.request.contextPath}/codemirror/mode/xml/xml.js"></script>
+		<script src="#{facesContext.externalContext.request.contextPath}/codemirror/mode/r/r.js"></script>
+		<script src="#{facesContext.externalContext.request.contextPath}/codemirror/addon/edit/closetag.js"></script>
+		<script src="#{facesContext.externalContext.request.contextPath}/codemirror/addon/hint/show-hint.js"></script>
+		<script src="#{facesContext.externalContext.request.contextPath}/codemirror/addon/hint/xml-hint.js"></script>
+		<script src="#{facesContext.externalContext.request.contextPath}/codemirror/addon/edit/matchbrackets.js"></script>
+		<script src="#{facesContext.externalContext.request.contextPath}/codemirror/mode/groovy/groovy.js"></script>	
+		<script src="#{facesContext.externalContext.request.contextPath}/codemirror/mode/sql/sql.js"></script>
+		<link rel="stylesheet" href="#{facesContext.externalContext.request.contextPath}/codemirror/lib/codemirror.css"/>
+		<link rel="stylesheet" href="#{facesContext.externalContext.request.contextPath}/codemirror/addon/hint/show-hint.css"/>
+		<style type="text/css">
+			.ui-tree .ui-tree-selectable .ui-treenode-label, .ui-tree .ui-tree-selectable {
+				width:95%;
+			}
+		</style>
+	</ui:define>
+
+	<ui:define name="topnav">
+		<ui:include src="/layout/menu.xhtml">
+			<ui:param name="page" value="transform" />
+			<ui:param name="detailPage" value="true" />
+		</ui:include>
+	</ui:define>
+    
+    <ui:define name="maincontent">
+		<h:panelGroup layout="block" styleClass="contenttab" id="content">
+			<div class="headercontent" style="padding-bottom:3px;">
+				<div class="headerdetails" style="width:70%;">
+					<span class="headertext" >
+						<s:fragment rendered="#{transformModule.managed}">#{transformModule.config.label}: #{transformModule.instance.name}</s:fragment>
+						<s:fragment rendered="#{not transformModule.managed}">#{transformModule.config.label}: Neu</s:fragment>
+					</span>		
+				</div>
+				<div class="headerdetails detailtagwrapper">
+					<span class="headertextsmall" style="float:left;">#{messages.get('global.detailsView')}</span>
+				</div>
+			</div>
+			<h:form id="mainform">
+				<div class="formwrapper">
+					<s:fragment rendered="#{not transformModule.isXmlMode()}">
+						<s:validateAll>
+						<h:panelGroup id="data">
+							<h:panelGrid styleClass="attributeTable" columns="2" columnClasses="labelCol, attributCol" id="header">
+			          			<ui:include src="/modules/common/componentHeader.xhtml">
+									<ui:param name="module" value="#{transformModule}" />
+								</ui:include>
+								 
+								<s:fragment rendered="#{transformModule.maxSources > 0}">
+									<span class="inputlabel">#{transformModule.maxSources == 1 ? 'Source' : 'Sources'}:</span>
+								</s:fragment>
+								<s:fragment rendered="#{transformModule.maxSources > 0}">
+							    	<h:panelGroup id="sourcesData">	
+						          		<ui:include src="/elements/editComponent.xhtml" >
+						          			<ui:param name="title" value="" />
+						          			<ui:param name="editComponent" value="#{transformModule.sourcesEditComponent}" />
+						          			<ui:param name="module" value="#{transformModule}" />
+						          			<ui:param name="include" value="/modules/common/sourcesEditPart.xhtml" />
+						          			<ui:param name="render" value=":mainform:sourcesData :rightform:inputList :mainform:complexFields :mainform:functionData" />
+						          			<ui:param name="enableCreation" value="true" />
+						          			<ui:param name="officalCreateText" value="Add Source" />
+						          			<ui:param name="rowStyle" value="margin: 0px 0;"/>
+						          		</ui:include>
+								    </h:panelGroup>	
+								</s:fragment>
+							</h:panelGrid>
+						
+							<h:panelGroup id="functionData" rendered="#{transformModule.hasFunctions()}">
+								<ui:include src="/modules/transform/elements/functionEditPart.xhtml">
+								</ui:include>
+							</h:panelGroup>
+						
+							<p:dataList value="#{transformModule.getComplexRootNodes()}" var="builder" styleClass="repeat" type="none" emptyMessage="" id="complexFields">
+								<ui:include src="/modules/common/componentEditor.xhtml">
+									<ui:param name="inputList" value="#{transformModule.getComponentTypedInputList()}" />
+									<ui:param name="render" value=":mainform:complexFields" />									
+									<ui:param name="nodeBase" value=":mainform:complexFields" />
+									<ui:param name="treeVar" value="tree#{builder.position}" />
+									<ui:param name="module" value="#{transformModule}" />
+								</ui:include>
+							</p:dataList>	
+							
+							<h:panelGrid styleClass="attributeTable" columns="2" columnClasses="labelCol, attributCol" >
+			          			<ui:include src="/modules/common/componentFooter.xhtml">
+									<ui:param name="module" value="#{transformModule}" />
+								</ui:include>
+							</h:panelGrid> 
+						</h:panelGroup>
+						<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml"  id="logPanel"> 
+						   		<s:fragment rendered="#{transformModule.executing or not empty transformModule.etlLogs}">
+							     	<p:tabView id="tabs">
+							     		<p:tab id="LogsTab" title="Logs">
+							     			<h:inputTextarea styleClass="inputfield" rows="5"	cols="120" style="width:99.4%;"	value="#{transformModule.etlLogs}" id="logDisplay" readonly="true">
+									 		</h:inputTextarea>
+							     		</p:tab>
+							     	</p:tabView>
+						     	</s:fragment>
+						 </s:decorate>
+						 <ui:include src="/modules/common/componentPreview.xhtml">
+								<ui:param name="module" value="#{transformModule}" />
+							</ui:include>
+						<h:panelGroup id="actions">
+							<div class="subspacer"/>
+							<div class="actions">
+								<p:commandButton type="submit" action="#{transformModule.persist}" value="#{messages.get('global.save')}" process=":content" update=":content :rightform :messages #{empty transformModule.instance.id ? ':sockets' : ''}" global="true" onclick="#{transformModule.getEditorsToSave()}" widgetVar="saveButton"/>
+							</div> 
+							<div class="actions">
+								<p:commandButton type="submit" action="#{transformModule.close}" value="#{messages.get('global.hide')}" immediate="true" />
+							</div>
+							<div class="actions">
+								<p:commandButton type="submit" action="#{transformModule.validateComponent()}" value="#{messages.get('global.validate')}" update=":content :messages" global="true" rendered="#{not empty transformModule.instance.id}" onclick="#{transformModule.getEditorsToSave()}" />
+							</div>
+							<div class="actions">
+								<p:commandButton global="true" type="submit" action="#{transformModule.testComponent()}" value="#{messages.get('global.test')}" update=":content :mainform:actions" rendered="#{not empty transformModule.instance.id}" onclick="#{transformModule.getEditorsToSave()}"/>
+							</div>
+							<div class="actions">
+									<p:commandButton widgetVar="previewButton" global="false" type="submit" action="#{transformModule.calculatePreview()}" value="#{messages.get('ui.preview')}" update=":content :mainform:logPanel :mainform:actions" rendered="#{not empty transformModule.instance.id and not transformModule.executing}" onclick="#{transformModule.getEditorsToSave()}"/>
+								</div>
+							<div class="actions">
+								<p:commandButton global="true" type="submit" action="#{transformModule.stopExecution()}" value="#{messages.get('global.stop')}" update=":messages" rendered="#{transformModule.executing}">
+									<p:effect type="scale" speed="1000">  
+						    		</p:effect>  
+								</p:commandButton>
+							</div>
+							<div class="actions" style="float:left;">
+								<p:commandButton type="submit" 
+									value="#{messages.get('global.flowgraph')}" action="#{transformModule.generateFlowGraph()}"
+									oncomplete="PF('flowGraphSelectionPanel').show();"  rendered="#{not empty transformModule.instance.id}" update=":flowGraphSelectionPanel" widgetVar="showGraphButton">
+								</p:commandButton>
+							</div>
+							<div class="actions" style="float:left;">
+								<p:commandButton type="submit" value="XML" process="@(form)" update="@(form)" action="#{transformModule.switchToXML()}" oncomplete="callXML()" onclick="#{transformModule.getEditorsToSave()}" widgetVar="toXMLButton"></p:commandButton>
+							</div>
+						</h:panelGroup>
+						</s:validateAll>
+					</s:fragment>
+					<s:fragment rendered="#{transformModule.isXmlMode()}">
+						<ui:include src="/modules/common/fragmentCodeEditor.xhtml">
+							<ui:param name="module" value="#{transformModule}" />
+						</ui:include>	
+					</s:fragment>
+				</div>
+			</h:form> 
+		</h:panelGroup>
+		<ui:include src="/elements/flowgraph.xhtml">
+			<ui:param name="module" value="#{transformModule}"/>
+		</ui:include>
+		<s:fragment rendered="#{not empty transformModule.instance.id}">
+			<ui:include src="/modules/common/cloneComponent.xhtml">
+				<ui:param name="module" value="#{transformModule}"/>
+			</ui:include>
+		</s:fragment>
+		<h:panelGroup id="sockets">
+			<p:socket channel="/log/#{transformModule.pushId}" onMessage="handleMessage"> 
+			</p:socket>
+			<p:socket channel="/completed/#{transformModule.pushId}"> 
+				<p:ajax global="false" process="@this" event="message" update=":mainform:actions :rightform:inputList :mainform:complexFields @(.functionContent) :mainform:logPanel :mainform:dataDisplay :messages" listener="#{transformModule.checkMessages()}" oncomplete="scrollLogs();"/>				
+			</p:socket>
+		</h:panelGroup>		
+		<p:hotkey bind="ctrl+g" handler="PF('showGraphButton').jq.click();" />
+		<p:hotkey bind="ctrl+s" handler="PF('saveButton').jq.click();" />	
+		<p:hotkey bind="ctrl+d" handler="PF('previewButton').jq.click();" />			
+		<p:hotkey bind="ctrl+return" handler="PF('toXMLButton').jq.click();" />
+    </ui:define>
+  
+    <ui:define name="rightcontent">
+    	<h:form id="rightform"> 
+    		<div class="subspacer marginplus14pix">&nbsp;</div>
+    		 
+    		<h:panelGroup id="inputList">
+    		<ui:include src="/modules/common/componentInputs.xhtml">
+    			<ui:param name="id" value="inputs" />
+    			<ui:param name="title" value="Input Fields" />
+    			<ui:param name="results" value="#{transformModule.getAllSources()}" />
+    			<ui:param name="module" value="#{transformModule}" />
+    			<!--  <ui:param name="render" value="poll actions codearea" />-->
+    			<ui:param name="render" value=":mainform:actions :mainform:codearea" />
+    		</ui:include>
+    		</h:panelGroup> 
+    		
+    		<div class="subspacer">&nbsp;</div>
+ 			<h:panelGroup id="projectList">
+    		<ui:include src="/modules/common/rightContentList.xhtml">
+    			<ui:param name="id" value="projects" />
+    			<ui:param name="title" value="Project" />
+    			<ui:param name="backingBean" value="#{projectModule}" />
+    			<ui:param name="emptyText" value="No Project" />
+    			<ui:param name="listImage" value="icon.png" />
+    			<ui:param name="results" value="#{transformModule.getProjectInList()}" />
+    			<ui:param name="collapsed" value="false"></ui:param>
+    		</ui:include>
+    		</h:panelGroup> 
+    	
+    		
+    		<div class="subspacer">&nbsp;</div>
+    		<h:panelGroup id="transformList">
+				<ui:include src="/modules/common/rightContentList.xhtml">
+	    			<ui:param name="id" value="transforms" />
+	    			<ui:param name="title" value="Transforms" />
+	    			<ui:param name="backingBean" value="#{transformModule}" />
+	    			<ui:param name="emptyText" value="No dependant Transforms" />
+	    			<ui:param name="listImage" value="icon.png" />
+	    			<ui:param name="results" value="#{transformModule.getDirectDependants('transforms')}" />
+	    			<ui:param name="collapsed" value="#{results.size() == 0}"></ui:param>
+	    		</ui:include>
+    		</h:panelGroup>
+    		
+    		<div class="subspacer">&nbsp;</div>
+    		<h:panelGroup id="loadList">
+				<ui:include src="/modules/common/rightContentList.xhtml">
+	    			<ui:param name="id" value="loads" />
+	    			<ui:param name="title" value="Loads" />
+	    			<ui:param name="backingBean" value="#{loadModule}" />
+	    			<ui:param name="emptyText" value="No dependant Extracts" />
+	    			<ui:param name="listImage" value="icon.png" />
+	    			<ui:param name="results" value="#{transformModule.getDirectDependants('loads')}" />
+	    			<ui:param name="collapsed" value="#{results.size() == 0}"></ui:param>
+	    		</ui:include>
+    		</h:panelGroup>
+   
+    	</h:form>
+    </ui:define>
+    
+</ui:composition>

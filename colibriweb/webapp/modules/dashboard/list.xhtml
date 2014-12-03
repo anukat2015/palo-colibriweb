@@ -1,0 +1,44 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+   	
+    template="/layout/template.xhtml">
+
+	<ui:define name="topnav">
+	
+		<ui:include src="/layout/menu.xhtml">
+			<ui:param name="page" value="dashboard" />
+		</ui:include>
+	</ui:define>
+    
+    <ui:define name="maincontent"> 
+		<ui:include src="/modules/common/moduleItemList.xhtml">
+			<ui:param name="title" value="Aktuelles" />
+			<ui:param name="label" value="Benachrichtigung" />
+			<ui:param name="sortPart" value="true" />
+			<ui:param name="disableCreatePart" value="true" />
+			<ui:param name="backingBean" value="#{dashboardModule}" />
+			<ui:param name="searchEnabled" value="true" />
+			<ui:param name="searchField" value="#{dashboardModule.getRestrictionGroup('listSearchProperties')}" />
+			<ui:param name="deleteLabel" value="Erledigt" />
+			<ui:param name="undeleteLabel" value="Erledigt rückgängig" />
+			<ui:param name="deleteLinkDisabled" value="#{result.read}" />
+			<ui:param name="undeleteLinkDisabled" value ="#{not result.read}" />
+		</ui:include>
+    </ui:define>
+    
+   
+    <ui:define name="rightcontent">
+    	
+		<ui:include src="/modules/common/moduleFilter.xhtml">
+			<ui:param name="backingBean" value="#{dashboardModule}" />
+		</ui:include>
+	</ui:define>
+
+	
+</ui:composition>

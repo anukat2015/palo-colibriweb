@@ -1,0 +1,38 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+   	>
+
+	<!--  
+		<s:fragment rendered="#{result.targetModule == 'decurs'}">
+			<ui:include src="/modules/decurs/elements/text.xhtml">
+				<ui:param name="result" value="#{result.entity}" />
+			</ui:include>
+		
+		</s:fragment>
+	-->
+		<s:fragment rendered="#{result.targetModule == 'etl'}">
+			<h3>
+			<s:link value="#{result.title}" propagation="none" view="/modules/#{result.targetModule}/edit.xhtml" >
+				<f:param name="id" value="#{result.targetId}" />
+			</s:link>
+			<s:fragment rendered="#{not empty result.details}">
+				<div style="width: 90%;">
+		  	 	 <!--  <h:outputText escape="false" value="#{result.details}"></h:outputText>	-->
+			  	 	 <s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml">
+						<h:inputTextarea rows="7" value="#{result.details}"  styleClass="inputfield" readonly="true"/>		
+					</s:decorate>
+				</div>		
+			</s:fragment>
+			<div style="clear:both;">
+			</div>
+			<ui:include src="/modules/common/defaultListItemInfos.xhtml" />
+			</h3>
+		</s:fragment>
+	
+</ui:composition>

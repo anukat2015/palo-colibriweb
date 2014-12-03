@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<f:view contentType="text/html"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:s="http://jboss.org/schema/seam/taglib">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <h:head>
+    <title>Colibri</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+  </h:head>
+  <h:body>
+ 	 <h:panelGroup layout="block" styleClass="header" id="mainheader" style="background: url('#{facesContext.externalContext.request.contextPath}/img/topbar.png') repeat-x scroll 0 0 rgba(0, 0, 0, 0);">	
+		<!-- <h:graphicImage value="/img/header.png" />	 -->
+		<h:outputLink value="http://www.proclos.com" title="about" style="margin-top:10px;margin-right:10px;float:right">About..</h:outputLink>
+	</h:panelGroup>
+		
+	<div class="main" style="margin-top:50px;">
+		<h:panelGroup layout="block" id="messages" styleClass="messageboxwrapper">
+			<h:messages globalOnly="true" styleClass="messages" infoClass="info" warnClass="warn" errorClass="error" />
+		</h:panelGroup>
+		
+		
+		<div class="block">
+			<div class="fullcontent">
+				<ui:insert name="maincontent"/>
+			</div>
+			
+			<div style="clear:both;"></div>
+		</div>
+	</div> 
+	  
+    <ui:include src="/layout/footer.xhtml" />
+ 	<h:outputStylesheet name="style.css" library="css" target="head" />
+  </h:body>
+</html>
+
+</f:view>

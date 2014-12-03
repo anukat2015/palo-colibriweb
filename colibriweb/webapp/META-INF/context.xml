@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/projectName">
+   <Resource auth="Container"
+      name="colibriDatasource"
+      type="javax.sql.DataSource"
+      driverClassName="org.postgresql.Driver"
+      factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+      url="jdbc:postgresql://localhost:5433/colibri"
+      username="colibri"
+      password="irbiloc" 
+      testWhileIdle="true"
+      testOnBorrow="true"
+      testOnReturn="false"
+      validationQuery="SELECT 1"
+      validationInterval="30000"
+      timeBetweenEvictionRunsMillis="30000"
+      minIdle="10"
+      maxWait="10000"
+      initialSize="10"
+      maxActive="90"
+      maxIdle="90"
+      removeAbandonedTimeout="36000"
+      removeAbandoned="false"
+      logAbandoned="true"
+      minEvictableIdleTimeMillis="30000"
+      connectionProperties="ssl=true;sslfactory=org.postgresql.ssl.NonValidatingFactory;"
+      />
+     
+     <Manager maxActiveSessions="-1" maxInactiveInterval="3600" pathname="" />
+      
+</Context>

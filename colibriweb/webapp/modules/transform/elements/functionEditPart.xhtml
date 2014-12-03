@@ -1,0 +1,66 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	>
+	
+	<h:panelGrid styleClass="attributeTable" columns="2" columnClasses="labelCol, attributCol">
+		<span class="inputlabel">Functions: </span>
+		<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml">
+			<h:panelGroup layout="block"  styleClass="detailseditheader" style="overflow:hidden;margin-bottom:5px;">
+					<div class="actions">
+						<h:panelGroup style="overflow:hidden; float:left;" layout="block">
+							<p:commandLink global="true" styleClass="add" value="Create Function" action="#{transformModule.createFunction()}" update=":mainform:functionData :mainform:actions" process=":mainform:functionData" onstart="#{transformModule.getEditorsToSave()}">
+							</p:commandLink>
+						</h:panelGroup>		
+					</div>	
+			</h:panelGroup>	
+		</s:decorate>	
+	</h:panelGrid>
+	
+	<p:dataList value="#{transformModule.functions}" var="function" styleClass="repeat" type="none" emptyMessage="" id="functionPanel" >
+		<p:commandButton type="submit" icon="#{function.inEdit ? 'ui-icon-minusthick' : 'ui-icon-plusthick'}" value="#{function.name} : #{function.type}" style="width:93%;" action="#{function.toggleEdit()}" update="@this functionContent :mainform:actions" process="@this functionContent" styleClass="functionTabTitle ui-button-text"></p:commandButton>
+		<p:commandButton type="submit" icon="deleteButtonIcon" style="width:4%;" immediate="true" global="true" title="#{messages.get('global.delete')}" action="#{transformModule.removeFunction(function)}" update=":mainform:functionPanel :mainform:actions" process="@this"></p:commandButton>
+		<h:panelGroup id="functionContent" styleClass="functionContent" >
+			<h:panelGroup id="functionContentPanel" rendered="#{function.inEdit}">
+				<h:panelGrid styleClass="attributeTable"  columns="2" columnClasses="labelCol, attributCol" id="functionHeader">
+					   <span class="inputlabel">#{messages.get('ui.type')}:&#160;*</span>
+					   <s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml">
+						<p:selectOneMenu id="typeSelection" styleClass="inputfield" value="#{function.type}" requiredMessage=""
+									                         effect="fade" var="p" style="width:150px;margin-bottom:3px;" filter="true" filterMatchMode="startsWith">
+						   <s:selectItems value="#{transformModule.getAvailableTypes(function)}" var="selectionItem" label="#{selectionItem}" itemValue="#{selectionItem}"/>
+						   <p:ajax global="false" process="@this" update="@parent:@parent:@parent:@parent @parent:@parent:@parent:@parent:@parent:@parent:@child(0)" event="change" listener="#{transformModule.functionTypeChanged(function)}"/> 
+						</p:selectOneMenu>
+					</s:decorate>
+					<span class="inputlabel">#{messages.get('ui.name')}:&#160;*</span>
+					<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml">
+						<h:inputText value="#{function.name}" styleClass="inputfield" required="true" validator="#{transformModule.validateFunctionName}" style="margin-bottom:3px;">
+								<p:ajax global="false" process="@this @(.codeeditor)" update="@this @(.codeeditor) @parent:@parent:@parent:@parent:@parent:@parent:@child(0) :mainform:actions" event="change" listener="#{transformModule.functionNameChanged(function)}" onstart="#{transformModule.getFunctionEditorToSave(function)}" /> 						</h:inputText>
+					</s:decorate>
+				</h:panelGrid>
+				<div style="clear:both"></div>
+				<p:dataList value="#{transformModule.getFunctionBuilder(function)}" var="builder" styleClass="repeat" type="none" emptyMessage="" id="complexFields" style="margin-left:-10px;">
+					<ui:include src="/modules/common/componentEditor.xhtml">
+						<ui:param name="inputList" value="#{transformModule.getFunctionTypedInputList(function)}" />
+						<ui:param name="render" value=":mainform:functionPanel"/>
+						<ui:param name="nodeBase" value=":mainform:functionPanel:#{transformModule.functions.indexOf(function)}:complexFields"/>
+						<ui:param name="treeVar" value="ftree#{transformModule.functions.indexOf(function)}_#{builder.position}" />
+						<ui:param name="module" value="#{transformModule}" />
+					</ui:include>
+				</p:dataList>
+				<div style="clear:both"></div>
+				<h:panelGrid styleClass="attributeTable" columns="2" columnClasses="labelCol, attributCol">	
+		        	<span class="inputlabel">#{messages.get('ui.description')}:</span>
+					<p:editor style="margin-bottom:3px;" value="#{function.description}"  height="92" controls="bold italic underline strikethrough | alignleft center alignright justify | bullets numbering  outdent indent | link unlink image | undo redo ">
+					</p:editor> 
+				</h:panelGrid>
+			</h:panelGroup>
+		</h:panelGroup>
+	</p:dataList>
+	
+	<div style="clear:both"/>
+	<div class="marginplus14pix"></div>
+</ui:composition>

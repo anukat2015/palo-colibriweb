@@ -1,0 +1,106 @@
+
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+   	>
+
+	<h:form id="listform">
+		<h:panelGroup layout="block" id="bodycontent">
+		
+			<div class="headercontent" >
+				<div class="headerdetails" style="width: 28%;float:left;">
+					<p:commandLink  global="false" title="reload" action="#{backingBean.setDirty()}" process="@this" update=":listform:bodycontent" style="float:left;margin-top:5px;margin-right:5px;">
+						<h:graphicImage value="/img/reload_small.png" />
+					</p:commandLink>
+					<span class="headertext">#{title}</span>
+					<br />
+				</div>	
+				 
+				<h:panelGroup layout="block" styleClass="actionssearch" style="width:60%; vertical-align: middle; " rendered="#{searchEnabled}">		
+					<s:fragment rendered="#{empty selector}">
+					
+						<div style="margin-top: 28px; margin-left:10px;float:right;">
+							<p:commandLink  rendered="#{not disableCreatePart and not empty ajaxSingle}" style="margin-top:10px; font-size:13px;"  styleClass="add" action="#{backingBean.createNewInstance}" value="Create #{label}" />
+							<p:commandLink  rendered="#{not disableCreatePart and empty ajaxSingle}" style="margin-top:10px; font-size:13px;"  execute="@this" styleClass="add" action="#{backingBean.createNewInstance}" value="Create #{label}" />
+						</div>
+					</s:fragment>
+					
+					<h:panelGrid styleClass="searchwrapper" columns="1" rowClasses="detailsearch,normalsearch">
+							
+						<s:fragment rendered="#{not empty filterView}"><h:graphicImage value="/img/search90ccw.png" style="height:14px;margin-right:5px;"/><s:link styleClass="smalllink" value="Detaillierte Suche" view="#{filterView}" /></s:fragment>
+						<s:fragment rendered="#{empty filterView}"><h:graphicImage value="/img/spacer_small.png" style="height:14"></h:graphicImage></s:fragment>
+						<s:fragment>
+							<label>Search:</label>
+							<h:inputText id="inText" value="#{searchField.value}" autocomplete="off">
+								<p:ajax global="false" process="@this" event="keyup" listener="#{backingBean.filter(searchField.value)}" update=":listform:content"/>
+							</h:inputText>
+							<s:fragment rendered="#{fuzzySearch}">
+								<label>Fuzzy:</label>
+								<h:selectBooleanCheckbox style="width: auto;" onclick="this.blur();" value="#{searchField.fuzzy}" >
+									<p:ajax global="false" event="change" process="@this" listener="#{backingBean.filter(searchField.value)}" update=":listform:content"/>
+								</h:selectBooleanCheckbox>
+							</s:fragment>
+							<p:focus context="inText"></p:focus>
+						</s:fragment>
+					</h:panelGrid>
+					
+					<h:panelGroup rendered="#{not empty listFilterView}">
+						<ui:include src="#{listFilterView}" />
+					</h:panelGroup>
+				</h:panelGroup>
+			</div>
+		
+			<h:panelGroup layout="block" id="content">  
+		
+				<h:panelGroup layout="block" styleClass="noresultwrapper" rendered="#{empty backingBean.results}">
+					<span class="infotext"><h:outputText value="No #{title} found" /></span>
+				</h:panelGroup>
+				<h:dataTable id="containerList" footerClass="footer" columnClasses="#{rowClassGenerator.getRowClasses(backingBean.pageResultCount)}"
+					rowClasses="#{rowClassGenerator.getRowClasses(backingBean.pageResultCount)}" cellspacing="0" styleClass="results listresults" var="result" value="#{backingBean.results}"
+					rendered="#{not empty backingBean.results}" style="table-layout: fixed;">
+					<h:column>
+						<h:panelGroup layout="block" styleClass="listElement">
+							<div class="listImage">
+								<s:fragment>
+									<h:graphicImage value="/img/modules/#{backingBean.config.path}/icon.png" rendered="#{empty listImage}" title="#{result.iconTitle}"/>
+									<h:graphicImage value="#{backingBean.getListIcon(result)}" rendered="#{not empty listImage}" />
+								</s:fragment>
+							</div>
+							<div class="attributes" style="#{attributesStyle}">	
+								<div class="#{result.active ? '' : 'inactive'}">  
+									<ui:include src="/modules/#{backingBean.config.path}/elements/text.xhtml">
+										<ui:param name="item" value="#{result}" />
+									</ui:include>
+								</div>					
+							</div>
+							<h:panelGroup class="infos" style="#{infosStyle}" layout="block" rendered="#{not empty infosView}" >
+								<ui:include src="#{infosView}">
+									<ui:param name="item" value="#{result}" />
+								</ui:include>
+							</h:panelGroup> 
+							<div class="actions">
+								<p:commandLink rendered="#{not result.active and not activationDisabled}" process="@this" action="#{backingBean.activateAndPersist(result)}" styleClass="delete" update=":listform:content" value="Activate" />
+								<p:commandLink rendered="#{result.active and not deactivationDisabled}" process="@this" action="#{backingBean.deactivateAndPersist(result)}" styleClass="delete" update=":listform:content" value="Deactivate" />
+								<p:commandLink global="true" rendered="#{not deleteLinkDisabled and (not result.active or deactivationDisabled) and not result.cascadesDelete()}" process="@this" action="#{backingBean.delete(result.id)}" styleClass="delete" update=":listform:content :mainfilter" value="#{not empty deleteLabel ? deleteLabel : 'Delete'}" />
+							</div>
+						</h:panelGroup>
+					</h:column>
+				</h:dataTable>
+				<div class="listfooter">
+					<ui:include src="/elements/paginationPart.xhtml">
+						<ui:param name="backingBean" value="#{backingBean}" />
+						<ui:param name="render" value=":listform:content" />
+						<ui:param name="max" value="10" />
+						<ui:param name="center" value="6" />
+					</ui:include>
+				</div>
+			</h:panelGroup>
+			
+		</h:panelGroup>    
+	</h:form>   
+</ui:composition>

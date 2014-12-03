@@ -1,0 +1,113 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	>
+		<ui:param name="hasLabel" value="#{field.isNormalField() and !field.isScript() and not empty field.getVisibleAttributes()}"/>
+		<ui:param name="padding" value="#{hasLabel ? '5px' : '0px'}" />
+		<s:fragment rendered="#{hasLabel}" style="float:left;#{field.required ? '': 'font-weight:normal;'}">
+			<span class="inputlabel" style="float:left;">Value:</span>
+		</s:fragment>
+		<s:fragment rendered="#{field.isScript()}">
+			<div style="clear:both"/>
+		</s:fragment>
+		<s:decorate template="/layout/fieldvalidation.xhtml" rendered="#{field.isMetadataField()}" style="overflow:hidden;padding-right:5px;padding-left:#{padding};float:left;" id="metadataValue">
+			<p:selectOneMenu styleClass="inputfield" value="#{field.value}" required="#{field.required}" editable="true" widgetVar="metadataWidget#{field.name}" style="width:150px;" filter="true" filterMatchMode="startsWith">
+			   <s:selectItems value="#{builder.getMetadataList(field)}" var="selectionItem" label="#{selectionItem}" itemValue="#{selectionItem}"/>
+			   <p:ajax global="false" process="@this" event="change"/> 
+			</p:selectOneMenu>
+		</s:decorate> 
+		<p:commandLink rendered="#{field.isMetadataField()}"  global="false" title="reload" action="#{builder.calculateMetadataList(field)}" process="@this" update="metadataValue :messages" oncomplete="PF('metadataWidget#{field.name}').show();">
+			 <h:graphicImage value="/img/reload_small.png" />
+		</p:commandLink>
+		<s:decorate template="/layout/fieldvalidation.xhtml" rendered="#{field.isInputField()}" style="overflow:hidden;padding-right:5px;padding-left:#{padding};float:left;">
+			 <p:selectOneMenu value="#{field.value}" editable="true" required="#{field.required}" requiredMessage=""
+	                         effect="fade" var="p" style="width:150px;float:left;margin-bottom:3px;" filter="true" filterMatchMode="startsWith"> 
+	           <s:selectItems value="#{builder.getInputList(inputList,module.getComponentExtraSourcesTypedInputList(builder.instance),field)}" var="selectionItem" label="#{selectionItem.name}" itemValue="#{selectionItem.name}"/>
+	           <p:ajax event="change" global="false" process="@this"></p:ajax>
+	        </p:selectOneMenu> 
+		</s:decorate>
+		<s:decorate template="/layout/fieldvalidation.xhtml" rendered="#{field.isSourceField()}" style="overflow:hidden;padding-right:5px;padding-left:#{padding};float:left;" >
+			<p:selectOneMenu value="#{field.value}" required="#{field.required}" effect="fade" var="p" style="width:150px;margin-right:5px;"  filter="true" filterMatchMode="startsWith" editable="true">   
+	            <s:selectItems value="#{module.getSources(field.getSourceCategory(),builder.instance)}" var="selectionItem" label="#{selectionItem.label}" itemValue="#{selectionItem.name}"/>
+	             <p:ajax global="true" event="change" process="@this" update=":rightform" oncomplete="loadNodes(PF('#{treeVar}'), $(document.getElementById('#{builder.getParentNodeToUpdate(nodeBase, field)}')));"/>
+	        </p:selectOneMenu>  
+	    </s:decorate>
+	    <s:decorate template="/layout/fieldvalidation.xhtml" rendered="#{field.isConnectionField()}" style="overflow:hidden;padding-right:5px;padding-left:#{padding};float:left;">
+			<p:selectOneMenu value="#{field.value}" required="#{field.required}" effect="fade" var="p" style="width:150px;margin-right:5px;"  filter="true" filterMatchMode="startsWith" editable="true">   
+	            <s:selectItems value="#{module.getConnections(field.getConnectionCategory())}" var="selectionItem" label="#{selectionItem.label}" itemValue="#{selectionItem.name}"/>
+					<p:ajax global="false" process="@this" event="change" listener="#{module.setComponentExtraConnection(builder.instance,field.input)}" oncomplete="loadNodes(PF('#{treeVar}'), $(document.getElementById('#{builder.getParentNodeToUpdate(nodeBase, field)}')));"/>
+	        </p:selectOneMenu>  
+	    </s:decorate>
+	    <s:decorate template="/layout/fieldvalidation.xhtml" rendered="#{field.isProjectField()}" style="overflow:hidden;padding-right:5px;padding-left:#{padding};float:left;">
+			<p:selectOneMenu value="#{field.value}" required="#{field.required}" effect="fade" var="p" style="width:150px;margin-right:5px;"  filter="true" filterMatchMode="startsWith" editable="true">   
+	            <s:selectItems value="#{projectModule.getAllResults()}" var="selectionItem" label="#{selectionItem.name}" itemValue="#{selectionItem.name}"/>
+					<p:ajax global="true" process="@this" update=":content" event="change" listener="#{module.externalProjectSet()}"/>
+	        </p:selectOneMenu>  
+	    </s:decorate>
+		<s:decorate template="/layout/fieldvalidation.xhtml" rendered="#{field.isNormalField() and field.isString()}" style="overflow:hidden;padding-left:#{padding}x;padding-right:10px;" id="stringField">
+			<p:inputText value="#{field.value}"  style="#{field.isEncryptable() ? 'width:50%;' : 'width:100%;'}min-width:80px;" required="#{field.required}" requiredMessage="" onfocus="this.value = this.value;" rendered="#{!field.isScript()}">
+				<p:ajax process="@this" event="change" listener="#{field.checkEncrypt()}" update="stringField" global="false"/>
+			</p:inputText>
+			<s:fragment rendered="#{field.isScript()}">
+				<h:panelGroup styleClass="codeeditor" style="margin-top:5px;margin-bottom:10px;margin-left:-10px" id="codeeditwrapper">
+					<h:inputTextarea id="code" styleClass="inputfield" rows="20"
+						cols="120" style="width:99.4%;"
+						value="#{field.value}" title="_#{builder.instance.internalName}#{field.name}_" >
+					 </h:inputTextarea>
+					<script type="text/javascript">
+							var #{builder.instance.internalName}#{field.name} = CodeMirror.fromTextArea($('.codeeditor').find("[title='_#{builder.instance.internalName}#{field.name}_']").last().get(0), {
+			    				mode: "#{field.getScriptType()}",
+			    		        lineNumbers: true,
+			    		        matchBrackets: true,
+			    		        indentWithTabs: true,
+			    		        smartIndent: true
+			  				});	
+				    </script>	
+		    	</h:panelGroup>	
+			</s:fragment>
+			<s:fragment rendered="#{field.isEncryptable()}">
+				<span class="inputlabel">Encrypt:</span>
+			</s:fragment>
+			<h:selectBooleanCheckbox value="#{field.encrypted}" rendered="#{field.isEncryptable()}">
+				<p:ajax process="stringField" event="change" update="stringField" listener="#{field.toggleEncryption()}"/> 
+			</h:selectBooleanCheckbox>
+		</s:decorate> 
+		
+		
+		<s:decorate template="/layout/fieldvalidation.xhtml" rendered="#{field.isNormalField() and field.isInteger()}" style="float:left;margin-left:#{padding};" id="integer">
+			<p:spinner value="#{field.value}" readonly="false" min="#{empty field.value ? '0' : field.type.type.minValue}"  max="#{field.type.type.maxValue}" size="5" required="#{field.required}">
+				<p:ajax global="false" process="@this" event="change" update="integer" disabled="#{not empty field.value}"/> 
+				<p:ajax global="false" process="@this" event="change"/> 
+			</p:spinner>
+			<p:commandLink rendered="#{not field.required}" immediate="true" global="false" title="Reset" action="#{field.setValue(null)}" process="@this" update="integer">
+				<h:graphicImage value="/img/arrow_left.png" />
+			</p:commandLink>
+		</s:decorate>
+		
+		<s:decorate template="/layout/fieldvalidation.xhtml" rendered="#{field.isNormalField() and field.isFloat()}" style="float:left;margin-left:#{padding};" id="float">
+			<p:spinner readonly="false" value="#{field.value}" min="#{empty field.value ? '0' : field.type.type.minValue}"  max="#{field.type.type.maxValue}" required="#{field.required}" stepFactor="0.25" size="5"> 
+				<p:ajax global="false" process="@this" event="change" update="float" disabled="#{not empty field.value}"/> 
+				<p:ajax global="false" process="@this" event="change"/> 
+			</p:spinner>
+			<p:commandLink rendered="#{not field.required}" immediate="true" global="false" title="Reset" action="#{field.setValue(null)}" process="@this" update="float">
+				<h:graphicImage value="/img/arrow_left.png" />
+			</p:commandLink>
+		</s:decorate>
+	
+	    <s:decorate template="/layout/fieldvalidation.xhtml" rendered="#{field.isNormalField()  and field.isEnum()}" style="float:left;margin-left:#{padding};">
+			<p:selectOneMenu styleClass="inputfield" value="#{field.value}" required="#{field.required}">
+			   <s:selectItems value="#{field.type.type.enumeration}" var="selectionItem" label="#{selectionItem}" itemValue="#{selectionItem}" noSelectionLabel="#{messages['global.noSelectionLabel']}"/>
+			   <p:ajax global="false" process="@this" event="change"/> 
+			</p:selectOneMenu>
+		</s:decorate>
+	    <s:decorate template="/layout/fieldvalidation.xhtml"  rendered="#{field.isNormalField()  and field.isBoolean()}" style="float:left;margin-left:#{padding};">
+			<h:selectBooleanCheckbox value="#{field.value}" style="float:left;" required="#{field.required}">
+				<p:ajax global="false" process="@this" event="change"/> 
+			</h:selectBooleanCheckbox>
+		</s:decorate>
+
+</ui:composition>

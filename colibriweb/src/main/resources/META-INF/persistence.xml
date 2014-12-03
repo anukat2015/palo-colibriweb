@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" 
+       version="2.0">
+
+	<persistence-unit name="opensmc" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<non-jta-data-source>java://comp/env/colibriDatasource</non-jta-data-source>
+		<properties>
+			<property name="hibernate.dialect" value="com.proclos.colibriweb.session.common.ColibriDialect" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.cache.use_second_level_cache" value="false" />
+			<property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider" />
+			<property name="hibernate.generate_statistics" value="false"/>
+			<property name="hibernate.jdbc.use_streams_for_binary" value="true"/> <!-- fixes @Lob problem -->
+			<property name="hibernate.search.autoregister_listeners" value="false"/>
+			<property name="hibernate.search.default.directory_provider" value="org.hibernate.search.store.impl.RAMDirectoryProvider" /> 
+			<property name="hibernate.connection.ssl" value="true"/>
+			<property name="hibernate.connection.sslfactory" value="org.postgresql.ssl.NonValidatingFactory"/>
+		</properties>
+	</persistence-unit>
+</persistence>

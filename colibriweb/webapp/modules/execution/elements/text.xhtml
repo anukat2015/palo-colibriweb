@@ -1,0 +1,30 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+   	>
+
+	<h3>  	
+		<s:link value="#{result.type} #{result.name}" propagation="none" view="/modules/execution/edit.xhtml" >
+			<f:param name="id" value="#{result.id}" />
+		</s:link>
+	</h3>
+	<div>
+		<h:outputText value="#{result.getStateString()} in #{result.component.project.name}"/>	
+		<br></br>	
+		<h:outputText value="#{result.startDate}">						
+			<s:convertDateTime pattern="'Start:' dd.MM.yyyy ', ' HH:mm" />
+		</h:outputText>	
+		<br></br>	
+		<h:outputText value="#{result.stopDate}" rendered="#{not empty result.stopDate}">						
+			<s:convertDateTime pattern="'Stop:' dd.MM.yyyy ', ' HH:mm" />
+		</h:outputText>		
+	</div>
+	<ui:include src="/modules/common/defaultListItemInfos.xhtml" />
+	
+	
+</ui:composition>

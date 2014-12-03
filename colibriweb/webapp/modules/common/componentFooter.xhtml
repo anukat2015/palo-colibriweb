@@ -1,0 +1,25 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+   	>
+   	
+   <span class="inputlabel">#{messages.get('ui.description')}:</span>
+    <p:editor style="width:100%;margin-bottom:3px;" id="description" value="#{module.instance.description}"  height="92" controls="bold italic underline strikethrough | alignleft center alignright justify | bullets numbering  outdent indent | link unlink image | undo redo ">
+    </p:editor>  
+	<span class="inputlabel">#{messages.get('ui.responsible')}: </span>
+	<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml">
+		<h:inputText value="#{module.instance.contactPerson}" styleClass="inputfield" required="false" readonly="true">
+		</h:inputText>
+	</s:decorate>
+     <span class="inputlabel">#{messages.get('ui.rights')}:</span>
+	<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml">
+		<h:inputText value="#{module.accessString}" styleClass="inputfield" required="false" readonly="true">
+		</h:inputText>
+	</s:decorate> 
+   	
+</ui:composition>

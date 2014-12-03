@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	metadata-complete="true" version="3.0">
+	<display-name>colibriweb</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+
+	<context-param>
+		<param-name>etlserver.datadir</param-name>
+		<param-value>data</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>etlserver.logdir</param-name>
+		<param-value>logs</param-value>
+	</context-param>
+	
+	<filter>
+		<filter-name>PrimeFaces FileUpload Filter</filter-name>
+		<filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>PrimeFaces FileUpload Filter</filter-name>
+		<servlet-name>Faces Servlet</servlet-name>
+	</filter-mapping>
+	   
+	<filter>
+		<filter-name>Gondor Filter</filter-name>
+		<filter-class>com.proclos.colibriweb.session.system.GondorFilter</filter-class>
+		<init-param>
+			<param-name>enabled</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<param-name>roles</param-name>
+			<param-value>administration,user,public</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>Gondor Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.seam</url-pattern>
+	</servlet-mapping>
+
+    <mime-mapping>
+        <extension>wsdl</extension>
+        <mime-type>text/xml</mime-type>
+    </mime-mapping>
+
+    <mime-mapping>
+        <extension>xsd</extension>
+        <mime-type>text/xml</mime-type>
+    </mime-mapping>
+
+	<servlet>
+		<servlet-name>Push Servlet</servlet-name>
+		<servlet-class>org.primefaces.push.PushServlet</servlet-class>
+		<init-param>
+			<param-name>org.atmosphere.cpr.broadcasterCacheClass</param-name>
+			<param-value>org.atmosphere.cache.UUIDBroadcasterCache</param-value>
+		</init-param>
+		<async-supported>true</async-supported>
+		<!--  
+		<init-param>
+			<param-name>org.atmosphere.cpr.broadcasterClass</param-name>
+			<param-value>org.atmosphere.cpr.DefaultBroadcaster</param-value>
+		</init-param>
+		<init-param>
+			<param-name>org.atmosphere.cpr.broadcastFilterClasses</param-name>
+			<param-value>org.atmosphere.client.TrackMessageSizeFilter</param-value>
+		</init-param>
+		<init-param>
+			<param-name>org.atmosphere.cpr.sessionSupport</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		-->
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Push Servlet</servlet-name>
+		<url-pattern>/primepush/*</url-pattern>
+	</servlet-mapping>
+
+	<listener>
+		<listener-class>org.jboss.seam.servlet.SeamListener</listener-class>
+	</listener>
+	<filter>
+		<filter-name>Seam Filter</filter-name>
+		<filter-class>org.jboss.seam.servlet.SeamFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>Seam Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<servlet>
+		<servlet-name>Seam Resource Servlet</servlet-name>
+		<servlet-class>org.jboss.seam.servlet.SeamResourceServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Seam Resource Servlet</servlet-name>
+		<url-pattern>/seam/resource/*</url-pattern>
+	</servlet-mapping>
+	<context-param>
+		<param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
+		<param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+		<param-value>.xhtml</param-value>
+	</context-param>
+	<context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>bootstrap</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	
+	<context-param>  
+	  <param-name>contextConfigLocation</param-name>  
+	  <param-value>classpath:/jaxws-config.xml</param-value>  
+	</context-param>  
+	  
+	<listener>  
+	  <listener-class>  
+	    	org.springframework.web.context.ContextLoaderListener  
+	  </listener-class>  
+	</listener>
+	
+	<servlet>
+	    <servlet-name>CXFServlet</servlet-name>
+	    <servlet-class>
+	       org.apache.cxf.transport.servlet.CXFServlet
+	    </servlet-class>
+	    <load-on-startup>1</load-on-startup> 
+	 </servlet>
+ 
+	  <servlet-mapping>
+	    <servlet-name>CXFServlet</servlet-name>
+	    <url-pattern>/services/*</url-pattern>
+	  </servlet-mapping>
+
+	<listener>
+		<listener-class>com.proclos.colibriweb.session.common.ColibriListener</listener-class>
+	</listener>
+
+	<session-config>
+		<session-timeout>44</session-timeout>
+	</session-config>
+	<security-constraint>
+		<display-name>Restrict raw XHTML Documents</display-name>
+		<web-resource-collection>
+			<web-resource-name>XHTML</web-resource-name>
+			<url-pattern>*.xhtml</url-pattern>
+		</web-resource-collection>
+		<auth-constraint />
+	</security-constraint>
+</web-app>

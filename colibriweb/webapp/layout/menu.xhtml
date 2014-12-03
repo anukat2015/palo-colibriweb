@@ -1,0 +1,26 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.org/schema/seam/taglib" xmlns:p="http://primefaces.org/ui" >
+
+	<!--<h:form>
+		--><ul id="navigation" >
+			<p:dataList value="#{moduleManager.navigableModules}" var="module" styleClass="repeat" type="none" emptyMessage="">
+				<ui:include src="/layout/menuentry.xhtml">
+					<ui:param name="rendered" value="#{module.config.navigable}" />
+					<ui:param name="name" value="#{module.config.name}" />
+					<ui:param name="module" value="#{module}" />
+					<ui:param name="view" value="/modules/#{module.config.name.toLowerCase()}/list.xhtml" />
+					<ui:param name="label" value="#{module.config.label}" />
+				</ui:include>
+			</p:dataList>
+			<ui:include src="/layout/menuentry.xhtml">
+				<ui:param name="rendered" value="#{s:hasRole('admin')}" />
+				<ui:param name="name" value="administration" />
+				<ui:param name="view" value="/admin.xhtml" />
+				<ui:param name="label" value="Admin" />
+			</ui:include>
+		</ul>
+	<!--</h:form>
+--></ui:composition>
+
+    

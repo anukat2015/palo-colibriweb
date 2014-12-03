@@ -1,0 +1,47 @@
+<ui:composition 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:s="http://jboss.org/schema/seam/taglib" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+		<p:tree value="#{builder.root}" var="field" style="width:100%;" onNodeClick="$('.ui-state-focus').focus();" id="root" dynamic="true" cache="true"  widgetVar="#{treeVar}">  
+			
+			<p:treeNode styleClass="#{builder.isEvenLevel(field) ? 'treenodeeven' : 'treenodeuneven'}">
+				<h:panelGroup style="border:none;margin-top:0px;width:100%" layout="block" id="nodeContent">
+			        <h:panelGroup rendered="#{(field.type.isChoice() or field.type.isSequence() or field.type.maxOccurs == 1)}" styleClass="inputlabel" style="float:left;margin-right:5px;#{field.type.isSequence() ? '' : 'min-width:70px;'}">
+			        	<h:outputText value="#{field.type.displayName}" styleClass="inputlabel" style="font-weight: normal; font-style:italic;"/>
+				    </h:panelGroup>
+			        <s:fragment rendered="#{field.visible}">
+			        	<h:panelGroup layout="block" styleClass="detailseditpanel" style="float:right;margin-left:5px;" rendered="#{(builder.mayDeleteItem(field) or builder.mayMoveDown(field) or builder.mayMoveUp(field))}">
+							<p:commandLink rendered="#{builder.mayMoveUp(field)}" immediate="true" global="false" title="up" action="#{builder.moveUp(field)}" process="@this" oncomplete="loadNodes(PF('#{treeVar}'), $(document.getElementById('#{builder.getParentNodeToUpdate(nodeBase, field)}')));">
+									<h:graphicImage value="/img/up1.png" />
+							</p:commandLink>
+							<p:commandLink rendered="#{builder.mayMoveDown(field)}" immediate="true" global="false" title="down" action="#{builder.moveDown(field)}" process="@this" oncomplete="loadNodes(PF('#{treeVar}'), $(document.getElementById('#{builder.getParentNodeToUpdate(nodeBase, field)}')));">
+									<h:graphicImage value="/img/down1.png" />
+							</p:commandLink>
+							<p:commandLink rendered="#{builder.mayDeleteItem(field)}" immediate="true" global="false" title="#{messages.get('global.delete')}" action="#{builder.delete(field)}" process="@this" update="@namingcontainer" >
+								<h:graphicImage value="/img/decline.png" />
+							</p:commandLink>
+						</h:panelGroup>
+						<p:dataList value="#{field.childTypesInverseOrder}" var="childType" styleClass="repeat" type="none" emptyMessage="" rendered="#{not empty field.childTypes}">
+								<div class="actions">
+									<p:commandLink rendered="#{field.getEditComponent(childType).canCreateNewItem()}" global="false" process="@this @(.codeeditor)" update="@parent @(.codeeditor) :mainform:actions" styleClass="add" value="Add #{childType.displayName}" action="#{builder.create(field,childType)}" onstart="#{module.getEditorsToSave()}" oncomplete="loadNodes(PF('#{treeVar}'), $(document.getElementById('#{builder.getNodeToUpdate(nodeBase, field)}')));">
+									</p:commandLink>
+								</div>		
+						</p:dataList>
+						<s:fragment rendered="#{field.attributes.size gt 1 and not empty field.childTypes}">
+							<div style="clear:both"/>
+						</s:fragment>
+			        	<ui:include src="/modules/common/componentEditorEditPart.xhtml">
+							<ui:param name="field" value="#{field}" />
+						</ui:include>
+					</s:fragment>
+					<div style="clear:both;"/>
+					<!--  <div style="margin-bottom:3px;"></div> -->
+				</h:panelGroup>
+			</p:treeNode>
+		</p:tree>
+		<div class="marginplus14pix"></div>
+</ui:composition>

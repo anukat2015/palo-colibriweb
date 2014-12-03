@@ -1,0 +1,31 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+   	
+    template="/layout/template.xhtml">
+
+	<ui:define name="topnav">
+		<ui:include src="/layout/menu.xhtml">
+			<ui:param name="page" value="administration" />
+		</ui:include>
+	</ui:define>
+    <ui:define name="maincontent">
+		<ui:include src="/modules/common/selectionitemedit.xhtml" >
+			<ui:param name="backingBean" value="#{projectTypeModule}" />
+			<ui:param name="sortable" value="true"/>
+		</ui:include>
+    </ui:define>
+    
+    <ui:define name="rightcontent">
+		<ui:include src="/elements/administrationMenu.xhtml" >
+			<ui:param name="selectedParent" value="project" />
+			<ui:param name="selected" value="projectType" />
+		</ui:include>
+    </ui:define>
+    
+</ui:composition>

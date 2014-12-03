@@ -1,0 +1,262 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+   	
+    template="/layout/template.xhtml">
+
+	<ui:define name="head">
+		<script src="#{facesContext.externalContext.request.contextPath}/js/component.js"></script>
+		<script src="#{facesContext.externalContext.request.contextPath}/codemirror/lib/codemirror.js" type="text/javascript"></script>
+		<script src="#{facesContext.externalContext.request.contextPath}/codemirror/mode/xml/xml.js"></script>
+		<script src="#{facesContext.externalContext.request.contextPath}/codemirror/addon/edit/closetag.js"></script>
+		<script src="#{facesContext.externalContext.request.contextPath}/codemirror/addon/hint/show-hint.js"></script>
+		<script src="#{facesContext.externalContext.request.contextPath}/codemirror/addon/hint/xml-hint.js"></script>
+		<script src="#{facesContext.externalContext.request.contextPath}/codemirror/addon/edit/matchbrackets.js"></script>
+		<script src="#{facesContext.externalContext.request.contextPath}/codemirror/mode/groovy/groovy.js"></script>	
+		<link rel="stylesheet" href="#{facesContext.externalContext.request.contextPath}/codemirror/lib/codemirror.css"/>
+		<link rel="stylesheet" href="#{facesContext.externalContext.request.contextPath}/codemirror/addon/hint/show-hint.css"/>
+		<style type="text/css">
+			.ui-tree .ui-tree-selectable .ui-treenode-label, .ui-tree .ui-tree-selectable {
+				width:95%;
+			}
+		</style>
+	</ui:define>
+
+	<ui:define name="topnav">
+		<ui:include src="/layout/menu.xhtml">
+			<ui:param name="page" value="job" />
+			<ui:param name="detailPage" value="true" />
+		</ui:include>
+	</ui:define>
+    
+    <ui:define name="maincontent">
+    	<script type="text/javascript">
+		</script> 
+		<h:panelGroup layout="block" styleClass="contenttab" id="content">
+			<div class="headercontent" style="padding-bottom:3px;">
+				<div class="headerdetails" style="width:70%;">
+					<span class="headertext" >
+						<s:fragment rendered="#{jobModule.managed}">#{jobModule.config.label}: #{jobModule.instance.name}</s:fragment>
+						<s:fragment rendered="#{not jobModule.managed}">#{jobModule.config.label}: #{messages.get('global.new')}</s:fragment>
+					</span>		
+				</div>
+				<div class="headerdetails detailtagwrapper">
+					<span class="headertextsmall" style="float:left;">#{messages.get('global.detailsView')}</span>
+				</div>
+			</div>
+			<h:form id="mainform">
+				<div class="formwrapper">
+					<s:fragment rendered="#{not jobModule.isXmlMode()}">
+						<s:validateAll>
+						<h:panelGroup id="data">
+						<h:panelGrid styleClass="attributeTable" columns="2" columnClasses="labelCol, attributCol" id="baseGrid" >
+		          			<ui:include src="/modules/common/componentHeader.xhtml">
+								<ui:param name="module" value="#{jobModule}" />
+							</ui:include>
+							<s:fragment rendered="#{jobModule.maxSources > 0}">
+								<span class="inputlabel">Executions:</span>
+							</s:fragment>
+							<s:fragment rendered="#{jobModule.maxSources > 0}">
+						    	<h:panelGroup id="sourcesData">	
+					          		<ui:include src="/elements/editComponent.xhtml" >
+					          			<ui:param name="title" value="" />
+					          			<ui:param name="editComponent" value="#{jobModule.sourcesEditComponent}" />
+					          			<ui:param name="module" value="#{jobModule}" />
+					          			<ui:param name="include" value="/modules/common/sourcesEditPart.xhtml" />
+					          			<ui:param name="render" value=":mainform:sourcesData" />
+					          			<ui:param name="enableCreation" value="true" />
+					          			<ui:param name="officalCreateText" value="Add Execution" />
+					          			<ui:param name="rowStyle" value="margin: 0px 0;"/>
+					          		</ui:include>
+							    </h:panelGroup>	
+							</s:fragment>
+						</h:panelGrid> 
+						
+						<p:dataList value="#{jobModule.getComplexRootNodes()}" var="builder" styleClass="repeat" type="none" emptyMessage="" id="complexFields">
+							<ui:include src="/modules/common/componentEditor.xhtml">
+								<ui:param name="inputList" value="#{jobModule.getComponentTypedInputList()}" />
+								<ui:param name="render" value=":mainform:complexFields" />
+								<ui:param name="nodeBase" value=":mainform:complexFields" />
+								<ui:param name="treeVar" value="tree#{builder.position}" />
+								<ui:param name="module" value="#{jobModule}" />
+							</ui:include>
+						</p:dataList>	
+						<h:panelGrid styleClass="attributeTable" columns="2" columnClasses="labelCol, attributCol" id="scheduler">	
+							<span class="inputlabel">Manuell:</span>
+							<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml">
+								<h:selectBooleanCheckbox  value="#{jobModule.instance.isManual}" >
+									<p:ajax process="@this" event="change" update=":mainform:scheduler"/>
+								</h:selectBooleanCheckbox>
+							</s:decorate>
+		          			<s:fragment rendered="#{not empty jobModule.instance.isManual and not jobModule.instance.isManual}">
+								<span class="inputlabel">Scheduling:</span>
+							</s:fragment>
+							<s:fragment rendered="#{not empty jobModule.instance.isManual and not jobModule.instance.isManual}">
+								<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml">
+									<h:selectOneMenu value="#{jobModule.instance.interval}" required="true">
+										<s:selectItems value="#{fetchIntervals}" var="selectionItem" label="#{selectionItem.label}"  noSelectionLabel="#{messages['global.noSelectionLabel']}" />
+										<s:convertEntity />
+										<p:ajax process="@this" event="change"/>
+									</h:selectOneMenu>
+								</s:decorate> 
+							</s:fragment>
+						</h:panelGrid>
+						<h:panelGrid styleClass="attributeTable" columns="2" columnClasses="labelCol, attributCol">	
+							<s:fragment rendered="#{jobModule.hasVariables()}">
+								<span class="inputlabel">#{messages.get('ui.variables')}:</span>
+							</s:fragment>
+						 	 <h:panelGroup id="variableData" rendered="#{jobModule.hasVariables()}">	
+				          		<ui:include src="/elements/editComponent.xhtml" >
+				          			<ui:param name="title" value="" />
+				          			<ui:param name="editComponent" value="#{jobModule.variableEditComponent}" />
+				          			<ui:param name="include" value="/modules/common/variableEditPart.xhtml" />
+				          			<ui:param name="render" value=":mainform:variableData" />
+				          			<ui:param name="enableCreation" value="true" />
+				          			<ui:param name="availableVariables" value="#{jobModule.instance.project.variables}" />
+				          			<ui:param name="officalCreateText" value="Set Variable" />
+				          			<ui:param name="rowStyle" value="border-bottom: 1px solid lightgray; margin: 5px 0;"/>
+				          		</ui:include>
+						     </h:panelGroup>		
+		          			<ui:include src="/modules/common/componentFooter.xhtml">
+								<ui:param name="module" value="#{jobModule}" />
+							</ui:include>
+						</h:panelGrid>
+						</h:panelGroup>
+						<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml"  id="logPanel"> 
+					   		<s:fragment rendered="#{jobModule.executing or not empty jobModule.etlLogs}">
+						     	<p:tabView id="tabs">
+						     		<p:tab id="LogsTab" title="Logs">
+						     			<h:inputTextarea styleClass="inputfield" rows="15"	cols="120" style="width:99.4%;"	value="#{jobModule.etlLogs}" id="logDisplay" readonly="true">
+								 		</h:inputTextarea>
+						     		</p:tab>
+						     	</p:tabView>
+					     	</s:fragment>
+					   </s:decorate>
+		          		<h:panelGroup id="actions">
+		          			<div class="subspacer"/>
+							<div class="actions">
+								<p:commandButton onclick="#{jobModule.getEditorsToSave()}" type="submit" action="#{jobModule.persist}" value="#{messages.get('global.save')}" update=":content :rightform :messages #{empty jobModule.instance.id ? ':sockets' : ''}" global="true" widgetVar="saveButton"/>
+							</div>
+							<div class="actions">
+								<p:commandButton type="submit" action="#{jobModule.close}" value="#{messages.get('global.hide')}" immediate="true"/>
+							</div>
+							<div class="actions">
+								<p:commandButton onclick="#{jobModule.getEditorsToSave()}" type="submit" action="#{jobModule.validateComponent()}" value="#{messages.get('global.validate')}" update=":content :messages" global="true" rendered="#{not empty jobModule.instance.id and not jobModule.executing}"/>
+							</div>
+							<div class="actions">
+								<p:commandButton onclick="#{jobModule.getEditorsToSave()}" global="true" type="submit" action="#{jobModule.testComponent()}" value="#{messages.get('global.test')}" update=":content :mainform:actions :mainform:logPanel" rendered="#{not empty jobModule.instance.id and not jobModule.executing}"/>
+							</div>
+							<div class="actions">
+								<p:commandButton onclick="#{jobModule.getEditorsToSave()}" type="submit" action="#{jobModule.execute()}" value="#{messages.get('global.execute')}" update=":content :mainform:actions :mainform:logPanel" rendered="#{not empty jobModule.instance.id and not jobModule.executing}"/>
+							</div>
+							<div class="actions">
+								<p:commandButton global="true" type="submit" action="#{jobModule.stopExecution()}" value="Stop" update=":content :messages" rendered="#{jobModule.executing}">
+									<p:effect type="scale" speed="1000">  
+						    		</p:effect>  
+								</p:commandButton>
+							</div>
+							<div class="actions" style="float:left;">
+								<p:commandButton type="submit"
+									value="#{messages.get('global.flowgraph')}" action="#{jobModule.generateFlowGraph()}"
+									update=":flowGraphSelectionPanel" oncomplete="PF('flowGraphSelectionPanel').show();" rendered="#{not empty jobModule.instance.id}" widgetVar="showGraphButton">
+								</p:commandButton>
+							</div>	
+							<div class="actions" style="float:left;">
+								<p:commandButton type="submit" value="XML" process=":content" update=":content" action="#{jobModule.switchToXML()}" oncomplete="callXML()" onclick="#{jobModule.getEditorsToSave()}" widgetVar="toXMLButton"></p:commandButton>
+							</div>
+						</h:panelGroup>
+						</s:validateAll>
+					</s:fragment>
+					<s:fragment rendered="#{jobModule.isXmlMode()}">
+						<ui:include src="/modules/common/fragmentCodeEditor.xhtml">
+							<ui:param name="module" value="#{jobModule}" />
+						</ui:include>	
+					</s:fragment>
+				</div>
+			</h:form>
+		</h:panelGroup>
+		<ui:include src="/elements/flowgraph.xhtml">
+			<ui:param name="module" value="#{jobModule}"/>
+		</ui:include>
+		<s:fragment rendered="#{not empty jobModule.instance.id}">
+			<ui:include src="/modules/common/cloneComponent.xhtml">
+				<ui:param name="module" value="#{jobModule}"/>
+			</ui:include>
+		</s:fragment>
+		<h:panelGroup id="sockets">
+			<p:socket channel="/log/#{jobModule.pushId}" onMessage="handleMessage"> 
+			</p:socket>
+			<p:socket channel="/completed/#{jobModule.pushId}"> 
+				<p:ajax global="false" process="@this" event="message" update=":mainform:actions :mainform:complexFields :mainform:logPanel :messages" listener="#{jobModule.checkMessages()}" oncomplete="scrollLogs();"/>				
+			</p:socket>
+		</h:panelGroup>		
+		<p:hotkey bind="ctrl+g" handler="PF('showGraphButton').jq.click();" />
+		<p:hotkey bind="ctrl+s" handler="PF('saveButton').jq.click();" />
+		<p:hotkey bind="ctrl+return" handler="PF('toXMLButton').jq.click();" />		
+    </ui:define>
+    
+    <ui:define name="rightcontent">
+    	<h:form id="rightform"> 
+    		<div class="subspacer marginplus14pix">&nbsp;</div>
+    		
+ 			<h:panelGroup id="projectList">
+    		<ui:include src="/modules/common/rightContentList.xhtml">
+    			<ui:param name="id" value="projects" />
+    			<ui:param name="title" value="Project" />
+    			<ui:param name="backingBean" value="#{projectModule}" />
+    			<ui:param name="emptyText" value="No Project assigned" />
+    			<ui:param name="listImage" value="icon.png" />
+    			<ui:param name="results" value="#{jobModule.getProjectInList()}" />
+    			<ui:param name="collapsed" value="false"></ui:param>
+    		</ui:include>
+    		</h:panelGroup> 
+    		
+    		<div class="subspacer">&nbsp;</div>
+    		<h:panelGroup id="jobList">
+				<ui:include src="/modules/common/rightContentList.xhtml">
+	    			<ui:param name="id" value="jobs" />
+	    			<ui:param name="title" value="Jobs" />
+	    			<ui:param name="backingBean" value="#{jobModule}" />
+	    			<ui:param name="emptyText" value="No dependant Jobs" />
+	    			<ui:param name="listImage" value="icon.png" />
+	    			<ui:param name="results" value="#{jobModule.getDirectDependants('jobs')}" />
+	    			<ui:param name="collapsed" value="#{results.size() == 0}"></ui:param>
+	    		</ui:include>
+    		</h:panelGroup>
+    		
+    		<!--  
+    		<div class="subspacer">&nbsp;</div>
+    		<h:panelGroup id="loadList">
+				<ui:include src="/modules/common/rightContentList.xhtml">
+	    			<ui:param name="id" value="loads" />
+	    			<ui:param name="title" value="Loads" />
+	    			<ui:param name="backingBean" value="#{loadModule}" />
+	    			<ui:param name="emptyText" value="Keine abhängigen Loads" />
+	    			<ui:param name="listImage" value="icon.png" />
+	    			<ui:param name="results" value="#{jobModule.getDirectDependencies('loads')}" />
+	    			<ui:param name="initialState" value="#{results.size() > 0 ? 'opened' : 'closed'}"></ui:param>
+	    		</ui:include>
+    		</h:panelGroup>
+    		
+    		<div class="subspacer">&nbsp;</div>
+    		<h:panelGroup id="jobList">
+				<ui:include src="/modules/common/rightContentList.xhtml">
+	    			<ui:param name="id" value="jobs" />
+	    			<ui:param name="title" value="Jobs" />
+	    			<ui:param name="backingBean" value="#{jobModule}" />
+	    			<ui:param name="emptyText" value="Keine abhängigen Jobs" />
+	    			<ui:param name="listImage" value="icon.png" />
+	    			<ui:param name="results" value="#{jobModule.getDirectDependencies('jobs')}" />
+	    			<ui:param name="initialState" value="#{results.size() > 0 ? 'opened' : 'closed'}"></ui:param>
+	    		</ui:include>
+    		</h:panelGroup>
+    		-->
+    	</h:form>
+    </ui:define>
+    
+</ui:composition>

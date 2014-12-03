@@ -1,0 +1,56 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+   	>
+   	
+   	<h:panelGroup id="#{id}List" rendered="#{rendered}" layout="block" styleClass="contentbox">
+		<h:panelGroup layout="block" styleClass="subheader" rendered="#{fullHeader}">
+			<span style="float: left;" class="textsubheader">#{title} #{attributesStyle}</span>
+			<div class="subheadercontent">
+				<div class="actionssearch">
+					<ui:include src="/elements/displayInactiveItems.xhtml" rendered="#{displayInactiveItemFilter}" >
+						<ui:param name="backingBean" value="#{backingBean}" />
+						<ui:param name="render" value="#{id}Results" />
+					</ui:include>
+				</div>
+			</div>
+		</h:panelGroup>
+		
+		<h:panelGroup layout="block" styleClass="boxheader" style="float: right;" rendered="#{not fullHeader}">
+			<h:panelGroup styleClass="actions" layout="block" >
+				<ui:include src="/elements/displayInactiveItems.xhtml" rendered="#{displayInactiveItemFilter}" >
+					<ui:param name="backingBean" value="#{backingBean}" />
+					<ui:param name="render" value="#{id}Results" />
+				</ui:include>
+				<p:commandLink process="@this" styleClass="add" rendered="#{not readOnly}" value="Create" action="#{backingBean.createNewInstance()}" update="#{id}List" />
+			</h:panelGroup>
+		</h:panelGroup>
+		<div class="headertext">&nbsp;</div>
+		<s:fragment rendered="#{backingBean.inCreation and simpleList and not empty editView}">
+			<h:panelGroup layout="block" styleClass="actions" style="margin-top: 10px;" rendered="#{not readOnly and not showStorno and not empty editView}"> 
+				<p:commandLink styleClass="delete" value="Stornieren" rendered="#{backingBean.instance.active}" action="#{backingBean.deactivateAndPersist(backingBean.instance)}" process="@this" update="#{id}List #{render}"/>
+				<p:commandLink value="Stornierung aufheben" rendered="#{not backingBean.instance.active}" action="#{backingBean.activateAndPersist(backingBean.instance)}" process="@this" update="#{id}List #{render}"/>
+			</h:panelGroup>	
+			<ui:include src="#{editView}" rendered="#{not empty editView}" />
+		</s:fragment>
+		<s:fragment rendered="#{not simpleList or not backingBean.inCreation}">
+			<ui:include src="/modules/common/simpleItemList.xhtml">
+				<ui:param name="id" value="#{id}" />
+				<ui:param name="attributesStyle" value="#{attributesStyle}"/>
+				<ui:param name="backingBean" value="#{backingBean}" />
+				<ui:param name="title" value="#{title}" />
+				<ui:param name="emptyText" value="#{emptyText}" />
+				<ui:param name="listImage" value="#{listImage}" />
+				<ui:param name="readOnly" value="#{readOnly}" />
+				<ui:param name="clientFilter" value="#{clientFilter}" />
+			</ui:include>
+		</s:fragment>
+		<ui:include src="#{bottomView}" rendered="#{not empty bottomView}" />
+	</h:panelGroup>
+   	
+</ui:composition>

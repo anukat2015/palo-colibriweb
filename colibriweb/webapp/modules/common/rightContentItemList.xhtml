@@ -1,0 +1,38 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+   	>
+   	
+	<h:panelGroup id="#{id}Results" layout="block" style="overflow:hidden;">
+		<h:panelGroup layout="block" styleClass="results" rendered="#{empty results}">
+			<span class="infotext">#{emptyText}</span>
+		</h:panelGroup>
+		<h:panelGroup styleClass="list" layout="block" rendered="#{not empty results}">
+			<h:dataTable rowClasses="#{rowClassGenerator.getRowClasses(results.size)}" cellspacing="0" styleClass="results" var="result" value="#{results}" rendered="#{not empty results}">
+				<h:column>
+				
+					<div class="#{result.active ? '' : 'inactive'}"> 
+						<div class="listImage">
+							<s:fragment>
+								<h:graphicImage rendered="#{empty listImage}" value="/img/modules/#{backingBean.config.path}/icon.png" title="#{result.iconTitle}"/>
+								<h:graphicImage rendered="#{not empty listImage}" value="/img/modules/#{backingBean.config.path}/#{listImage}" title="#{result.iconTitle}"/>
+							</s:fragment>
+						</div>
+					
+						<ui:include src="/modules/#{backingBean.config.path}/elements/text.xhtml">
+							<ui:param name="hideOwner" value="true"/>
+						</ui:include>
+						<br style="clear:both;"></br>
+						
+					</div>
+				</h:column>
+			</h:dataTable>
+	   </h:panelGroup>
+  	</h:panelGroup>
+	
+</ui:composition>

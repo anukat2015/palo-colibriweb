@@ -1,0 +1,110 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+   	>
+
+	<p:dialog maximizable="false" dynamic="false" widgetVar="clonePanel" id="clonePanel" header="Copy - Rename" modal="true" styleClass="modalpanel" minWidth="500" minHeight="500" closable="true" resizable="false">
+		<h:form id="cloneForm">
+			<h:panelGroup layout="block"  rendered="#{not empty module.cloneHelper}" style="overflow:auto;width:400px;" id="clonePanelContent">
+				<h:panelGrid styleClass="attributeTable" columns="2" columnClasses="labelColFixed150,labelColFixed">
+			        <span class="inputlabel">Mode:</span>
+					<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml">
+						<h:selectOneRadio value="#{module.cloneHelper.mode}" layout="pageDirection">
+							<f:selectItem itemValue="1" itemLabel="Copy"/>
+							<f:selectItem itemValue="2" itemLabel="Rename"/>
+							<f:selectItem itemValue="3" itemLabel="Delete"/>
+							<p:ajax global="false" process="@this" event="change" update=":cloneForm" listener="#{module.cloneHelper.checkSettings()}"/>
+						</h:selectOneRadio>
+					</s:decorate>
+					<s:fragment rendered="#{module.cloneHelper.mode == 1}">
+						<span class="inputlabel" style="vertical-align:-35px;">Target:</span>
+					</s:fragment>
+					<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml" style="margin-top:20px;" rendered="#{module.cloneHelper.mode == 1}">
+						<h:selectOneRadio value="#{module.cloneHelper.target}" layout="pageDirection">
+							<f:selectItem itemValue="1" itemLabel="Current Project"/>
+							<f:selectItem itemValue="2" itemLabel="Existing Project" />
+							<f:selectItem itemValue="3" itemLabel="New Project"/>
+							<p:ajax global="false" process="@this" event="change" update=":cloneForm" listener="#{module.cloneHelper.checkSettings()}"/>
+						</h:selectOneRadio>
+					</s:decorate>
+					<s:fragment rendered="#{module.cloneHelper.mode != 3}">
+						<span class="inputlabel" style="vertical-align:-35px;">New Name:</span>
+					</s:fragment>
+					<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml" style="margin-top:20px;" rendered="#{module.cloneHelper.mode != 3}">
+						<s:fragment rendered="#{not module.cloneHelper.overwrite and module.cloneHelper.target != 3}">
+							<h:inputText value="#{module.cloneHelper.newComponentName}" styleClass="inputfield" required="#{module.cloneHelper.mode == 2 and module.cloneHelper.target == 1}" validator="#{module.cloneHelper.validateComponentName}">
+								<p:ajax global="false" process="@this" event="change" update=":cloneForm"/>
+							</h:inputText>
+						</s:fragment>
+						<s:fragment rendered="#{module.cloneHelper.overwrite or module.cloneHelper.target == 3}">
+							<h:inputText value="#{module.cloneHelper.newComponentName}" styleClass="inputfield" required="#{module.cloneHelper.mode == 2 and module.cloneHelper.target == 1}">
+								<p:ajax global="false" process="@this" event="change"/>
+							</h:inputText>
+						</s:fragment>
+					</s:decorate>
+					<s:fragment rendered="#{module.cloneHelper.mode != 3}">
+						<span class="inputlabel" style="vertical-align:-15px;">Overwrite:</span>
+					</s:fragment>
+					<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml" rendered="#{module.cloneHelper.mode != 3}">
+						<h:selectBooleanCheckbox  value="#{module.cloneHelper.overwrite}" >
+							<p:ajax global="false" process="@this" event="change" update=":cloneForm"/>
+						</h:selectBooleanCheckbox>
+					</s:decorate>
+					<s:fragment rendered="#{module.cloneHelper.target == 1 and module.cloneHelper.mode == 2}">
+						<span class="inputlabel" style="vertical-align:-35px;">Update Dependents:</span>
+					</s:fragment>
+					<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml" rendered="#{module.cloneHelper.target == 1 and module.cloneHelper.mode == 2}" style="margin-top:20px;">
+						<h:selectBooleanCheckbox  value="#{module.cloneHelper.updateDependencies}" >
+							<p:ajax global="false" process="@this" event="change"/>
+						</h:selectBooleanCheckbox>
+					</s:decorate>
+					<s:fragment rendered="#{module.cloneHelper.target == 2}">
+						<span class="inputlabel" style="vertical-align:-35px;">Choose Project:</span>
+					</s:fragment>
+					<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml" rendered="#{module.cloneHelper.target == 2}" style="margin-top:20px;">
+						<p:selectOneMenu value="#{module.cloneHelper.targetProject}">
+							<s:selectItems value="#{projectModule.getAllResults()}" var="selectionItem" label="#{selectionItem.name}"/>
+							<s:convertEntity />
+							<p:ajax global="false" process="@this" event="change"/>
+						</p:selectOneMenu>
+					</s:decorate>
+					<s:fragment rendered="#{module.cloneHelper.target == 3}">
+						<span class="inputlabel" style="vertical-align:-35px;">New Project:</span>
+					</s:fragment>
+					<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml" rendered="#{module.cloneHelper.target == 3}" style="margin-top:20px;">
+						<h:inputText value="#{module.cloneHelper.newProjectName}" styleClass="inputfield" required="true" validator="#{module.cloneHelper.validateProjectName}">
+							<p:ajax process="@this" event="change"/>
+						</h:inputText>
+						<p:selectOneMenu value="#{module.cloneHelper.newProjectType}" required="true">
+							<s:selectItems value="#{projectTypeModule.results}" var="selectionItem" label="#{selectionItem.label}"/>
+							<s:convertEntity />
+							<p:ajax process="@this" event="change"/>
+						</p:selectOneMenu>
+					</s:decorate>
+					<s:fragment rendered="#{module.cloneHelper.target > 1}">
+						<span class="inputlabel" style="vertical-align:-35px;">With Dependencies:</span>
+					</s:fragment>
+					<s:decorate styleClass="inputwrapper" template="/layout/fieldvalidation.xhtml" rendered="#{module.cloneHelper.target > 1}" style="margin-top:20px;">
+						<h:selectBooleanCheckbox  value="#{module.cloneHelper.withDependencies}" >
+							<p:ajax global="false" process="@this" event="change"/>
+						</h:selectBooleanCheckbox>
+					</s:decorate>
+				</h:panelGrid>
+				<h:panelGroup>
+	         		<div class="subspacer"/>
+					<div class="actions">
+						<p:commandButton type="submit" action="#{module.cloneInstance()}" value="Apply" global="true" process=":cloneForm" update=":content" oncomplete="PF('clonePanel').hide()"/>
+					</div>
+					<div class="actions">
+						<p:commandButton type="button" value="Cancel" immediate="true" onclick="PF('clonePanel').hide()"/>
+					</div>
+				</h:panelGroup>
+		   </h:panelGroup>
+	   </h:form>
+	</p:dialog>
+</ui:composition>

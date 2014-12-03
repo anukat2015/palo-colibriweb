@@ -1,0 +1,101 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:s="http://jboss.org/schema/seam/taglib"
+	xmlns:p="http://primefaces.org/ui"
+	>
+
+		
+		
+		<s:fragment rendered="#{not notRendered and not noLabel}">
+			<span class="#{not empty labelClass ? labelClass : 'inputlabel'}" style="#{not empty labelStyle ? labelStyle :''}">
+			<h:outputText value="#{label}:"/>
+			<h:outputText value="&#160;*" rendered="#{fieldrequired}" style="font-size:10px;"/>
+			</span>
+			<p:outputPanel rendered="#{not empty toolTip}">
+				<h:graphicImage value="/img/info_tooltip.png" style="cursor: pointer;" />
+				<p:tooltip value="#{toolTip}"  />
+			</p:outputPanel>
+			
+		</s:fragment>
+		 
+		<s:fragment rendered="#{not notRendered}">
+			
+			<s:fragment rendered="#{inputType == 'inputText'}">	
+				<s:decorate styleClass="#{not empty wrapperClass ? wrapperClass : 'inputwrapper'}" style="#{not empty wrapperStyle ? wrapperStyle :''}" template="/layout/fieldvalidation.xhtml">
+					<h:inputText tabindex="#{tabindex}" required="#{fieldrequired}" value="#{inputValue}" disabled="#{disabled}" readonly="#{readOnly}" styleClass="#{not empty inputClass ? inputClass : 'inputfield'}" style="#{not empty inputStyle ? inputStyle :''}"/>		
+				</s:decorate>
+			</s:fragment>
+			
+			<s:fragment rendered="#{inputType == 'inputTextArea'}">	
+				<s:decorate styleClass="#{not empty wrapperClass ? wrapperClass : 'inputwrapper'}" style="#{not empty wrapperStyle ? wrapperStyle :''}" template="/layout/fieldvalidation.xhtml">
+					<h:inputTextarea tabindex="#{tabindex}" required="#{fieldrequired}" rows="#{rows}" value="#{inputValue}" readonly="#{readOnly}" disabled="#{disabled}" styleClass="#{not empty inputClass ? inputClass : 'inputfield'}" style="#{not empty inputStyle ? inputStyle :''}"/>		
+				</s:decorate>
+			</s:fragment>
+			
+			<s:fragment rendered="#{inputType == 'inputSecret'}">	
+				<s:decorate styleClass="#{not empty wrapperClass ? wrapperClass : 'inputwrapper'}" style="#{not empty wrapperStyle ? wrapperStyle :''}" template="/layout/fieldvalidation.xhtml">
+					<h:inputSecret tabindex="#{tabindex}" validator="passwordValidator" required="#{fieldrequired}" value="#{inputValue}" disabled="#{disabled}" styleClass="#{not empty inputClass ? inputClass : 'inputfield'}" style="#{not empty inputStyle ? inputStyle :''}" autocomplete="off" />		
+				</s:decorate>
+			</s:fragment>
+			
+			<s:fragment rendered="#{inputType == 'selectOneMenu'}">
+				<s:decorate styleClass="#{not empty wrapperClass ? wrapperClass : 'inputwrapper'}" style="#{not empty wrapperStyle ? wrapperStyle :''}" template="/layout/fieldvalidation.xhtml">
+					<p:selectOneMenu tabindex="#{tabindex}" required="#{fieldrequired}" value="#{inputValue}" disabled="#{disabled}" styleClass="#{not empty inputClass ? inputClass : 'inputfield'}" style="#{not empty inputStyle ? inputStyle :''}">
+						<s:selectItems value="#{itemList}" var="selectionItem" label="#{not empty selectionLabel ? selectionLabel :selectionItem.label}"  noSelectionLabel="#{not empty noSelectionLabel ? noSelectionLabel : messages['global.noSelectionLabel']}" />
+						<s:convertEntity />
+					</p:selectOneMenu>
+				</s:decorate>
+			</s:fragment>
+			
+			<s:fragment rendered="#{inputType == 'selectOneRadio'}">
+				<s:decorate styleClass="#{not empty wrapperClass ? wrapperClass : 'inputwrapper'}" style="#{not empty wrapperStyle ? wrapperStyle :''}" template="/layout/fieldvalidation.xhtml">
+					<h:selectOneRadio tabindex="#{tabindex}" required="#{fieldrequired}" layout="#{layout}" disabled="#{disabled}" value="#{inputValue}" styleClass="#{not empty inputClass ? inputClass : 'inputfield'}" style="#{not empty inputStyle ? inputStyle :''}">
+						<s:selectItems value="#{itemList}" var="selectionItem" label="#{selectionItem.label}" />
+						<s:convertEntity />
+					</h:selectOneRadio>
+				</s:decorate>
+			</s:fragment>
+			
+			<s:fragment rendered="#{inputType == 'checkBox'}">
+				<s:decorate styleClass="#{not empty wrapperClass ? wrapperClass : 'inputwrapper'}" style="#{not empty wrapperStyle ? wrapperStyle :''}" template="/layout/fieldvalidation.xhtml">
+					<h:selectBooleanCheckbox tabindex="#{tabindex}" value="#{inputValue}" disabled="#{disabled}" required="#{fieldrequired}" styleClass="#{not empty inputClass ? inputClass : 'inputfield'} checkbox" style="#{not empty inputStyle ? inputStyle :''}" />
+				</s:decorate>
+			</s:fragment>
+			
+			<s:fragment rendered="#{inputType == 'dateField'}">
+				<s:decorate styleClass="#{not empty wrapperClass ? wrapperClass : 'inputwrapper'}" style="#{not empty wrapperStyle ? wrapperStyle :''}" template="/layout/fieldvalidation.xhtml">
+					<h:panelGroup styleClass="#{not empty inputClass ? inputClass : 'inputfield'}" style="#{not empty inputStyle ? inputStyle :''}">
+						<p:calendar title="Bitte folgendes Format verwenden: #{not empty datePattern ? datePattern : 'dd.MM.yyyy'}" tabindex="#{tabindex}" style="#{calendarInputStyle}" disabled="#{disabled}" value="#{inputValue}" pattern="#{not empty datePattern ? datePattern : 'dd.MM.yyyy'}" required="#{fieldrequired}" readOnly="#{empty enableManualInput}"/>
+					</h:panelGroup>
+				</s:decorate>
+			</s:fragment>
+		
+			
+			<s:fragment rendered="#{inputType == 'listShuttle'}">
+				<s:decorate styleClass="#{not empty wrapperClass ? wrapperClass : 'inputwrapper'}" style="#{not empty wrapperStyle ? wrapperStyle :''}" template="/layout/fieldvalidation.xhtml">
+					<p:pickList required="#{fieldrequired}" itemValue="#{selectionItem}" value="#{sourceValue}" var="selectionItem" itemLabel="#{selectionItem.label}" showTargetControls="true" showSourceControls="false" showSourceFilter="true" showTargetFilter="true"
+					addAllLabel="#{messages.get('global.addAll')}" addLabel="#{messages.get('global.add')}" removeAllLabel="#{messages.get('global.removeAll')}" removeLabel="#{messages.get('global.remove')}" moveBottomLabel="#{messages.get('global.bottom')}" moveDownLabel="#{messages.get('global.down')}" moveUpLabel="#{messages.get('global.up')}" moveTopLabel="#{messages.get('global.top')}">
+						<f:facet name="sourceCaption">#{sourceCaptionLabel}</f:facet>  
+       					<f:facet name="targetCaption">#{targetCaptionLabel}</f:facet>  
+       					<s:convertEntity />
+					</p:pickList>
+				</s:decorate>
+			</s:fragment>
+			
+			<s:fragment rendered="#{inputType == 'pickList'}">
+				<s:decorate styleClass="#{not empty wrapperClass ? wrapperClass : 'inputwrapper'}" style="#{not empty wrapperStyle ? wrapperStyle :''}" template="/layout/fieldvalidation.xhtml">
+					<p:pickList required="#{fieldrequired}" itemValue="#{selectionItem}" value="#{sourceValue}" var="selectionItem" itemLabel="#{selectionItem.label}" showTargetControls="false" showSourceControls="false" showSourceFilter="false" showTargetFilter="false"
+					addAllLabel="#{messages.get('global.addAll')}" addLabel="#{messages.get('global.add')}" removeAllLabel="#{messages.get('global.removeAll')}" removeLabel="#{messages.get('global.remove')}" moveBottomLabel="#{messages.get('global.bottom')}" moveDownLabel="#{messages.get('global.down')}" moveUpLabel="#{messages.get('global.up')}" moveTopLabel="#{messages.get('global.top')}">
+						<f:facet name="sourceCaption">#{sourceCaptionLabel}</f:facet>  
+       					<f:facet name="targetCaption">#{targetCaptionLabel}</f:facet>  
+       					<s:convertEntity />
+					</p:pickList>
+				</s:decorate>
+			</s:fragment>
+			
+		</s:fragment>
+
+</ui:composition>
+

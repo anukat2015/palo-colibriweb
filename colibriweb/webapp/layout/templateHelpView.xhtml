@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<f:view contentType="text/html"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:s="http://jboss.org/schema/seam/taglib"
+        >
+        
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <h:head>
+    <title>Colibri #{page}</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <ui:insert name="head" />
+    <style type="text/css">
+	    .ui-growl-title {
+			color: black;
+		}
+		.ui-growl-message p {
+			color: black;
+			background: green;
+		}
+		.ui-widget-overlay {
+			background: none;
+		}
+	 </style>
+  </h:head>
+  <h:body>
+    <h:panelGroup layout="block" styleClass="header" id="mainheader" style="background: url('#{facesContext.externalContext.request.contextPath}/img/topbar.png') repeat-x scroll 0 0 rgba(0, 0, 0, 0);">	
+		<!-- <h:graphicImage value="/img/header.png" />	 -->
+		<h:outputLink value="http://www.proclos.com" title="about" style="margin-top:10px;margin-right:10px;float:right">About..</h:outputLink>
+	</h:panelGroup>
+	
+	<p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();">  
+	</p:ajaxStatus>  
+	
+	<p:dialog modal="true" widgetVar="statusDialog" showHeader="false" style="text-align:center" width="150" height="83" resizable="false"
+        draggable="false" closable="false" styleClass="result">  
+    	<p:graphicImage value="/img/loading.gif" />  
+    	<div style="clear:both;"></div>
+    	<h:outputText value="Please Wait"></h:outputText>
+	</p:dialog>
+	
+	
+	<div class="main">
+	
+		
+		
+		<h:panelGroup layout="block" id="messages" styleClass="messageboxwrapper">
+		    <p:outputPanel autoUpdate="true">
+		    	<p:messages severity="warn, error" globalOnly="true" closable="true" autoUpdate="true" />
+		    	<p:growl globalOnly="true" life="3000" widgetVar="growlComponent" showDetail="false" showSummary="true" autoUpdate="true" id="growl"></p:growl>
+		    </p:outputPanel >
+		</h:panelGroup>
+		
+		<div class="block" >
+		
+		
+			<div class="content">
+				<ui:insert name="maincontent"/>
+			</div>
+			<div class="rightcontent">
+			
+				
+				<ui:insert name="rightcontent"/>
+			</div>
+			<div style="clear:both;">
+			</div>
+		</div>
+		<div>&nbsp;<h:graphicImage value="/img/spacer.gif" width="100%" height="1px" />
+		</div>
+	</div> 
+	  
+   	<ui:include src="/layout/footer.xhtml" />
+ 	<h:outputStylesheet name="style.css" library="css" target="head" />
+  </h:body>
+</html>
+
+</f:view>

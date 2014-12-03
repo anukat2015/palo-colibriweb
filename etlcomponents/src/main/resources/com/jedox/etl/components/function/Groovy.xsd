@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://schemas.jedox.com/etlcore"
+    xmlns:c="http://schemas.jedox.com/etlcore"
+    elementFormDefault="qualified">
+
+    <element name="function" type="c:transformertype" />
+    
+    <simpleType name="paramtype">
+ 		 <restriction base="string">
+    		<enumeration value="Double"/>
+    		<enumeration value="Date"/>
+    		<enumeration value="Boolean"/>
+    		<enumeration value="Integer"/>
+    		<enumeration value="Long"/>
+    		<enumeration value="Byte"/>
+    		<enumeration value="Float"/>
+    		<enumeration value="Short"/>
+    		<enumeration value="String"/>
+    		<enumeration value="Object"/>
+    		<enumeration value="double"/>
+    		<enumeration value="byte"/>
+    		<enumeration value="float"/>
+    		<enumeration value="short"/>
+    		<enumeration value="long"/>
+    		<enumeration value="int"/>
+    		<enumeration value="boolean"/>
+  		</restriction>
+	</simpleType> 
+	
+	<simpleType name="boolsel">
+ 		 <restriction base="string">
+    		<enumeration value="true"/>
+    		<enumeration value="false"/>
+  		</restriction>
+	</simpleType> 
+    
+    <complexType name="inputref">
+		<attribute name="nameref" type="string">
+		</attribute>
+		<attribute name="constant" type="string"/>
+		<attribute name="type" type="c:paramtype"/>
+	</complexType>
+
+	 <complexType name="inputstype">
+        <sequence>
+        	<element name="input" type="c:inputref" minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+	 <complexType name="parametertype">
+        <all>
+			<element name="script" type="string" minOccurs="1" maxOccurs="1"/>
+        	<element name="type" type="c:paramtype" minOccurs="0" maxOccurs="1">
+        		<annotation>
+					<appinfo>expanded</appinfo>
+				</annotation>
+        	</element>
+        	<element name="buffered" type="c:boolsel" minOccurs="0" maxOccurs="1"/>
+        	<element name="forceEval" type="c:boolsel" minOccurs="0" maxOccurs="1">
+        	</element>
+        </all>
+    </complexType>
+    <complexType name="transformertype">
+        <all>
+        	<element name="inputs" type="c:inputstype" minOccurs="1" maxOccurs="1"/>
+        	<element name="parameters" type="c:parametertype" minOccurs="1" maxOccurs="1"/>
+			<element name="comment" type="string" minOccurs="0" maxOccurs="1"/> 
+        </all>
+        <attribute name="name" type="string" use="required"/>
+        <attribute name="type" type="string" use="required"/>
+    </complexType>
+</schema>

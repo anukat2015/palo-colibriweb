@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="tomcat_deployer" default="for-each">
+
+	<target name="for-each">
+		<echo>Start deploying</echo>
+		<foreach list="${tomcat.list}" target="loop" param="name"
+			delimiter="," inheritall="true" />
+	</target>
+
+	<target name="loop">
+		<propertycopy name="url" from="${name}.url" silent="false" />
+		<propertycopy name="username" from="${name}.username"
+			silent="false" />
+		<propertycopy name="password" from="${name}.password"
+			silent="false" />
+		<propertycopy name="path" from="${name}.path" silent="false" />
+		<propertycopy name="enabled" from="${name}.enabled"
+			silent="false" />
+		<propertycopy name="environment" from="${name}.environment"
+			silent="false" />
+		<propertycopy name="defaultContext" from="${name}.defaultContext"
+			silent="false" />
+		<propertycopy name="deleteSeamQuartz" from="${name}.deleteSeamQuartz"
+			silent="false" />
+		<propertycopy name="databaseconfig" from="${name}.databaseconfig"
+			silent="false" />
+		<propertycopy name="autostart" from="${name}.autostart"
+			silent="false" />
+		<antcall target="deploy" />
+	</target>
+
+	<target name="deploy">
+		<if>
+			<and>
+				<equals arg1="${enabled}" arg2="true" />
+				<equals arg1="${environment}" arg2="${active_env}" />
+			</and>
+			<then>
+				<antcall target="stop" />
+				<antcall target="repackage" />
+				<echo>Deploying :: ${name} </echo>
+				<deploy url="${url}" username="${username}" password="${password}"
+					path="${path}" war="file:${warfile}" update="true" config="file:${configfile}" />
+				<antcall target="start" />
+			</then>
+			<else>
+				<echo>Not deployed :: ${name} </echo>
+				<echo>Enabled :: ${enabled} </echo>
+				<echo>Environment mismatch? Project=${active_env},
+					Config=${environment}</echo>
+			</else>
+		</if>
+	</target>
+
+	<target name="stop">
+		<if>
+			<equals arg1="${autostart}" arg2="true" />
+			<then>
+				<echo>Stopping: Autostart is enabled for ${name}</echo>
+				<stop url="${url}" username="${username}" password="${password}"
+					path="${path}" />
+			</then>
+			<else>
+				<echo>Stopping: Autostart disabled for ${name}</echo>
+			</else>
+		</if>
+	</target>
+
+	<target name="start">
+		<if>
+			<equals arg1="${autostart}" arg2="true" />
+			<then>
+				<echo>Starting: Autostart is enabled for ${name}</echo>
+				<start url="${url}" username="${username}" password="${password}"
+					path="${path}" />
+			</then>
+			<else>
+				<echo>Starting: Autostart disabled for ${name}</echo>
+			</else>
+		</if>
+	</target>
+
+	<target name="repackage">
+		<if>
+			<equals arg1="${defaultContext}" arg2="false" />
+			<then>
+				<echo>Repackaging :: ${name} </echo>
+				<propertycopy name="db.hostname" from="${databaseconfig}.hostname"
+					silent="false" />
+				<propertycopy name="db.port" from="${databaseconfig}.port"
+					silent="false" />
+				<propertycopy name="db.dbname" from="${databaseconfig}.dbname"
+					silent="false" />
+				<propertycopy name="db.username" from="${databaseconfig}.defaultuser"
+					silent="false" />
+				<propertycopy name="db.password"
+					from="${databaseconfig}.defaultuserpassword" silent="false" />
+
+				<delete dir="${temp.dir}" />
+				<mkdir dir="${temp.dir}" />
+
+				<copy file="${configfile}" todir="${temp.dir}" />
+				<delete dir="${repackage.dir}" />
+				<mkdir dir="${repackage.dir}" />
+				<copy file="${warfile}" todir="${repackage.dir}" />
+
+				<replace file="${temp.dir}/context.xml" token="@hostname@"
+					value="${db.hostname}" />
+				<replace file="${temp.dir}/context.xml" token="@port@"
+					value="${db.port}" />
+				<replace file="${temp.dir}/context.xml" token="@dbname@"
+					value="${db.dbname}" />
+				<replace file="${temp.dir}/context.xml" token="@username@"
+					value="${db.username}" />
+				<replace file="${temp.dir}/context.xml" token="@password@"
+					value="${db.password}" />
+
+				<tstamp>
+					<format property="touch.time" pattern="MM/dd/yyyy hh:mm aa" />
+				</tstamp>
+				<touch datetime="${touch.time}">
+					<fileset dir="${temp.dir}" />
+				</touch>
+				<echo>test: ${repackage.dir}/${finalname} ${temp.dir} </echo>
+				<war destfile="${repackage.dir}/${finalname}" update="true">
+					<zipfileset dir="${temp.dir}" prefix="META-INF/" />
+				</war>
+
+				<copy file="${repackage.dir}/${finalname}" tofile="${warfile}"
+					overwrite="true" />
+				<delete dir="${repackage.dir}" />
+				<delete dir="${temp.dir}" />
+			</then>
+			<else>
+				<echo>No context change needed. Using default context.</echo>
+			</else>
+		</if>
+		<if>
+			<equals arg1="${deleteSeamQuartz}" arg2="true" />
+			<then>
+				<echo>Removing quartz config to enable RAMStore allowing database
+					read only use:: ${name} </echo>
+
+				<delete dir="${repackage.dir}" />
+				<mkdir dir="${repackage.dir}" />
+
+				<war destfile="${repackage.dir}/${finalname}" update="true"
+					needxmlfile='false'>
+					<zipfileset src="${warfile}" excludes="WEB-INF/classes/seam.quartz.properties" />
+				</war>
+
+				<copy file="${repackage.dir}/${finalname}" tofile="${warfile}"
+					overwrite="true" />
+				<delete dir="${repackage.dir}" />
+			</then>
+			<else>
+				<echo>No quartz config change needed.</echo>
+			</else>
+		</if>
+
+	</target>
+
+
+</project>
+
